@@ -241,6 +241,23 @@
   .setup code{color:var(--g-hi);word-break:break-all}
   .setup .row{display:flex;gap:6px;margin-top:4px}
   .setup input{flex:1;min-width:0;height:28px;padding:0 8px;background:#000;border:1px solid var(--g-dim);color:var(--g-hi);font:12.5px/1 var(--mono);border-radius:0}
+  /* phát trọn bài (đã kết nối Premium): trình phát trong trang hoặc app Spotify trên máy */
+  .sp-np{flex:none;position:relative;display:flex;align-items:center;gap:6px;min-height:46px;padding:5px 8px;border-top:1px solid var(--g-line);background:#000;font:12px/1.3 var(--mono)}
+  .sp-np .np-art{flex:none;width:36px;height:36px;background:#03140a center/cover no-repeat;border:1px solid var(--g-line)}
+  .sp-np .np-t{flex:1;min-width:0}
+  .sp-np .np-t b{display:block;font-weight:600;font-size:13px;color:var(--g-hi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sp-np .np-t span{display:block;color:var(--g-mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sp-np .np-t span a{color:var(--g-hi)}
+  .sp-np .ib{flex:none;width:32px;height:30px;border:1px solid var(--g-dim);color:var(--g);font:14px/1 var(--mono)}
+  .sp-np .ib:hover{background:var(--g);color:#000}
+  .sp-np .ib:disabled{opacity:.35;pointer-events:none}
+  .np-dev{flex:none;max-width:150px;height:30px;padding:0 8px;border:1px solid var(--g-dim);color:var(--g-mid);font:12px/1 var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .np-dev:hover,.np-dev[aria-expanded="true"]{color:var(--g)}
+  .np-devs{position:absolute;right:8px;bottom:calc(100% + 4px);z-index:5;min-width:220px;max-width:calc(100% - 16px);border:1px solid var(--g);background:#000}
+  .np-devs p{padding:6px 10px;color:var(--g-mid);border-bottom:1px dashed var(--g-line)}
+  .np-devs button{display:block;width:100%;padding:7px 10px;text-align:left;font:12.5px/1.3 var(--mono);color:var(--g)}
+  .np-devs button:hover,.np-devs button[aria-checked="true"]{background:var(--g);color:#000}
+  .np-devs a{display:block;padding:7px 10px;color:var(--g-hi);font-size:12px}
   .sp-foot{flex:none;display:flex;align-items:center;gap:8px;min-height:26px;padding:3px 8px;border-top:1px solid var(--g-line);font:12px/1.3 var(--mono);color:var(--g-mid)}
   .sp-foot span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .sp-foot .on{color:var(--g)}
@@ -342,6 +359,11 @@
     #w-note{right:0;width:auto;min-width:0}
     #w-spotify{position:fixed;left:0;right:0;bottom:var(--bar);height:var(--spmini);z-index:60;flex:none}
     #w-spotify:not(.big) .sp-ctl,#w-spotify:not(.big) .sp-foot,#w-spotify:not(.big) .sp-res{display:none!important}
+    #w-spotify.np-on:not(.big) .sp-main{display:none}
+    #w-spotify.np-on:not(.big) .sp-np{flex:1;border-top:0;gap:8px}
+    #w-spotify.np-on:not(.big) .np-art{width:64px;height:64px}
+    .sp-np .ib{width:40px;height:38px;font-size:16px}
+    .np-dev{height:38px;max-width:96px}
     #w-spotify.big{left:0;right:0;top:auto;bottom:var(--bar);height:84vh;height:84dvh}
     .app{position:fixed;left:0;right:0;top:0;bottom:calc(var(--bar) + var(--spmini));min-width:0;z-index:50}
     .taskbar{position:fixed;left:0;right:0;bottom:0;height:var(--bar);margin:0;gap:10px;padding:0 max(10px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(10px,env(safe-area-inset-left,0px));font-size:24px}
@@ -435,6 +457,15 @@
       <div class="sp-main">
         <div id="spHost"></div>
         <div class="sp-res" id="spRes" hidden><div class="hd"><b id="spResT"></b><button class="btn sm" type="button" id="spResX">✕ đóng</button></div><div class="bd" id="spResB"></div></div>
+      </div>
+      <div class="sp-np" id="spNp" hidden>
+        <span class="np-art" id="npArt" aria-hidden="true"></span>
+        <div class="np-t"><b id="npT">phát trọn bài</b><span id="npA"></span></div>
+        <button class="ib" type="button" id="npPrev" aria-label="Bài trước">&#x23EE;&#xFE0E;</button>
+        <button class="ib" type="button" id="npPlay" aria-label="Phát">▶</button>
+        <button class="ib" type="button" id="npNext" aria-label="Bài sau">&#x23ED;&#xFE0E;</button>
+        <button class="np-dev" type="button" id="npDev" aria-haspopup="true" aria-expanded="false" aria-label="Chọn nơi phát nhạc"><span id="npDevN">◌ thiết bị</span> ▾</button>
+        <div class="np-devs" id="npDevs" role="menu" hidden></div>
       </div>
       <div class="sp-foot" id="spFoot"></div>
     </section>
@@ -696,7 +727,7 @@
   // còn tìm kiếm / thư viện / thêm vào playlist dùng cổng kết nối chính thức (Web API, đăng nhập một lần).
   const spW = wins.spotify, spBigBtn = $('#spBig'), spHost = $('#spHost');
   const REDIRECT = new URL('./', location.href).href.split(/[?#]/)[0];
-  const SCOPES = 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-library-read user-library-modify user-read-currently-playing user-read-recently-played';
+  const SCOPES = 'playlist-read-private playlist-read-collaborative playlist-modify-public playlist-modify-private user-library-read user-library-modify user-read-currently-playing user-read-recently-played streaming user-read-email user-read-private user-read-playback-state user-modify-playback-state';
   const SP = { cid: SPOTIFY_CLIENT_ID || ls.get('sp-cid') || '', tok: ls.get('sp-tok'), me: null, pls: [], ctl: null, cur: ls.get('sp-cur') || '', q: '' };
   const toUri = u => { const m = String(u).match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(playlist|album|track|artist|episode|show)\/([A-Za-z0-9]{22})/); return m ? `spotify:${m[1]}:${m[2]}` : (/^spotify:(playlist|album|track|artist|episode|show):[A-Za-z0-9]{22}$/.test(u) ? u : ''); };
   const embedUrl = uri => { const [, t, id] = uri.split(':'); return `https://open.spotify.com/embed/${t}/${id}?utm_source=generator&theme=0`; };
@@ -721,6 +752,7 @@
         window.__spIFrameAPI.createController(el, { url: openUrl(uri), uri, width: '100%', height: '100%' }, c => {
           SP.ctl = c;
           c.addListener('ready', () => { if (SP.wantPlay){ SP.wantPlay = false; try { c.play(); } catch (e) {} } });
+          c.addListener('playback_update', e => embedUpdate(e && e.data));
         });
         return;
       } catch (e) { SP.ctl = null; }
@@ -787,7 +819,7 @@
     const r = await fetch('https://accounts.spotify.com/api/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(params) });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || !j.access_token) throw new Error(j.error_description || j.error || ('HTTP ' + r.status));
-    SP.tok = { a: j.access_token, r: j.refresh_token || (SP.tok && SP.tok.r), e: Date.now() + (j.expires_in - 60) * 1000 };
+    SP.tok = { a: j.access_token, r: j.refresh_token || (SP.tok && SP.tok.r), e: Date.now() + (j.expires_in - 60) * 1000, s: j.scope || (SP.tok && SP.tok.s) || '' };
     ls.set('sp-tok', SP.tok);
   }
   async function spRefresh(){ await spToken({ grant_type: 'refresh_token', refresh_token: SP.tok.r, client_id: SP.cid }); }
@@ -820,15 +852,16 @@
       if (/revoked|invalid_grant|refresh/i.test(e.message)){ SP.tok = null; ls.del('sp-tok'); }
       toast('Spotify: ' + e.message);
     }
-    renderChips(); spFoot();
+    renderChips(); spFoot(); fpStart();
     if (SP.me && !ls.get('sp-cur')){ const d = defaultUri(); if (d) spLoad(d, false); }
   }
   function spFoot(){
     const el = $('#spFoot');
     if (SP.me){
       const own = SP.pls.filter(p => p.owner && p.owner.id === SP.me.id).length;
-      el.innerHTML = `<span class="on">◉ ${esc(SP.me.display_name || SP.me.id)} · ${own} playlist của bạn</span><button type="button" id="spOut">thoát</button>`;
-      $('#spOut').addEventListener('click', () => { SP.tok = null; SP.me = null; SP.pls = []; ls.del('sp-tok'); renderChips(); spFoot(); toast('Đã thoát tài khoản Spotify khỏi Studio'); });
+      el.innerHTML = `<span class="on">◉ ${esc(SP.me.display_name || SP.me.id)} · ${own} playlist của bạn</span>${fullScope() ? '' : '<button type="button" id="spRe">▶ kết nối lại để phát trọn bài</button>'}<button type="button" id="spOut">thoát</button>`;
+      if ($('#spRe')) $('#spRe').addEventListener('click', spConnect);
+      $('#spOut').addEventListener('click', () => { SP.tok = null; SP.me = null; SP.pls = []; ls.del('sp-tok'); fpOff(); renderChips(); spFoot(); toast('Đã thoát tài khoản Spotify khỏi Studio'); });
     } else {
       el.innerHTML = `<span>◌ chưa kết nối tài khoản</span><button type="button" id="spConn">⏻ kết nối spotify</button>`;
       $('#spConn').addEventListener('click', spConnect);
@@ -838,7 +871,7 @@
     spOpenRes('kết nối spotify — làm một lần');
     $('#spResB').innerHTML = `<div class="setup">
       <h3>⏻ kết nối tài khoản Spotify của bạn</h3>
-      <p>Spotify không cho đặt trang open.spotify.com vào trang khác, nên Studio dùng cổng kết nối chính thức của Spotify để tìm bài, hiện playlist của bạn và thêm bài vào playlist ngay trong khung này. Spotify yêu cầu tài khoản <b>Premium</b> cho cổng này.</p>
+      <p>Spotify không cho đặt trang open.spotify.com vào trang khác, nên Studio dùng cổng kết nối chính thức của Spotify để tìm bài, hiện playlist của bạn, thêm bài vào playlist và <b>phát trọn bài</b> (ngay trong trang trên máy tính, hoặc điều khiển ứng dụng Spotify trên điện thoại). Spotify yêu cầu tài khoản <b>Premium</b> cho cổng này.</p>
       <ol>
         <li>Mở <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noopener">developer.spotify.com/dashboard</a> → đăng nhập → <b>Create app</b> (tên: anrevy studio).</li>
         <li>Ô <b>Redirect URI</b> dán: <code>${esc(REDIRECT)}</code> <button type="button" class="btn sm" id="cpRedir">chép</button><br>chọn <b>Web API</b> → <b>Save</b>.</li>
@@ -884,9 +917,9 @@
         body.innerHTML = (tr.length ? '<p class="sr-h">bài hát</p><ul class="sr-list">' + tr.map(o => row(o, 'track')).join('') + '</ul>' : '') +
           (al.length ? '<p class="sr-h">album</p><ul class="sr-list">' + al.slice(0, 6).map(o => row(o, 'album')).join('') + '</ul>' : '') ||
           '<p class="note">✕ không tìm thấy kết quả.</p>';
-        body.querySelectorAll('[data-act="play"]').forEach(b => b.addEventListener('click', () => { spLoad(b.closest('li').dataset.uri, true); spCloseRes(); }));
+        body.querySelectorAll('[data-act="play"]').forEach(b => b.addEventListener('click', () => { spPlay(b.closest('li').dataset.uri); spCloseRes(); }));
         body.querySelectorAll('[data-act="add"]').forEach(b => b.addEventListener('click', () => pickPlaylist(b.closest('li'))));
-        if (autoplay){ const first = (kind === 'album' ? al[0] : tr[0]) || tr[0] || al[0]; if (first){ spLoad(first.uri, true); toast('▶ ' + first.name + ' — ' + (first.artists || []).map(a => a.name).join(', ')); } }
+        if (autoplay){ const first = (kind === 'album' ? al[0] : tr[0]) || tr[0] || al[0]; if (first){ spPlay(first.uri); toast('▶ ' + first.name + ' — ' + (first.artists || []).map(a => a.name).join(', ')); } }
         return;
       } catch (e) { body.innerHTML = `<p class="note">✕ Spotify: ${esc(e.message)}</p>`; return; }
     }
@@ -918,6 +951,181 @@
       catch (e) { toast('Spotify: ' + e.message); }
     }));
   }
+
+  /* ---- PHÁT TRỌN BÀI (tài khoản Premium đã kết nối) ----
+     Khung nhúng của Spotify chỉ phát thử 30 giây khi trình duyệt không đăng nhập open.spotify.com (Safari, iPhone, app cài từ trang…).
+     Nên khi đã kết nối: máy tính → trình phát ngay trong trang (Web Playback SDK, thiết bị "Anrevy Studio");
+     điện thoại hoặc khi trình phát trong trang không chạy → điều khiển ứng dụng Spotify đang mở trên máy (Spotify Connect). */
+  const touchy = matchMedia('(pointer: coarse)').matches;
+  const FP = { sdk: null, dev: '', sdkSt: 'off', target: '', cur: null, last: 0, lastPoll: 0, timer: 0, embedAt: 0 };
+  const STUDIO_DEV = 'Studio (trình duyệt này)';
+  const DEVTYPE = { computer: 'máy tính', smartphone: 'điện thoại', tablet: 'máy tính bảng', speaker: 'loa', tv: 'TV', castvideo: 'TV', castaudio: 'loa', automobile: 'ô tô', gameconsole: 'máy chơi game' };
+  const spNp = $('#spNp');
+  function fullScope(){ const g = String((SP.tok && SP.tok.s) || '').split(' '); return ['streaming', 'user-read-playback-state', 'user-modify-playback-state'].every(x => g.includes(x)); }
+  const fullOK = () => !!(SP.me && SP.tok && fullScope());
+  const artOf = im => { im = im || []; return (im[im.length > 1 ? 1 : 0] || im[0] || {}).url || ''; };
+
+  function sdkLoad(){
+    if (touchy || FP.sdkSt !== 'off') return;
+    FP.sdkSt = 'loading';
+    window.onSpotifyWebPlaybackSDKReady = () => {
+      try {
+        const pl = new Spotify.Player({ name: 'Anrevy Studio', volume: 0.8,
+          getOAuthToken: cb => { (Date.now() > SP.tok.e ? spRefresh() : Promise.resolve()).then(() => cb(SP.tok.a), () => {}); } });
+        FP.sdk = pl;
+        pl.addListener('ready', ({ device_id }) => { FP.dev = device_id; FP.sdkSt = 'ready'; npRender(); });
+        pl.addListener('not_ready', () => { FP.dev = ''; npRender(); });
+        ['initialization_error', 'authentication_error', 'account_error'].forEach(ev => pl.addListener(ev, () => { FP.sdkSt = 'fail'; FP.dev = ''; npRender(); }));
+        pl.addListener('player_state_changed', st => {
+          const t = st && st.track_window && st.track_window.current_track;
+          if (!t){ if (FP.cur && FP.cur.devId === FP.dev) FP.cur = null; npRender(); setTimeout(fpPoll, 800); return; }
+          FP.cur = { name: t.name, by: (t.artists || []).map(a => a.name).join(', '), art: artOf(t.album && t.album.images), uri: t.uri, playing: !st.paused, devId: FP.dev, devName: STUDIO_DEV };
+          npRender();
+        });
+        pl.connect().then(ok => { if (!ok && FP.sdkSt === 'loading'){ FP.sdkSt = 'fail'; npRender(); } }, () => { FP.sdkSt = 'fail'; npRender(); });
+        setTimeout(() => { if (FP.sdkSt === 'loading'){ FP.sdkSt = 'fail'; npRender(); } }, 12000);
+      } catch (e) { FP.sdkSt = 'fail'; npRender(); }
+    };
+    const sc = document.createElement('script'); sc.src = 'https://sdk.scdn.co/spotify-player.js'; sc.async = true;
+    sc.onerror = () => { FP.sdkSt = 'fail'; npRender(); };
+    document.head.appendChild(sc);
+  }
+  function fpStart(){
+    npRender();
+    if (!fullOK()) return;
+    sdkLoad(); fpPoll();
+    if (!FP.timer) FP.timer = setInterval(() => {
+      if (!fullOK() || document.hidden || spW.hidden) return;
+      const busy = (FP.cur && FP.cur.playing) || Date.now() - FP.last < 120000;
+      if (busy || Date.now() - FP.lastPoll > 30000) fpPoll();
+    }, 5000);
+  }
+  function fpOff(){
+    try { if (FP.sdk) FP.sdk.disconnect(); } catch (e) {}
+    Object.assign(FP, { sdk: null, dev: '', sdkSt: 'off', target: '', cur: null });
+    npRender();
+  }
+  async function fpPoll(){
+    if (!fullOK()) return;
+    FP.lastPoll = Date.now();
+    if (FP.dev && FP.cur && FP.cur.devId === FP.dev) return;          // đang phát trong trang: trình phát tự báo
+    try {
+      const d = await spApi('/me/player?additional_types=episode');
+      const it = d && d.item;
+      if (!it){ if (FP.cur && FP.cur.devId !== FP.dev) FP.cur = null; npRender(); return; }
+      const dv = d.device || {};
+      FP.cur = { name: it.name, by: (it.artists || []).map(a => a.name).join(', ') || (it.show && it.show.name) || '', art: artOf((it.album && it.album.images) || it.images), uri: it.uri,
+        playing: !!d.is_playing, devId: dv.id || '', devName: dv.id && dv.id === FP.dev ? STUDIO_DEV : (dv.name || '') };
+      npRender();
+    } catch (e) {}
+  }
+  async function devices(){ const d = await spApi('/me/player/devices'); return ((d && d.devices) || []).filter(x => x && x.id && !x.is_restricted); }
+  async function pickDevice(){
+    if (FP.target && FP.target === FP.dev) return FP.dev;
+    let ds = [];
+    try { ds = await devices(); } catch (e) {}
+    if (FP.target && ds.some(x => x.id === FP.target)) return FP.target;
+    if (FP.dev) return FP.dev;
+    const d = ds.find(x => x.is_active) || ds.find(x => /smartphone|computer/i.test(x.type)) || ds[0];
+    return d ? d.id : '';
+  }
+  async function playFull(uri, at){
+    try { if (FP.sdk && FP.sdk.activateElement) FP.sdk.activateElement(); } catch (e) {}
+    FP.last = Date.now();
+    const id = await pickDevice();
+    if (!id){ noDevice(uri); return false; }
+    const t = uri.split(':')[1];
+    const body = t === 'track' || t === 'episode' ? { uris: [uri] } : Object.assign({ context_uri: uri }, at ? { offset: { uri: at } } : {});
+    try { await spApi('/me/player/play?device_id=' + encodeURIComponent(id), { method: 'PUT', body }); }
+    catch (e) {
+      if (/premium/i.test(e.message)){ toast('Spotify: phát trọn bài cần tài khoản Premium — đang nghe thử 30 giây.'); spLoad(uri, true); return false; }
+      if (/not found|no active/i.test(e.message)){ FP.target = ''; noDevice(uri); return false; }
+      toast('Spotify: ' + e.message); return false;
+    }
+    try { if (SP.ctl) SP.ctl.pause(); } catch (e) {}
+    FP.target = id; setTimeout(fpPoll, 900); setTimeout(fpPoll, 2500);
+    return true;
+  }
+  function spPlay(uri){
+    const u = toUri(uri); if (!u) return;
+    if (fullOK()){ spLoad(u, false); playFull(u); } else spLoad(u, true);
+  }
+  // bấm ▶ ngay trong khung nhúng mà khung chỉ phát thử (≤ 30 giây) → dừng khung, phát trọn bài ở trình phát/ứng dụng
+  function embedUpdate(d){
+    if (!d || d.isPaused || !fullOK()) return;
+    if (d.duration && d.duration > 31000){                              // khung nhúng đã đăng nhập, tự phát trọn bài
+      if (FP.sdk && FP.cur && FP.cur.devId === FP.dev && FP.cur.playing) try { FP.sdk.pause(); } catch (e) {}
+      return;
+    }
+    if (Date.now() - FP.embedAt < 4000) return;
+    FP.embedAt = Date.now();
+    try { SP.ctl.pause(); } catch (e) {}
+    const at = d.playingURI && d.playingURI !== SP.cur && /^spotify:(track|episode):/.test(d.playingURI) ? d.playingURI : null;
+    if (SP.cur) playFull(SP.cur, at);
+  }
+  function appLinks(uri){
+    return `<a href="${esc(uri || 'spotify:')}">↗ mở ${uri ? 'mục này' : ''} trong ứng dụng Spotify</a>` +
+      (touchy ? '' : '<a href="https://open.spotify.com/" target="_blank" rel="noopener">↗ mở open.spotify.com ở tab mới</a>');
+  }
+  function noDevice(uri){
+    toast('Chưa thấy nơi phát: mở ứng dụng Spotify trên máy rồi bấm ▶ lại.');
+    const box = $('#npDevs'); if (!box) return;
+    box.innerHTML = `<p>${touchy ? 'Mở ứng dụng Spotify trên điện thoại, quay lại đây rồi bấm ▶ lại — nhạc phát trọn bài qua ứng dụng.' : 'Trình phát trong trang chưa sẵn sàng. Mở ứng dụng Spotify hoặc open.spotify.com rồi bấm ▶ lại.'}</p>` + appLinks(uri);
+    box.hidden = false; $('#npDev').setAttribute('aria-expanded', 'true');
+  }
+  function npRender(){
+    const on = fullOK();
+    spNp.hidden = !on; spW.classList.toggle('np-on', on && !!FP.cur);
+    if (!on){ $('#npDevs').hidden = true; return; }
+    const c = FP.cur;
+    $('#npArt').style.backgroundImage = c && c.art ? `url("${c.art.replace(/"/g, '%22')}")` : '';
+    $('#npT').textContent = c ? c.name : '▶ phát trọn bài';
+    $('#npA').textContent = c ? (c.by + (c.devName ? ' · trên ' + c.devName : '')) :
+      (FP.dev ? 'bấm ▶ ở bài hoặc playlist bất kỳ — phát ngay trong trang' : FP.sdkSt === 'loading' ? '◌ đang mở trình phát…' : 'bấm ▶ — phát qua ứng dụng Spotify đang mở trên máy');
+    const pb = $('#npPlay'); pb.textContent = c && c.playing ? '❚❚' : '▶'; pb.setAttribute('aria-label', c && c.playing ? 'Tạm dừng' : 'Phát');
+    $('#npPrev').disabled = $('#npNext').disabled = !c;
+    const curId = (c && c.devId) || FP.target || FP.dev;
+    $('#npDevN').textContent = curId && curId === FP.dev ? '◉ Studio' : (c && c.devName ? '◉ ' + c.devName : '◌ thiết bị');
+  }
+  async function npCmd(kind){
+    const c = FP.cur, inPage = FP.sdk && FP.dev && c && c.devId === FP.dev;
+    try { if (FP.sdk && FP.sdk.activateElement) FP.sdk.activateElement(); } catch (e) {}
+    FP.last = Date.now();
+    try {
+      if (!c){ if (kind === 'toggle' && SP.cur) await playFull(SP.cur); return; }
+      if (inPage){ await (kind === 'toggle' ? FP.sdk.togglePlay() : kind === 'next' ? FP.sdk.nextTrack() : FP.sdk.previousTrack()); return; }
+      const q = c.devId ? '?device_id=' + encodeURIComponent(c.devId) : '';
+      if (kind === 'toggle'){ await spApi('/me/player/' + (c.playing ? 'pause' : 'play') + q, { method: 'PUT' }); c.playing = !c.playing; npRender(); }
+      else await spApi('/me/player/' + (kind === 'next' ? 'next' : 'previous') + q, { method: 'POST' });
+      setTimeout(fpPoll, 800);
+    } catch (e) { toast('Spotify: ' + e.message); setTimeout(fpPoll, 500); }
+  }
+  $('#npPlay').addEventListener('click', () => npCmd('toggle'));
+  $('#npNext').addEventListener('click', () => npCmd('next'));
+  $('#npPrev').addEventListener('click', () => npCmd('prev'));
+  $('#npDev').addEventListener('click', async () => {
+    const box = $('#npDevs'), btn = $('#npDev');
+    if (!box.hidden){ box.hidden = true; btn.setAttribute('aria-expanded', 'false'); return; }
+    box.innerHTML = '<p>◌ đang tìm thiết bị…</p>'; box.hidden = false; btn.setAttribute('aria-expanded', 'true');
+    let ds = []; try { ds = await devices(); } catch (e) {}
+    const cur = (FP.cur && FP.cur.devId) || FP.target || FP.dev;
+    const list = ds.map(d => ({ id: d.id, name: d.id === FP.dev ? STUDIO_DEV : d.name + ' · ' + (DEVTYPE[String(d.type).toLowerCase()] || d.type) }));
+    if (FP.dev && !list.some(x => x.id === FP.dev)) list.unshift({ id: FP.dev, name: STUDIO_DEV });
+    box.innerHTML = '<p>phát nhạc trên:</p>' + (list.length ? list.map(x => `<button type="button" role="menuitemradio" aria-checked="${x.id === cur}" data-id="${esc(x.id)}">${esc(x.name)}</button>`).join('') : '<p>chưa thấy thiết bị nào đang mở Spotify.</p>') + appLinks();
+    box.querySelectorAll('[data-id]').forEach(b => b.addEventListener('click', async () => {
+      const id = b.dataset.id; FP.target = id; box.hidden = true; btn.setAttribute('aria-expanded', 'false');
+      try { if (FP.sdk && id === FP.dev && FP.sdk.activateElement) FP.sdk.activateElement(); } catch (e) {}
+      FP.last = Date.now();
+      if (FP.cur){
+        try { await spApi('/me/player', { method: 'PUT', body: { device_ids: [id], play: !!FP.cur.playing } }); toast('◉ chuyển sang ' + b.textContent); }
+        catch (e) { toast('Spotify: ' + e.message); }
+        setTimeout(fpPoll, 1000);
+      } else toast('◉ sẽ phát trên ' + b.textContent);
+      npRender();
+    }));
+  });
+  document.addEventListener('click', e => { const box = $('#npDevs'); if (!box.hidden && !e.target.closest('#npDevs, #npDev')){ box.hidden = true; $('#npDev').setAttribute('aria-expanded', 'false'); } });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && fullOK()) fpPoll(); });
 
   /* ================= LETTERBOXD: đã xem · watchlist · tìm phim ================= */
   const lb = $('#lbBody'); let lbData = null, lbTab = ls.get('lb-tab') === 'watchlist' ? 'watchlist' : 'watched', lbBackFn = null, lbQ = '';
@@ -1154,7 +1362,7 @@
     nmBody.querySelectorAll('[data-ch]').forEach(b => b.addEventListener('click', () => { chKey = b.dataset.ch; ls.set('ch-key', chKey); chRender(); nmBody.scrollTop = 0; }));
     nmBody.querySelectorAll('.ch-row [data-i]').forEach(b => b.addEventListener('click', () => {
       const r = c.items[+b.dataset.i];
-      if (r.sp){ spLoad('spotify:track:' + r.sp, true); toast('▶ ' + r.t + ' — ' + r.a); }
+      if (r.sp){ spPlay('spotify:track:' + r.sp); toast('▶ ' + r.t + ' — ' + r.a); }
       else spFind(r.a + ' ' + r.t, 'track', true);
     }));
   }
