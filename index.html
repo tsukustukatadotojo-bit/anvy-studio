@@ -1523,7 +1523,7 @@
   { const qb = new URLSearchParams(location.search).get('broker'); if (qb) NOTE_BROKERS = qb.split(','); }
   const NOTE_LIB = 'https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js';
   const WEEK = 7 * 864e5;
-  const NT = { msgs: new Map(), clients: [], started: false, last: 0 };
+  const NT = { msgs: new Map(), clients: [], started: false, last: 0, wipe: 0 };   // wipe: mốc "xoá toàn bộ" trong notes.json — bỏ mọi tin gửi trước mốc này
   const ntList = $('#ntList'), ntName = $('#ntName'), ntText = $('#ntText');
   ntName.value = ls.get('note-name') || '';
   // màu tên theo từng tên: đỏ, xanh lá, xanh nước biển, vàng
@@ -1543,7 +1543,7 @@
   const ntTime = at => { const d = new Date(at); return `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())} ${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`; };
   function ntValid(m){
     return m && typeof m === 'object' && /^[a-z0-9]{6,32}$/.test(m.id || '') && typeof m.n === 'string' && m.n.trim() && typeof m.t === 'string' && m.t.trim() &&
-      typeof m.at === 'number' && Date.now() - m.at <= WEEK && m.at < Date.now() + 6e5 && (m.h == null || /^[0-9a-f]{32}$/.test(m.h)) &&
+      typeof m.at === 'number' && Date.now() - m.at <= WEEK && m.at < Date.now() + 6e5 && m.at > NT.wipe && (m.h == null || /^[0-9a-f]{32}$/.test(m.h)) &&
       (m.r == null || (/^[a-z0-9]{6,32}$/.test(m.r) && typeof m.rn === 'string'));
   }
   function ntAdd(m){
@@ -1609,7 +1609,11 @@
   function noteOpen(){
     if (!NT.started){
       NT.started = true; NT.first = true;
-      fetch('/anrevy-house/studio/data/notes.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(d => { ((d && d.items) || []).forEach(ntAdd); ntPaint(); }).catch(() => {});
+      fetch('/anrevy-house/studio/data/notes.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(d => {
+        NT.wipe = Math.max(NT.wipe, +(d && d.wipe) || 0);
+        for (const [id, m] of NT.msgs) if (m.at <= NT.wipe) NT.msgs.delete(id);
+        ((d && d.items) || []).forEach(ntAdd); ntPaint();
+      }).catch(() => {});
       ntLoadLib(ntConnect);
     } else ntPaint();
     setTimeout(() => (ntName.value ? ntText : ntName).focus({ preventScroll: true }), 0);
