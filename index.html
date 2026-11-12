@@ -233,6 +233,7 @@
   .pick p{padding:6px 10px;font:12px/1.3 var(--mono);color:var(--g-mid);border-bottom:1px dashed var(--g-line)}
   .pick button{display:block;width:100%;padding:6px 10px;text-align:left;font:12.5px/1.3 var(--mono);color:var(--g)}
   .pick button:hover{background:var(--g);color:#000}
+  .pick button.has{color:var(--g-hi)}.pick button.has:hover{background:none;color:var(--g-hi)}
   .setup{padding:12px 14px;font:12.5px/1.6 var(--mono);color:var(--g-mid)}
   .setup h3{font:600 13.5px/1.4 var(--mono);color:var(--g-hi);margin-bottom:6px}
   .setup ol{margin:8px 0 10px 18px}
@@ -243,8 +244,36 @@
   .setup input{flex:1;min-width:0;height:28px;padding:0 8px;background:#000;border:1px solid var(--g-dim);color:var(--g-hi);font:12.5px/1 var(--mono);border-radius:0}
   /* phát trọn bài (đã kết nối Premium): trình phát trong trang hoặc app Spotify trên máy */
   .sp-np{flex:none;position:relative;display:flex;align-items:center;gap:6px;min-height:46px;padding:5px 8px;border-top:1px solid var(--g-line);background:#000;font:12px/1.3 var(--mono)}
+  .sp-np .np-open{flex:1;min-width:0;display:flex;align-items:center;gap:6px;text-align:left;color:inherit;font:inherit;border-radius:2px}
+  .sp-np .np-open:hover .np-t b,.sp-np .np-open[aria-expanded="true"] .np-t b{text-decoration:underline}
   .sp-np .np-art{flex:none;width:36px;height:36px;background:#03140a center/cover no-repeat;border:1px solid var(--g-line)}
   .sp-np .np-t{flex:1;min-width:0}
+  /* khung "đang phát": ảnh bìa lớn + tên bài + thêm vào playlist */
+  .sp-now{position:absolute;inset:0;z-index:3;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px;padding:14px;background:#000;overflow:hidden}
+  .now-art{min-height:0;background:transparent center top/contain no-repeat;filter:drop-shadow(0 0 14px rgba(57,255,106,.18))}
+  .now-side{min-height:0;display:flex;flex-direction:column;gap:8px;overflow:auto;scrollbar-width:thin;scrollbar-color:var(--g-dim) #000;padding-right:2px}
+  .now-info{padding-right:84px}
+  .now-info b{display:block;font:600 22px/1.2 var(--mono);color:var(--g-hi);overflow-wrap:anywhere}
+  .now-info span{display:block;margin-top:3px;font:14px/1.35 var(--mono);color:var(--g)}
+  .now-info .now-al{color:var(--g-mid);font-size:12.5px}
+  .now-ctl{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .now-ctl .ib{width:38px;height:34px;border:1px solid var(--g-dim);color:var(--g);font:15px/1 var(--mono)}
+  .now-ctl .ib:hover{background:var(--g);color:#000}
+  .now-in{font:12.5px/1.45 var(--mono);color:var(--g-mid);border-top:1px dashed var(--g-line);padding-top:8px}
+  .now-in b{color:var(--g-hi);font-weight:600}
+  .now-h{font:12.5px/1.3 var(--mono);color:var(--g)}
+  .now-h i{color:var(--g-mid);font-style:normal}
+  .now-pls{display:flex;flex-direction:column;border:1px solid var(--g-line)}
+  .now-pls button{display:flex;align-items:center;gap:8px;width:100%;padding:7px 10px;text-align:left;font:12.5px/1.3 var(--mono);color:var(--g);border-bottom:1px dashed var(--g-line)}
+  .now-pls button:last-child{border-bottom:0}
+  .now-pls button span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .now-pls button i{flex:none;font-style:normal;color:var(--g-mid)}
+  .now-pls button.has{color:var(--g-hi)}.now-pls button.has i{color:var(--g-hi)}
+  .now-pls button:hover:not(.has){background:var(--g);color:#000}.now-pls button:hover:not(.has) i{color:#000}
+  .now-pls button:disabled{opacity:.6}
+  .now-pls p{padding:8px 10px;font:12.5px/1.4 var(--mono);color:var(--g-mid)}
+  .now-note{font:11.5px/1.4 var(--mono);color:var(--g-mid)}
+  .now-x{position:absolute;top:10px;right:10px;z-index:1;background:#000}
   .sp-np .np-t b{display:block;font-weight:600;font-size:13px;color:var(--g-hi);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .sp-np .np-t span{display:block;color:var(--g-mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .sp-np .np-t span a{color:var(--g-hi)}
@@ -358,7 +387,12 @@
     #w-poolsuite{right:0}
     #w-note{right:0;width:auto;min-width:0}
     #w-spotify{position:fixed;left:0;right:0;bottom:var(--bar);height:var(--spmini);z-index:60;flex:none}
-    #w-spotify:not(.big) .sp-ctl,#w-spotify:not(.big) .sp-foot,#w-spotify:not(.big) .sp-res{display:none!important}
+    #w-spotify:not(.big) .sp-ctl,#w-spotify:not(.big) .sp-foot,#w-spotify:not(.big) .sp-res,#w-spotify:not(.big) .sp-now{display:none!important}
+    .sp-now{grid-template-columns:1fr;grid-template-rows:minmax(0,46%) minmax(0,1fr);padding:12px;gap:10px}
+    .now-art{background-position:center}
+    .now-info{padding-right:0}
+    .now-info b{font-size:17px}
+    .now-x{top:8px;right:8px}
     #w-spotify.np-on:not(.big) .sp-main{display:none}
     #w-spotify.np-on:not(.big) .sp-np{flex:1;border-top:0;gap:8px}
     #w-spotify.np-on:not(.big) .np-art{width:64px;height:64px}
@@ -456,11 +490,22 @@
       </div>
       <div class="sp-main">
         <div id="spHost"></div>
+        <div class="sp-now" id="spNow" role="dialog" aria-label="Bài đang phát" hidden>
+          <div class="now-art" id="nowArt" role="img" aria-label=""></div>
+          <div class="now-side">
+            <div class="now-info"><b id="nowT"></b><span id="nowA"></span><span class="now-al" id="nowAl"></span></div>
+            <div class="now-ctl"><button class="ib" type="button" data-np="prev" aria-label="Bài trước">&#x23EE;&#xFE0E;</button><button class="ib" type="button" data-np="toggle" id="nowPlay" aria-label="Phát">▶</button><button class="ib" type="button" data-np="next" aria-label="Bài sau">&#x23ED;&#xFE0E;</button><a class="btn sm" id="nowOpen" href="#" target="_blank" rel="noopener">mở trên spotify ↗</a></div>
+            <p class="now-in" id="nowIn"></p>
+            <p class="now-h">＋ thêm vào playlist <i>· ✓ là đã có bài này</i></p>
+            <div class="now-pls" id="nowPls"></div>
+            <p class="now-note">Spotify chỉ cho xem bên trong playlist bạn tạo hoặc cùng chỉnh sửa.</p>
+          </div>
+          <button class="btn sm now-x" type="button" id="nowX">✕ đóng</button>
+        </div>
         <div class="sp-res" id="spRes" hidden><div class="hd"><b id="spResT"></b><button class="btn sm" type="button" id="spResX">✕ đóng</button></div><div class="bd" id="spResB"></div></div>
       </div>
       <div class="sp-np" id="spNp" hidden>
-        <span class="np-art" id="npArt" aria-hidden="true"></span>
-        <div class="np-t"><b id="npT">phát trọn bài</b><span id="npA"></span></div>
+        <button class="np-open" type="button" id="npOpen" aria-label="Xem bài đang phát, thêm vào playlist" aria-controls="spNow" aria-expanded="false"><span class="np-art" id="npArt" aria-hidden="true"></span><span class="np-t"><b id="npT">phát trọn bài</b><span id="npA"></span></span></button>
         <button class="ib" type="button" id="npPrev" aria-label="Bài trước">&#x23EE;&#xFE0E;</button>
         <button class="ib" type="button" id="npPlay" aria-label="Phát">▶</button>
         <button class="ib" type="button" id="npNext" aria-label="Bài sau">&#x23ED;&#xFE0E;</button>
@@ -897,7 +942,7 @@
   }
 
   // ---- tìm kiếm ----
-  function spOpenRes(title){ if (spW.hidden) openApp('spotify'); $('#spResT').textContent = title; $('#spRes').hidden = false; if (narrow() && !spW.classList.contains('big')) setBig(true); }
+  function spOpenRes(title){ if (spW.hidden) openApp('spotify'); if (nowOn) nowShow(false); $('#spResT').textContent = title; $('#spRes').hidden = false; if (narrow() && !spW.classList.contains('big')) setBig(true); }
   function spCloseRes(){ $('#spRes').hidden = true; stopPreview(); }
   $('#spResX').addEventListener('click', spCloseRes);
   $('#spForm').addEventListener('submit', e => { e.preventDefault(); const q = $('#spQ').value.trim(); if (q) spFind(q, 'track', false); });
@@ -955,10 +1000,16 @@
     const box = document.createElement('li'); box.className = 'pick';
     box.innerHTML = '<p>thêm vào playlist:</p>' + (own.length ? own.map(p => `<button type="button" data-id="${esc(p.id)}">♪ ${esc(p.name)}</button>`).join('') : '<p>bạn chưa có playlist nào để thêm.</p>');
     li.after(box);
-    box.querySelectorAll('button').forEach(b => b.addEventListener('click', async () => {
-      try { await spApi(`/playlists/${b.dataset.id}/items`, { method: 'POST', body: { uris: [li.dataset.uri] } }); toast('＋ đã thêm “' + li.querySelector('b').textContent + '” vào ' + b.textContent.replace(/^♪ /, '')); box.remove(); }
-      catch (e) { toast('Spotify: ' + e.message); }
-    }));
+    const uri = li.dataset.uri;
+    box.querySelectorAll('button').forEach(b => {
+      const p = own.find(x => x.id === b.dataset.id);
+      if (/^spotify:track:/.test(uri)) plUris(p).then(set => { if (set.has(uri)){ b.classList.add('has'); b.textContent = '✓ ' + p.name + ' · đã có'; } }).catch(() => {});
+      b.addEventListener('click', async () => {
+        if (b.classList.contains('has')){ toast('Bài này đã có trong “' + p.name + '”.'); return; }
+        try { await plAdd(p, uri); toast('＋ đã thêm “' + li.querySelector('b').textContent + '” vào ' + p.name); box.remove(); }
+        catch (e) { toast('Spotify: ' + e.message); }
+      });
+    });
   }
 
   /* ---- PHÁT TRỌN BÀI (tài khoản Premium đã kết nối) ----
@@ -972,6 +1023,7 @@
   const spNp = $('#spNp');
   function fullScope(){ const g = String((SP.tok && SP.tok.s) || '').split(' '); return ['streaming', 'user-read-playback-state', 'user-modify-playback-state'].every(x => g.includes(x)); }
   const fullOK = () => !!(SP.me && SP.tok && fullScope());
+  const bigOf = im => { im = (im || []).filter(x => x && x.url); im.sort((a, b) => (b.width || 0) - (a.width || 0)); return (im[0] || {}).url || ''; };
   const artOf = im => { im = im || []; return (im[im.length > 1 ? 1 : 0] || im[0] || {}).url || ''; };
 
   function sdkLoad(){
@@ -988,7 +1040,7 @@
         pl.addListener('player_state_changed', st => {
           const t = st && st.track_window && st.track_window.current_track;
           if (!t){ if (FP.cur && FP.cur.devId === FP.dev) FP.cur = null; npRender(); setTimeout(fpPoll, 800); return; }
-          FP.cur = { name: t.name, by: (t.artists || []).map(a => a.name).join(', '), art: artOf(t.album && t.album.images), uri: t.uri, playing: !st.paused, devId: FP.dev, devName: STUDIO_DEV };
+          FP.cur = { name: t.name, by: (t.artists || []).map(a => a.name).join(', '), art: artOf(t.album && t.album.images), big: bigOf(t.album && t.album.images), al: (t.album && t.album.name) || '', uri: t.uri, playing: !st.paused, devId: FP.dev, devName: STUDIO_DEV };
           npRender();
         });
         pl.connect().then(ok => { if (!ok && FP.sdkSt === 'loading'){ FP.sdkSt = 'fail'; npRender(); } }, () => { FP.sdkSt = 'fail'; npRender(); });
@@ -1023,7 +1075,7 @@
       const it = d && d.item;
       if (!it){ if (FP.cur && FP.cur.devId !== FP.dev) FP.cur = null; npRender(); return; }
       const dv = d.device || {};
-      FP.cur = { name: it.name, by: (it.artists || []).map(a => a.name).join(', ') || (it.show && it.show.name) || '', art: artOf((it.album && it.album.images) || it.images), uri: it.uri,
+      FP.cur = { name: it.name, by: (it.artists || []).map(a => a.name).join(', ') || (it.show && it.show.name) || '', art: artOf((it.album && it.album.images) || it.images), big: bigOf((it.album && it.album.images) || it.images), al: (it.album && it.album.name) || (it.show && it.show.name) || '', uri: it.uri,
         playing: !!d.is_playing, devId: dv.id || '', devName: dv.id && dv.id === FP.dev ? STUDIO_DEV : (dv.name || '') };
       npRender();
     } catch (e) {}
@@ -1095,6 +1147,7 @@
     $('#npPrev').disabled = $('#npNext').disabled = !c;
     const curId = (c && c.devId) || FP.target || FP.dev;
     $('#npDevN').textContent = curId && curId === FP.dev ? '◉ Studio' : (c && c.devName ? '◉ ' + c.devName : '◌ thiết bị');
+    nowRender();
   }
   async function npCmd(kind){
     const c = FP.cur, inPage = FP.sdk && FP.dev && c && c.devId === FP.dev;
@@ -1109,6 +1162,106 @@
       setTimeout(fpPoll, 800);
     } catch (e) { toast('Spotify: ' + e.message); setTimeout(fpPoll, 500); }
   }
+  /* ---- KHUNG "ĐANG PHÁT": bấm bài ở thanh dưới → ảnh bìa lớn, tên, nghệ sĩ, thêm vào playlist & xem bài đang có ở playlist nào ----
+     Spotify (từ 02/2026) chỉ trả nội dung playlist bạn tạo hoặc cùng chỉnh sửa → chỉ kiểm tra / thêm được vào các playlist đó. */
+  const PLC = new Map();                      // id playlist → { snap, set (các uri bài trong playlist) } — đọc lại khi playlist đổi (snapshot khác)
+  const editable = () => SP.pls.filter(p => p && SP.me && p.owner && (p.owner.id === SP.me.id || p.collaborative));
+  let plsAt = 0;
+  async function refreshPls(){
+    if (Date.now() - plsAt < 30000) return; plsAt = Date.now();
+    try { const pl = await spApi('/me/playlists?limit=50'); SP.pls = ((pl && pl.items) || []).filter(Boolean); } catch (e) {}
+  }
+  function plUris(p){
+    const c = PLC.get(p.id);
+    if (c && c.snap === p.snapshot_id) return c.set ? Promise.resolve(c.set) : c.job;
+    const job = (async () => {
+      const set = new Set(); let url = `/playlists/${encodeURIComponent(p.id)}/items?limit=50&fields=next,items(item(uri),track(uri))`, pages = 0;
+      while (url && pages < 80){
+        let d;
+        try { d = await spApi(url); }
+        catch (e) { if (/field/i.test(e.message) && url.includes('&fields=')){ url = url.replace(/&fields=[^&]*/, ''); continue; } throw e; }
+        ((d && d.items) || []).forEach(x => { const it = x && (x.item || x.track); if (it && it.uri) set.add(it.uri); });
+        url = d && d.next ? d.next.replace(/^https:\/\/api\.spotify\.com\/v1/, '') : null; pages++;
+      }
+      PLC.set(p.id, { snap: p.snapshot_id, set }); return set;
+    })();
+    PLC.set(p.id, { snap: p.snapshot_id, job });
+    job.catch(() => { if (PLC.get(p.id) && PLC.get(p.id).job === job) PLC.delete(p.id); });
+    return job;
+  }
+  async function plAdd(p, uri){
+    const r = await spApi(`/playlists/${encodeURIComponent(p.id)}/items`, { method: 'POST', body: { uris: [uri] } });
+    const c = PLC.get(p.id), snap = r && r.snapshot_id;
+    if (c && c.set){ c.set.add(uri); if (snap) c.snap = snap; }
+    if (snap) p.snapshot_id = snap;
+  }
+  async function pool(arr, n, fn){ let i = 0; await Promise.all(Array.from({ length: Math.min(n, arr.length) }, async () => { while (i < arr.length) await fn(arr[i++]); })); }
+  let nowOn = false, nowUri = '', nowGrew = false;
+  function nowShow(on){
+    if (on === nowOn) return;
+    nowOn = on; $('#spNow').hidden = !on; $('#npOpen').setAttribute('aria-expanded', String(on));
+    if (on){
+      nowGrew = !spW.classList.contains('big'); if (nowGrew) setBig(true);          // mở rộng khung Spotify để ảnh bìa hiện to
+      spCloseRes(); nowUri = ''; nowRender(); $('#nowX').focus({ preventScroll: true });
+    } else if (nowGrew){ nowGrew = false; if (spW.classList.contains('big')) setBig(false); }
+  }
+  function nowRender(){
+    if (!nowOn) return;
+    const c = FP.cur;
+    if (!c){ nowShow(false); return; }
+    const art = c.big || c.art;
+    $('#nowArt').style.backgroundImage = art ? `url("${art.replace(/"/g, '%22')}")` : '';
+    $('#nowArt').setAttribute('aria-label', 'Ảnh bìa: ' + (c.al || c.name));
+    $('#nowT').textContent = c.name; $('#nowA').textContent = c.by; $('#nowAl').textContent = c.al ? '◎ ' + c.al : '';
+    const pb = $('#nowPlay'); pb.textContent = c.playing ? '❚❚' : '▶'; pb.setAttribute('aria-label', c.playing ? 'Tạm dừng' : 'Phát');
+    const m = /^spotify:(track|episode):(\w+)/.exec(c.uri || '');
+    $('#nowOpen').hidden = !m; if (m) $('#nowOpen').href = `https://open.spotify.com/${m[1]}/${m[2]}`;
+    if (c.uri !== nowUri){ nowUri = c.uri; nowPls(c.uri); }
+  }
+  function nowSum(){
+    const box = $('#nowPls'), rows = [...box.querySelectorAll('button[data-id]')];
+    const has = rows.filter(b => b.classList.contains('has')).map(b => b.dataset.name), wait = rows.some(b => b.dataset.st === 'wait');
+    $('#nowIn').innerHTML = has.length ? `♪ đang có trong <b>${has.length}</b> playlist: ${has.map(n => '<b>' + esc(n) + '</b>').join(', ')}${wait ? ' · ◌ đang xem tiếp…' : ''}`
+      : wait ? '◌ đang xem bài này có trong playlist nào…' : '♪ chưa có trong playlist nào của bạn.';
+  }
+  function nowRow(b, st){
+    b.dataset.st = st === true ? 'has' : st === false ? 'no' : st === 'wait' ? 'wait' : 'err';
+    b.classList.toggle('has', st === true); b.disabled = st === 'wait';
+    b.querySelector('i').textContent = st === true ? '✓ đã có' : st === false ? '＋ thêm' : st === 'wait' ? '◌' : '＋ thêm';
+  }
+  async function nowPls(uri){
+    const box = $('#nowPls');
+    if (!/^spotify:track:/.test(uri || '')){ box.innerHTML = '<p>chỉ thêm được bài hát (không phải podcast hay file trên máy).</p>'; $('#nowIn').textContent = ''; return; }
+    box.innerHTML = '<p>◌ đang tải playlist của bạn…</p>'; $('#nowIn').textContent = '';
+    await refreshPls();
+    if (uri !== nowUri) return;
+    const pls = editable();
+    if (!pls.length){ box.innerHTML = '<p>bạn chưa có playlist nào tự tạo — tạo một playlist trong ứng dụng Spotify rồi quay lại.</p>'; return; }
+    box.innerHTML = pls.map(p => `<button type="button" data-id="${esc(p.id)}" data-name="${esc(p.name)}"><span>♪ ${esc(p.name)}</span><i></i></button>`).join('');
+    box.querySelectorAll('button[data-id]').forEach(b => {
+      nowRow(b, 'wait');
+      b.addEventListener('click', async () => {
+        const p = editable().find(x => x.id === b.dataset.id); if (!p) return;
+        if (b.classList.contains('has')){ toast('“' + FP.cur.name + '” đã có trong ' + p.name + '.'); return; }
+        nowRow(b, 'wait'); nowSum();
+        try { await plAdd(p, uri); nowRow(b, true); toast('＋ đã thêm “' + (FP.cur ? FP.cur.name : 'bài') + '” vào ' + p.name); }
+        catch (e) { nowRow(b, false); toast('Spotify: ' + e.message); }
+        nowSum();
+      });
+    });
+    nowSum();
+    await pool(pls, 3, async p => {
+      let st;
+      try { st = (await plUris(p)).has(uri); } catch (e) { st = 'err'; }
+      if (uri !== nowUri) return;
+      const b = box.querySelector(`button[data-id="${CSS.escape(p.id)}"]`); if (b) nowRow(b, st);
+      nowSum();
+    });
+  }
+  $('#npOpen').addEventListener('click', () => { if (!FP.cur){ toast('Chưa có bài nào đang phát — bấm ▶ ở bài hoặc playlist bất kỳ.'); return; } nowShow(!nowOn); });
+  $('#nowX').addEventListener('click', () => { nowShow(false); $('#npOpen').focus({ preventScroll: true }); });
+  $('#spNow').querySelectorAll('[data-np]').forEach(b => b.addEventListener('click', () => npCmd(b.dataset.np)));
+  addEventListener('keydown', e => { if (e.key === 'Escape' && nowOn){ nowShow(false); } });
   $('#npPlay').addEventListener('click', () => npCmd('toggle'));
   $('#npNext').addEventListener('click', () => npCmd('next'));
   $('#npPrev').addEventListener('click', () => npCmd('prev'));
