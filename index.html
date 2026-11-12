@@ -521,6 +521,12 @@
     <p>♫ web nhạc</p>
     <button type="button" role="menuitem" data-app="plaza">▤ plaza.one · radio</button>
     <button type="button" role="menuitem" id="poolBtn">☼ poolsuite · summer radio</button>
+    <p>☰ báo nhạc</p>
+    <button type="button" role="menuitem" data-msite="npr">☰ npr music</button>
+    <button type="button" role="menuitem" data-msite="rollingstone">☰ rolling stone</button>
+    <a role="menuitem" href="https://pitchfork.com/" target="_blank" rel="noopener">☰ pitchfork ↗</a>
+    <a role="menuitem" href="https://www.pastemagazine.com/music" target="_blank" rel="noopener">☰ paste music ↗</a>
+    <a role="menuitem" href="https://musicboard.app/albums?order_by=new" target="_blank" rel="noopener">☰ musicboard · album mới ↗</a>
     <p>✎ ghi chú</p>
     <button type="button" role="menuitem" data-app="note">✎ note · chat</button>
     <a role="menuitem" href="https://keep.google.com/u/0/#home" target="_blank" rel="noopener">✎ google keep ↗</a>
@@ -561,6 +567,7 @@
   const IMDB = 'https://streamimdb.ru/';
   const SITES = {
     npr: ['npr music', 'https://www.npr.org/music/'],
+    rollingstone: ['rolling stone', 'https://www.rollingstone.com/music/'],
     stereogum: ['stereogum', 'https://www.stereogum.com/'],
     consequence: ['consequence', 'https://consequence.net/category/music/'],
   };
@@ -682,6 +689,8 @@
   }
   document.querySelectorAll('.menu [data-app]').forEach(el => el.addEventListener('click', () => openApp(el.dataset.app)));
   $('#poolBtn').addEventListener('click', openPool);
+  // báo nhạc mở được trong khung newmusic.feed (NPR, Rolling Stone…); Pitchfork, Paste, Musicboard chặn nhúng nên mở thẻ mới
+  document.querySelectorAll('.menu [data-msite]').forEach(el => el.addEventListener('click', () => { const k = el.dataset.msite; openApp('music'); nmFrameOpen(SITES[k][1], SITES[k][0], k); }));
   document.querySelectorAll('.menu [data-nm]').forEach(el => el.addEventListener('click', () => { openApp('music'); nmTab = el.dataset.nm; ls.set('nm-tab', nmTab); nmRender(); }));
   Object.entries(wins).forEach(([app, w]) => {
     w.addEventListener('pointerdown', () => { if (!w.classList.contains('front')) front(w); });
