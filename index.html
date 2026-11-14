@@ -329,12 +329,8 @@
   .td-reads .m{display:block;margin-top:3px;font:11.5px/1.4 var(--mono);color:var(--g-mid)}
   .td-reads .m .old{color:var(--amber)}
   .td-reads .s{display:block;margin-top:5px;font:12.5px/1.5 var(--mono);color:var(--g)}
-  .td-box{margin:12px 14px;padding:12px;border:1px solid var(--g-line);font:12.5px/1.55 var(--mono);color:var(--g-mid)}
-  .td-box b{color:var(--g);font-weight:600}
-  .td-box p+p{margin-top:8px}
   .td-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-  .td-in{flex:1 1 160px;min-width:0;height:32px;padding:0 9px;background:#000;border:1px solid var(--g-dim);border-radius:0;color:var(--g-hi);font:13px/1 var(--mono)}
-  .td-in:focus,.td-ta:focus{outline:none;border-color:var(--g)}
+  .td-ta:focus{outline:none;border-color:var(--g)}
   .td-ta{display:block;width:100%;min-height:120px;padding:9px 10px;background:#000;border:1px solid var(--g-dim);border-radius:0;color:var(--g-hi);font:14px/1.6 var(--mono);resize:vertical}
   .td-go{flex:none;height:32px;padding:0 12px;background:var(--g);color:#000;font:12.5px/1 var(--mono)}
   .td-go:hover{background:var(--g-hi)}
@@ -343,15 +339,7 @@
   .td-go:disabled{opacity:.5;pointer-events:none}
   .td-msg{min-height:1.4em;margin-top:6px;font:12px/1.4 var(--mono);color:var(--g-mid)}
   .td-msg.bad{color:var(--amber)}
-  .td-form{padding:12px 14px;border-bottom:1px dashed var(--g-line)}
-  .td-form select{height:32px;padding:0 6px;background:#000;border:1px solid var(--g-dim);color:var(--g-hi);font:12.5px/1 var(--mono)}
-  .td-notes{list-style:none}
-  .td-notes li{padding:11px 14px;border-bottom:1px solid #0b2a14}
-  .td-notes .m{font:11.5px/1.4 var(--mono);color:var(--g-mid)}
-  .td-notes .m .tg{color:var(--g)}
-  .td-notes p{margin-top:5px;font:14px/1.6 var(--mono);color:var(--g-hi);white-space:pre-wrap;overflow-wrap:anywhere}
-  .td-notes .src{margin-top:4px;font:12px/1.4 var(--mono);color:var(--g-mid)}
-  .td-tools{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-bottom:1px dashed var(--g-line)}
+  .td-tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;padding:10px 14px;border-top:1px dashed var(--g-line)}
   .td-day{padding:10px 14px 4px;font:12px/1.4 var(--mono);color:var(--g-mid)}
   .td-past{list-style:none;padding:0 14px 8px}
   .td-past li{padding:4px 0;font:13.5px/1.5 var(--mono);color:var(--g)}
@@ -375,7 +363,10 @@
   .rd-unsure{margin:10px 0 0;padding:8px 12px;border:1px dashed var(--amber);font:13px/1.55 var(--mono);color:var(--amber)}
   .rd-done{max-width:70ch;margin:8px auto 40px;padding:16px 22px;border-top:1px solid var(--g-line);font:13px/1.55 var(--mono);color:var(--g-mid)}
   .rd-done h2{font:600 15px/1.4 var(--mono);color:var(--g);margin-bottom:8px}
-  .rd-done .mine{margin-top:8px;padding:10px 12px;border-left:3px solid var(--g);font:14px/1.65 var(--mono);color:var(--g-hi);white-space:pre-wrap;overflow-wrap:anywhere}
+  .rd-foot{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .rd-del{flex:none;margin-top:5px;padding:0 2px;background:none;border:0;font:10.5px/1.4 var(--mono);color:var(--g-dim);letter-spacing:.04em;cursor:pointer;opacity:.7}
+  .rd-del:hover,.rd-del:focus-visible{color:var(--amber);opacity:1;outline:none;text-decoration:underline}
+  .td-reads .s.nt{white-space:pre-wrap;color:var(--g-hi);opacity:.85;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   /* ---- Instagram: cửa sổ mở từ biểu tượng ---- */
   .app{position:absolute;left:calc(clamp(290px,25vw,380px) + 32px);top:14px;right:calc(clamp(320px,28vw,430px) + 46px);bottom:calc(var(--bar) + 12px);min-width:300px;min-height:220px;z-index:20}
   .ig{display:flex;flex-direction:column;height:100%}
@@ -568,7 +559,7 @@
   <!-- Hôm nay: 6 câu trong ngày, bài đọc dài (dồn lại tới khi đọc xong), ghi chép mã hoá, lịch sử -->
   <section class="win app drag" id="w-today" data-app="today" aria-label="Hôm nay" hidden>
     <div class="tb"><span class="t">hôm nay <i id="tdDate"></i></span><span class="r" id="tdUpd"></span><button type="button" data-act="hide" aria-label="Ẩn khung hôm nay">_</button><button type="button" data-full aria-label="Mở rộng toàn màn hình" aria-pressed="false">⛶</button></div>
-    <div class="tabs" role="tablist" aria-label="Hôm nay"><button type="button" role="tab" aria-selected="true" data-td="today">☀ hôm nay</button><button type="button" role="tab" aria-selected="false" data-td="notes">✎ ghi chép</button><button type="button" role="tab" aria-selected="false" data-td="hist">◷ lịch sử</button></div>
+    <div class="tabs" role="tablist" aria-label="Hôm nay"><button type="button" role="tab" aria-selected="true" data-td="today">☀ hôm nay</button><button type="button" role="tab" aria-selected="false" data-td="hist">◷ lịch sử</button></div>
     <div class="wb" id="tdBody"><p class="note">◌ đang tải…</p></div>
   </section>
   <!-- Đọc bài -->
@@ -1715,15 +1706,14 @@
     }
   }
 
-  /* ================= HÔM NAY: 6 câu mỗi ngày · 2 bài đọc dài · ghi chép mã hoá · lịch sử =================
+  /* ================= HÔM NAY: 6 câu mỗi ngày · 4 bài đọc dài · ghi chép sau bài đọc · lịch sử =================
      Nội dung do tác vụ buổi sáng soạn vào anrevy-house/studio/data/ (reads/, idioms/) — Studio chỉ đọc và hiển thị.
-     Ghi chép mã hoá ngay trên máy (AES-GCM, khoá sinh từ mật khẩu bằng PBKDF2) rồi mới lưu lên repo anvy-studio
-     bằng GitHub token của Vy; mật khẩu và token không nằm trong code, không ai khôi phục được mật khẩu. */
+     Ghi chép sau bài đọc là chữ thường (không khoá): gõ tới đâu tự lưu tới đó — lưu ngay trên máy này và gửi lên
+     máy chủ chuyển tin công cộng (tin giữ lại), rồi bot gallery-sync (15 phút một lần) chép vào
+     anrevy-house/studio/data/readnotes.json để máy nào mở Studio cũng thấy. Có ghi chép thì bài chuyển vào Lịch sử. */
   const VN_TZ = 'Asia/Ho_Chi_Minh', TD_DATA = '/anrevy-house/studio/data/';
-  const NOTES_REPO = 'tsukustukatadotojo-bit/anvy-studio', NOTES_DIR = 'data/notes/';
   const IDIOM_AT = ['10:00', '12:00', '14:00', '16:00', '18:00', '20:00'];
   const TD_WD = { Mon: 'thứ hai', Tue: 'thứ ba', Wed: 'thứ tư', Thu: 'thứ năm', Fri: 'thứ sáu', Sat: 'thứ bảy', Sun: 'chủ nhật' };
-  const NOTE_TYPES = { realize: 'câu tự nhận ra', quote: 'câu trích', info: 'thông tin mới' };
   const LANG = { vi: 'tiếng Việt', en: 'English' };
   function vnNow(d = new Date()){
     const o = {}; new Intl.DateTimeFormat('en-CA', { timeZone: VN_TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', weekday: 'short' }).formatToParts(d).forEach(p => { o[p.type] = p.value; });
@@ -1731,79 +1721,79 @@
   }
   const dmy = d => { const [y, m, dd] = String(d || '').split('-'); return dd ? `${dd}/${m}` : ''; };
   const getJSON = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
-  const TD = { tab: 'today', reads: [], idioms: null, hist: null, idx: [], done: new Set(), art: {}, notes: {}, day: '', shown: -1 };
+  const TD = { tab: 'today', reads: [], idioms: null, hist: null, art: {}, day: '', shown: -1 };
   const tdBody = $('#tdBody'), rdBody = $('#rdBody');
 
-  /* ---------- mã hoá ---------- */
-  const te = new TextEncoder(), tdec = new TextDecoder();
-  const b64e = u8 => { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
-  const b64d = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-  let KEY = null, SALT = null;
-  async function deriveKey(pw, salt){
-    const base = await crypto.subtle.importKey('raw', te.encode(pw), 'PBKDF2', false, ['deriveKey']);
-    return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 310000, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+  /* ---------- ghi chép sau bài đọc: { mã bài: { t: chữ, at: lúc lưu } } — t rỗng nghĩa là đã xoá ---------- */
+  const RN_PFX = 'anrevy-house-9q2/reads/v1/n/';
+  let RN_BROKERS = ['wss://broker.emqx.io:8084/mqtt', 'wss://broker.hivemq.com:8884/mqtt'];
+  { const qb = new URLSearchParams(location.search).get('broker'); if (qb) RN_BROKERS = qb.split(','); }
+  const RN_LIB = 'https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js';
+  const RN = { local: {}, web: {}, clients: [], started: false };
+  { const j = ls.get('rd-notes'); if (j && typeof j === 'object' && !Array.isArray(j)) Object.entries(j).forEach(([id, v]) => { if (/^\d{4}-\d{2}-\d{2}-\d{1,2}$/.test(id) && v && typeof v.t === 'string' && typeof v.at === 'number') RN.local[id] = v; }); }
+  const rnOk = (id, v) => /^\d{4}-\d{2}-\d{2}-\d{1,2}$/.test(id) && v && typeof v.t === 'string' && typeof v.at === 'number' && v.at > 0;
+  function rnGet(id){                                        // bản mới nhất giữa máy này và trên web
+    const a = RN.local[id], b = RN.web[id];
+    return !a ? b : !b ? a : (a.at >= b.at ? a : b);
   }
-  async function seal(obj, key = KEY){ const iv = crypto.getRandomValues(new Uint8Array(12)); const c = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, te.encode(JSON.stringify(obj))); return { v: 1, i: b64e(iv), c: b64e(new Uint8Array(c)) }; }
-  async function open_(box, key = KEY){ const p = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(box.i) }, key, b64d(box.c)); return JSON.parse(tdec.decode(p)); }
+  const rnText = id => { const v = rnGet(id); return v && v.t ? v.t : ''; };
+  const rnDone = () => Object.keys(Object.assign({}, RN.web, RN.local)).filter(id => rnText(id));
+  function rnWeb(id, v){ if (!rnOk(id, v)) return false; const o = RN.web[id]; if (o && o.at >= v.at) return false; RN.web[id] = { t: v.t.slice(0, 8000), at: v.at }; return true; }
+  function rnPublish(id, v){
+    const live = RN.clients.filter(c => c.connected); if (!live.length) return false;
+    live.forEach(c => c.publish(RN_PFX + id, JSON.stringify({ id, t: v.t, at: v.at }), { qos: 1, retain: true }));
+    return true;
+  }
+  function rnFlush(){                                        // bản trên máy mới hơn bản trên web → gửi lên
+    Object.entries(RN.local).forEach(([id, v]) => { const w = RN.web[id]; if (!w || w.at < v.at){ if (rnPublish(id, v)) RN.web[id] = { t: v.t, at: v.at }; } });
+  }
+  function rnSave(id, text){
+    const v = { t: String(text || '').slice(0, 8000), at: Date.now() };
+    RN.local[id] = v; ls.set('rd-notes', RN.local);
+    const sent = rnPublish(id, v); if (sent) RN.web[id] = { t: v.t, at: v.at };
+    return sent;
+  }
+  function rnLib(cb){
+    if (window.mqtt) return cb();
+    const srcs = [RN_LIB, RN_LIB.replace('https://cdn.jsdelivr.net/npm/', 'https://unpkg.com/')];
+    (function next(i){
+      if (i >= srcs.length) return;
+      const sc = document.createElement('script'); sc.src = srcs[i]; sc.async = true;
+      sc.onload = () => window.mqtt ? cb() : next(i + 1); sc.onerror = () => next(i + 1);
+      document.head.appendChild(sc);
+    })(0);
+  }
+  function rnConnect(){
+    RN_BROKERS.forEach(url => {
+      let c; try { c = window.mqtt.connect(url, { clientId: 'anrevy_rn_' + Math.random().toString(36).slice(2, 12), clean: true, keepalive: 30, reconnectPeriod: 6000, connectTimeout: 12000, protocolVersion: 4 }); } catch (e) { return; }
+      c.on('connect', () => { c.subscribe(RN_PFX + '+', { qos: 1 }); setTimeout(rnFlush, 1500); rnStatus(); });
+      c.on('close', rnStatus); c.on('offline', rnStatus); c.on('error', () => {});
+      c.on('message', (topic, payload) => {
+        if (!payload || !payload.length) return;
+        try { const m = JSON.parse(new TextDecoder().decode(payload)), id = topic.slice(RN_PFX.length); if (m.id === id && rnWeb(id, m)) rnChanged(id); } catch (e) {}
+      });
+      RN.clients.push(c);
+    });
+  }
+  async function rnLoad(){
+    const j = await getJSON(TD_DATA + 'readnotes.json');
+    Object.entries((j && j.items) || {}).forEach(([id, v]) => rnWeb(id, v));
+    if (!RN.started){ RN.started = true; rnLib(rnConnect); }
+  }
+  let rnT = 0;
+  function rnChanged(id){                                    // có bản mới từ máy khác: vẽ lại danh sách (không đụng ô đang gõ)
+    clearTimeout(rnT);
+    rnT = setTimeout(() => {
+      if (TD.tab === 'today' || TD.tab === 'hist') tdRender();
+      const ta = $('#rdNote');
+      if (ta && ta.dataset.id === id && document.activeElement !== ta && ta.value !== rnText(id)){ ta.value = rnText(id); rdDel(); }
+    }, 120);
+  }
+  function rnStatus(){
+    const el = $('#rdMsg'); if (!el || !el.dataset.saved) return;
+    el.textContent = RN.clients.some(c => c.connected) ? '✓ đã lưu' : '✓ đã lưu trên máy này · sẽ gửi lên web khi có mạng';
+  }
 
-  /* ---------- đọc / ghi repo anvy-studio ---------- */
-  const ghTok = () => ls.get('gh-tok') || '';
-  const ghH = () => ({ Authorization: 'Bearer ' + ghTok(), Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' });
-  const ghURL = p => `https://api.github.com/repos/${NOTES_REPO}/contents/${p}`;
-  async function ghRead(path){                        // có token: đọc thẳng qua API (luôn mới); không có: bản công khai (chậm ~5 phút)
-    try {
-      const r = ghTok() ? await fetch(ghURL(path) + '?ref=main', { headers: Object.assign(ghH(), { Accept: 'application/vnd.github.raw+json' }), cache: 'no-store' })
-        : await fetch(`https://raw.githubusercontent.com/${NOTES_REPO}/main/${path}?t=${Date.now()}`, { cache: 'no-store' });
-      return r.ok ? r.json() : null;
-    } catch (e) { return null; }
-  }
-  const b64utf8 = s => b64e(te.encode(s));
-  async function ghPut(path, text, msg){
-    let sha;
-    const g = await fetch(ghURL(path) + '?ref=main', { headers: ghH(), cache: 'no-store' });
-    if (g.ok) sha = (await g.json()).sha; else if (g.status === 401 || g.status === 403) throw new Error('token không đúng hoặc không có quyền ghi vào anvy-studio');
-    const r = await fetch(ghURL(path), { method: 'PUT', headers: ghH(), body: JSON.stringify(Object.assign({ message: msg, content: b64utf8(text), branch: 'main' }, sha ? { sha } : {})) });
-    if (!r.ok){ let m = 'HTTP ' + r.status; try { m = (await r.json()).message || m; } catch (e) {} throw new Error(r.status === 401 || r.status === 403 || r.status === 404 ? 'token không đúng hoặc không có quyền ghi vào anvy-studio' : m); }
-  }
-  async function idxLoad(){
-    const j = await ghRead(NOTES_DIR + 'index.json');
-    TD.idx = (j && Array.isArray(j.items)) ? j.items : [];
-    TD.done = new Set(TD.idx.filter(x => x.kind === 'read').map(x => x.read));
-  }
-  async function idxAdd(item){                        // mục lục chỉ có mã + ngày, không có nội dung
-    const j = await ghRead(NOTES_DIR + 'index.json');
-    const items = (j && Array.isArray(j.items)) ? j.items : [];
-    if (!items.some(x => x.id === item.id)) items.push(item);
-    await ghPut(NOTES_DIR + 'index.json', JSON.stringify({ items }, null, 1), 'mục lục ghi chép');
-    TD.idx = items; TD.done = new Set(items.filter(x => x.kind === 'read').map(x => x.read));
-  }
-  async function unlock(pw, pw2){
-    const chk = await ghRead(NOTES_DIR + 'check.enc');
-    if (chk && chk.s){
-      const salt = b64d(chk.s), key = await deriveKey(pw, salt);
-      try { if ((await open_(chk, key)).ok !== 'anvy-notes') throw 0; } catch (e) { throw new Error('sai mật khẩu'); }
-      KEY = key; SALT = salt; return;
-    }
-    // lần đầu: đặt mật khẩu (gõ 2 lần), lưu một hộp kiểm tra để lần sau biết gõ đúng hay sai
-    if (pw2 === undefined) throw new Error('first');
-    if (pw !== pw2) throw new Error('hai lần gõ không khớp');
-    if (pw.length < 6) throw new Error('mật khẩu cần ít nhất 6 ký tự');
-    if (!ghTok()) throw new Error('cần GitHub token trước để lưu mật khẩu lần đầu');
-    const salt = crypto.getRandomValues(new Uint8Array(16)), key = await deriveKey(pw, salt);
-    const box = Object.assign(await seal({ ok: 'anvy-notes' }, key), { s: b64e(salt) });
-    await ghPut(NOTES_DIR + 'check.enc', JSON.stringify(box), 'khoá ghi chép');
-    KEY = key; SALT = salt;
-  }
-  async function noteGet(id){
-    if (TD.notes[id]) return TD.notes[id];
-    const box = await ghRead(NOTES_DIR + id + '.enc'); if (!box || !KEY) return null;
-    try { return (TD.notes[id] = await open_(box)); } catch (e) { return null; }
-  }
-  async function noteSave(id, obj, idxItem){
-    await ghPut(NOTES_DIR + id + '.enc', JSON.stringify(await seal(obj)), 'ghi chép (mã hoá)');
-    TD.notes[id] = obj;
-    await idxAdd(idxItem);
-  }
   // nhờ Claude: chép nội dung vào bộ nhớ tạm rồi mở Claude ở thẻ mới — trang không tự gửi gì đi đâu
   async function askClaude(text){
     let ok = false; try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {}
@@ -1840,9 +1830,8 @@
   /* ---------- tải dữ liệu ---------- */
   async function tdLoad(){
     const t = vnNow(); TD.day = t.date;
-    const [idx, idi, hist] = await Promise.all([getJSON(TD_DATA + 'reads/index.json'), getJSON(TD_DATA + `idioms/${t.date}.json`), getJSON(TD_DATA + 'idioms/history.json')]);
+    const [idx, idi, hist] = await Promise.all([getJSON(TD_DATA + 'reads/index.json'), getJSON(TD_DATA + `idioms/${t.date}.json`), getJSON(TD_DATA + 'idioms/history.json'), rnLoad()]);
     TD.reads = (idx && Array.isArray(idx.items)) ? idx.items : []; TD.idioms = idi; TD.hist = hist;
-    await idxLoad();
     $('#tdUpd').textContent = TD.reads.length ? '' : '◌';
     tdRender();
   }
@@ -1854,7 +1843,6 @@
     const t = vnNow();
     $('#tdDate').textContent = '— ' + (TD_WD[t.wd] || '') + ' ' + dmy(t.date);
     document.querySelectorAll('[data-td]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.td === TD.tab)));
-    if (TD.tab === 'notes') return notesRender();
     if (TD.tab === 'hist') return histRender();
     // 6 câu trong ngày: ra lần lượt 10h → 20h, câu mới nhất ở trên, không giải thích
     const shown = revealed(), all = (TD.idioms && TD.idioms.items) || [];
@@ -1863,88 +1851,23 @@
     let h = `<div class="td-sec"><b>❝ câu hôm nay</b><span>${shown.length}/6</span></div>`;
     h += shown.length ? '<ol class="td-idi">' + shown.slice().reverse().map((x, n) => `<li${n === 0 ? ' class="new"' : ''}><span class="h">${esc(x.at || '')}</span><q>${esc(x.text || '')}</q>${x.kind ? `<span class="k">${esc(x.kind)}</span>` : ''}</li>`).join('') + '</ol>' : '';
     h += next ? `<p class="td-next">câu tiếp theo · ${next}</p>` : (!shown.length ? '<p class="td-next">câu đầu tiên ra lúc 10:00</p>' : '');
-    // bài đọc: chưa đọc thì còn nằm đây, dồn qua các ngày
-    const queue = TD.reads.filter(r => !TD.done.has(r.id)).sort((a, b) => (b.date || '').localeCompare(a.date || '') || (a.id || '').localeCompare(b.id || ''));
+    // bài đọc: chưa có ghi chép thì còn nằm đây, dồn qua các ngày
+    const done = new Set(rnDone());
+    const queue = TD.reads.filter(r => !done.has(r.id)).sort((a, b) => (b.date || '').localeCompare(a.date || '') || (a.id || '').localeCompare(b.id || ''));
     h += `<div class="td-sec"><b>▤ bài đọc</b><span>${queue.length ? queue.length + ' bài chưa đọc' : ''}</span></div>`;
     if (!TD.reads.length) h += '<p class="td-empty">◌ chưa có bài — bài mỗi ngày được soạn vào khoảng 5–6 giờ sáng.</p>';
     else if (!queue.length) h += '<p class="td-empty">✓ đã đọc hết. Bài mới có vào sáng mai.</p>';
     else h += '<ul class="td-reads">' + queue.map(r => `<li><button type="button" data-read="${esc(r.id)}"><b>${esc(r.title || '')}</b><span class="m">${r.date && r.date !== t.date ? `<span class="old">từ ${dmy(r.date)}</span> · ` : ''}${esc(kindRead(r))}</span>${r.summary ? `<span class="s">${esc(r.summary)}</span>` : ''}</button></li>`).join('') + '</ul>';
+    h += '<div class="td-tools"><a class="btn sm" href="https://claude.ai/new" target="_blank" rel="noopener">✦ claude ↗</a><a class="btn sm" href="https://keep.google.com/" target="_blank" rel="noopener">✎ google keep ↗</a></div>';
     tdBody.innerHTML = h;
     tdBody.querySelectorAll('[data-read]').forEach(b => b.addEventListener('click', () => openRead(b.dataset.read)));
   }
 
-  /* ---------- ghi chép ---------- */
-  function lockBox(where){
-    const tok = ghTok();
-    return `<div class="td-box">
-      <p><b>🔒 ghi chép được khoá bằng mật khẩu</b> — mã hoá ngay trên máy này trước khi lưu; ai mở repo cũng chỉ thấy chuỗi ký tự vô nghĩa. Quên mật khẩu thì không ai mở lại được.</p>
-      <div class="td-row"><label class="sr" for="${where}Pw">Mật khẩu ghi chép</label><input class="td-in" id="${where}Pw" type="password" autocomplete="current-password" placeholder="mật khẩu ghi chép">
-      <input class="td-in" id="${where}Pw2" type="password" autocomplete="new-password" placeholder="gõ lại (lần đầu đặt mật khẩu)" hidden><button class="td-go" type="button" id="${where}Un">mở khoá</button></div>
-      <p class="td-msg" id="${where}Msg"></p>
-      <p><b>GitHub token</b> ${tok ? '✓ đã lưu trên máy này' : '— cần một lần để lưu ghi chép lên repo'}: tạo ở <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com → Fine-grained token</a>, chọn <b>Only select repositories → anvy-studio</b>, quyền <b>Contents: Read and write</b>.</p>
-      <div class="td-row"><label class="sr" for="${where}Tok">GitHub token</label><input class="td-in" id="${where}Tok" type="password" autocomplete="off" placeholder="${tok ? 'dán token mới để thay' : 'github_pat_…'}"><button class="td-go alt" type="button" id="${where}TokOk">lưu token</button>${tok ? `<button class="td-go alt" type="button" id="${where}TokX">xoá token</button>` : ''}</div>
-    </div>`;
-  }
-  function wireLock(where, after){
-    const pw = $('#' + where + 'Pw'), pw2 = $('#' + where + 'Pw2'), msg = $('#' + where + 'Msg');
-    const go = async () => {
-      if (!pw.value){ pw.focus(); return; }
-      msg.className = 'td-msg'; msg.textContent = '◌ đang mở khoá…'; $('#' + where + 'Un').disabled = true;
-      try { await unlock(pw.value, pw2.hidden ? undefined : pw2.value); msg.textContent = '✓ đã mở khoá'; after(); }
-      catch (e) {
-        if (e.message === 'first'){ pw2.hidden = false; pw2.focus(); msg.textContent = 'lần đầu: gõ lại mật khẩu để đặt'; }
-        else { msg.className = 'td-msg bad'; msg.textContent = '✕ ' + e.message; }
-      }
-      const b = $('#' + where + 'Un'); if (b) b.disabled = false;
-    };
-    $('#' + where + 'Un').addEventListener('click', go);
-    [pw, pw2].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') go(); }));
-    $('#' + where + 'TokOk').addEventListener('click', () => { const v = $('#' + where + 'Tok').value.trim(); if (!v) return; ls.set('gh-tok', v); toast('✓ đã lưu token trên máy này'); idxLoad().then(after); });
-    const x = $('#' + where + 'TokX'); if (x) x.addEventListener('click', () => { ls.del('gh-tok'); toast('đã xoá token khỏi máy này'); after(); });
-  }
-  async function notesRender(){
-    const tools = `<div class="td-tools"><a class="btn sm" href="https://claude.ai/new" target="_blank" rel="noopener">✦ claude ↗</a><a class="btn sm" href="https://keep.google.com/" target="_blank" rel="noopener">✎ google keep ↗</a>${KEY ? '<button class="btn sm" type="button" id="ntLock">🔒 khoá lại</button>' : ''}</div>`;
-    if (!KEY || !ghTok()){
-      tdBody.innerHTML = tools + lockBox('nt') + (KEY ? '' : '');
-      wireLock('nt', () => { if (TD.tab === 'notes') notesRender(); });
-      if (KEY && !ghTok()) $('#ntMsg').textContent = '✓ đã mở khoá — thêm GitHub token để lưu được ghi chép';
-      return;
-    }
-    tdBody.innerHTML = tools + `<div class="td-form">
-      <label class="sr" for="ntTxt">Nội dung</label><textarea class="td-ta" id="ntTxt" placeholder="câu mình chợt nhận ra, câu văn hay, thông tin mới…"></textarea>
-      <div class="td-row"><label class="sr" for="ntType">Loại</label><select id="ntType">${Object.entries(NOTE_TYPES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>
-      <label class="sr" for="ntSrc">Nguồn</label><input class="td-in" id="ntSrc" placeholder="nguồn (sách, phim, người nói…)">
-      <label class="sr" for="ntTags">Tag</label><input class="td-in" id="ntTags" placeholder="tag, cách nhau bằng dấu phẩy"></div>
-      <div class="td-row"><button class="td-go" type="button" id="ntSave">lưu</button><button class="td-go alt" type="button" id="ntAsk">✦ nhờ Claude tóm tắt ý chính</button></div>
-      <p class="td-msg" id="ntMsg">nội dung chỉ rời máy khi bạn bấm ✦ Claude.</p>
-    </div><ul class="td-notes" id="ntList"><li class="m">◌ đang mở ghi chép…</li></ul>`;
-    $('#ntLock').addEventListener('click', () => { KEY = null; TD.notes = {}; notesRender(); });
-    $('#ntAsk').addEventListener('click', () => { const v = $('#ntTxt').value.trim(); if (!v){ $('#ntTxt').focus(); return; } askClaude('Tóm tắt và lọc giúp mình các ý chính của đoạn sau (gạch đầu dòng ngắn, giữ nguyên ngôn ngữ của đoạn):\n\n' + v); });
-    $('#ntSave').addEventListener('click', async () => {
-      const text = $('#ntTxt').value.trim(), msg = $('#ntMsg'); if (!text){ $('#ntTxt').focus(); return; }
-      const t = vnNow(), id = 'n-' + t.date.replace(/-/g, '') + '-' + t.hm.replace(':', '') + '-' + Math.random().toString(36).slice(2, 6);
-      const obj = { kind: 'note', type: $('#ntType').value, text, source: $('#ntSrc').value.trim(), tags: $('#ntTags').value.split(',').map(s => s.trim()).filter(Boolean), date: t.date, time: t.hm };
-      $('#ntSave').disabled = true; msg.className = 'td-msg'; msg.textContent = '◌ đang mã hoá & lưu…';
-      try { await noteSave(id, obj, { id, kind: 'note', date: t.date }); msg.textContent = '✓ đã lưu'; $('#ntTxt').value = ''; $('#ntSrc').value = ''; $('#ntTags').value = ''; listNotes(); }
-      catch (e) { msg.className = 'td-msg bad'; msg.textContent = '✕ ' + e.message; }
-      $('#ntSave').disabled = false;
-    });
-    listNotes();
-  }
-  async function listNotes(){
-    const ul = $('#ntList'); if (!ul) return;
-    const ids = TD.idx.filter(x => x.kind === 'note').map(x => x.id).reverse();
-    if (!ids.length){ ul.innerHTML = '<li class="m">chưa có ghi chép nào.</li>'; return; }
-    const list = await Promise.all(ids.map(id => noteGet(id).then(n => [id, n])));
-    if (!$('#ntList')) return;
-    ul.innerHTML = list.map(([id, n]) => n ? `<li><div class="m">${esc(dmy(n.date))}${n.time ? ' ' + esc(n.time) : ''} · ${esc(NOTE_TYPES[n.type] || n.type || '')}${(n.tags || []).length ? ' · ' + n.tags.map(x => `<span class="tg">#${esc(x)}</span>`).join(' ') : ''}</div><p>${esc(n.text || '')}</p>${n.source ? `<div class="src">— ${esc(n.source)}</div>` : ''}</li>` : `<li class="m">✕ không mở được một ghi chép (${esc(id)})</li>`).join('');
-  }
-
   /* ---------- lịch sử ---------- */
   function histRender(){
-    const done = TD.idx.filter(x => x.kind === 'read').slice().reverse().map(x => [x, TD.reads.find(r => r.id === x.read)]).filter(([, r]) => r);
+    const done = rnDone().map(id => [id, rnGet(id), TD.reads.find(r => r.id === id)]).filter(([, , r]) => r).sort((a, b) => b[1].at - a[1].at);
     let h = `<div class="td-sec"><b>✓ bài đã đọc</b><span>${done.length}</span></div>`;
-    h += done.length ? '<ul class="td-reads">' + done.map(([x, r]) => `<li><button type="button" data-read="${esc(r.id)}"><b>${esc(r.title || '')}</b><span class="m">xong ${dmy(x.date)} · ${esc(kindRead(r))}</span></button></li>`).join('') + '</ul>' : '<p class="td-empty">chưa có bài nào — đọc xong và ghi lại điều mình hiểu thì bài chuyển vào đây.</p>';
+    h += done.length ? '<ul class="td-reads">' + done.map(([id, n, r]) => `<li><button type="button" data-read="${esc(r.id)}"><b>${esc(r.title || '')}</b><span class="m">xong ${dmy(vnNow(new Date(n.at)).date)} · ${esc(kindRead(r))}</span><span class="s nt">${esc(n.t)}</span></button></li>`).join('') + '</ul>' : '<p class="td-empty">chưa có bài nào — đọc xong và ghi lại điều mình hiểu thì bài chuyển vào đây.</p>';
     const items = ((TD.hist && TD.hist.items) || []).filter(x => x.date && x.date < TD.day);
     const days = {}; items.forEach(x => { (days[x.date] = days[x.date] || []).push(x); });
     const keys = Object.keys(days).sort().reverse().slice(0, 30);
@@ -1955,7 +1878,7 @@
   }
   document.querySelectorAll('[data-td]').forEach(b => b.addEventListener('click', () => { TD.tab = b.dataset.td; tdRender(); tdBody.scrollTop = 0; }));
 
-  /* ---------- đọc bài + hoàn thành ---------- */
+  /* ---------- đọc bài + ghi chép tự lưu ---------- */
   async function openRead(id){
     const meta = TD.reads.find(r => r.id === id) || { id };
     openApp('reader'); $('#rdT').textContent = '— ' + (meta.title || '');
@@ -1969,32 +1892,33 @@
       ${(a.unsure || []).length ? `<div class="rd-unsure"><b>⚠ chỗ chưa kiểm chứng chắc chắn</b><ul>${a.unsure.map(x => '<li>' + esc(x) + '</li>').join('')}</ul></div>` : ''}
       ${src.length ? `<h2>${a.lang === 'en' ? 'Sources' : 'Nguồn'}</h2><ol class="rd-src">${src.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title || s.url)}</a></li>`).join('')}</ol>` : ''}
     </article><section class="rd-done" id="rdDone"></section>`;
-    doneRender(a);
+    noteBox(a);
   }
-  async function doneRender(a){
+  function rdDel(){ const d = $('#rdDel'), ta = $('#rdNote'); if (d && ta){ d.hidden = !ta.value.trim(); d.textContent = 'xoá'; delete d.dataset.arm; } }
+  function noteBox(a){
     const box = $('#rdDone'); if (!box) return;
-    if (TD.done.has(a.id)){
-      box.innerHTML = '<h2>✓ đã hoàn thành</h2>' + (KEY ? '<div class="mine" id="rdMine">◌ đang mở ghi chép…</div>' : '<p>Mở khoá ghi chép (trong ✎ ghi chép) để xem lại điều bạn đã viết.</p>');
-      if (KEY){ const n = await noteGet('r-' + a.id); const m = $('#rdMine'); if (m) m.textContent = n ? n.text : '✕ không mở được ghi chép này'; }
-      return;
-    }
-    if (!KEY || !ghTok()){
-      box.innerHTML = '<h2>✎ đọc xong rồi? ghi lại điều mình hiểu</h2><p>Có ghi chép thì bài mới chuyển vào Lịch sử. Cần mở khoá ghi chép trước:</p>' + lockBox('rd');
-      wireLock('rd', () => doneRender(a));
-      return;
-    }
-    box.innerHTML = `<h2>✎ điều mình hiểu được</h2><p>Viết lại bằng lời của bạn — lưu xong bài chuyển vào ◷ lịch sử.</p>
-      <label class="sr" for="rdNote">Điều mình hiểu được</label><textarea class="td-ta" id="rdNote" rows="7"></textarea>
-      <div class="td-row"><button class="td-go" type="button" id="rdSave">lưu & hoàn thành</button><button class="td-go alt" type="button" id="rdAsk">✦ hỏi Claude về bài này</button></div><p class="td-msg" id="rdMsg"></p>`;
-    $('#rdAsk').addEventListener('click', () => askClaude(`Mình vừa đọc bài “${a.title}”.` + ($('#rdNote').value.trim() ? `\nĐây là điều mình hiểu được:\n${$('#rdNote').value.trim()}\n\nMình hiểu đúng chưa, còn thiếu ý nào quan trọng?` : '\nGiải thích thêm giúp mình phần khó nhất của chủ đề này.')));
-    $('#rdSave').addEventListener('click', async () => {
-      const text = $('#rdNote').value.trim(), msg = $('#rdMsg'); if (!text){ $('#rdNote').focus(); return; }
-      const t = vnNow(); $('#rdSave').disabled = true; msg.className = 'td-msg'; msg.textContent = '◌ đang mã hoá & lưu…';
-      try {
-        await noteSave('r-' + a.id, { kind: 'read', read: a.id, title: a.title, text, date: t.date, time: t.hm }, { id: 'r-' + a.id, kind: 'read', read: a.id, date: t.date });
-        toast('✓ đã hoàn thành “' + (a.title || '') + '”'); doneRender(a); tdRender();
-      } catch (e) { msg.className = 'td-msg bad'; msg.textContent = '✕ ' + e.message; $('#rdSave').disabled = false; }
+    box.innerHTML = `<h2>✎ điều mình hiểu được</h2>
+      <label class="sr" for="rdNote">Ghi chép sau khi đọc</label><textarea class="td-ta" id="rdNote" rows="7" data-id="${esc(a.id)}"></textarea>
+      <div class="rd-foot"><p class="td-msg" id="rdMsg"></p><button type="button" class="rd-del" id="rdDel" hidden aria-label="Xoá ghi chép này">xoá</button></div>
+      <div class="td-row"><button class="td-go alt" type="button" id="rdAsk">✦ hỏi Claude về bài này</button></div>`;
+    const ta = $('#rdNote'), msg = $('#rdMsg'), del = $('#rdDel');
+    ta.value = rnText(a.id); rdDel();
+    let t = 0, last = ta.value;
+    const save = () => {
+      clearTimeout(t); if (ta.value === last) return;
+      const was = !!last.trim(), now = !!ta.value.trim(); last = ta.value;
+      rnSave(a.id, ta.value.trim() ? ta.value : '');
+      msg.dataset.saved = '1'; rnStatus(); if (!now) msg.textContent = '';
+      if (was !== now){ tdRender(); if (now) toast('✓ đã ghi chép — bài chuyển vào ◷ lịch sử'); }
+    };
+    ta.addEventListener('input', () => { clearTimeout(t); t = setTimeout(save, 900); msg.textContent = '…'; rdDel(); });
+    ta.addEventListener('blur', save);
+    addEventListener('pagehide', save, { once: true });
+    del.addEventListener('click', () => {                    // bấm 2 lần mới xoá (lần đầu hỏi lại cho chắc)
+      if (!del.dataset.arm){ del.dataset.arm = '1'; del.textContent = 'xoá thật?'; setTimeout(() => { if (del.dataset.arm){ delete del.dataset.arm; del.textContent = 'xoá'; } }, 3000); return; }
+      ta.value = ''; save(); rdDel(); msg.textContent = 'đã xoá ghi chép'; delete msg.dataset.saved;
     });
+    $('#rdAsk').addEventListener('click', () => askClaude(`Mình vừa đọc bài “${a.title}”.` + (ta.value.trim() ? `\nĐây là điều mình hiểu được:\n${ta.value.trim()}\n\nMình hiểu đúng chưa, còn thiếu ý nào quan trọng?` : '\nGiải thích thêm giúp mình phần khó nhất của chủ đề này.')));
   }
   // mỗi nửa phút: tới giờ thì hiện câu mới; sang ngày mới thì tải lại
   setInterval(() => {
