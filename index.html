@@ -17,7 +17,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=VT323&amp;family=IBM+Plex+Mono:wght@400;600&amp;family=Monoton&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=VT323&amp;family=IBM+Plex+Mono:wght@400;600&amp;family=Monoton&amp;family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&amp;display=swap" rel="stylesheet">
 <style>
   /* Studio: tĩnh hoàn toàn (không hiệu ứng chuyển động), chữ xanh trên nền đen kiểu terminal.
      Màn hình chia khung: Letterboxd | nhạc mới | Spotify + Last.fm — mọi thứ chạy ngay trong trang. */
@@ -310,40 +310,77 @@
   .lf-list .ib{flex:none;width:26px;height:24px;border:1px solid var(--g-dim);color:var(--g);font:12px/1 var(--mono)}
   .lf-list .ib:hover{background:var(--g);color:#000}
 
+  /* ---- HÔM NAY (6 câu · bài đọc · ghi chép · lịch sử) & ĐỌC BÀI ---- */
+  #w-today{z-index:21}
+  #w-reader{left:max(18px,7vw);right:max(18px,7vw);z-index:22}
+  .td-sec{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:12px 14px 6px;border-bottom:1px dashed var(--g-line);font:12px/1.4 var(--mono);color:var(--g-mid)}
+  .td-sec b{font:600 13px/1.3 var(--mono);color:var(--g)}
+  .td-idi{list-style:none}
+  .td-idi li{display:flex;align-items:baseline;gap:12px;padding:9px 14px;border-bottom:1px solid #0b2a14}
+  .td-idi .h{flex:none;width:42px;font:12px/1.6 var(--mono);color:var(--g-mid)}
+  .td-idi q{flex:1;min-width:0;quotes:none;font:15px/1.55 var(--mono);color:var(--g-hi);overflow-wrap:anywhere}
+  .td-idi .k{flex:none;font:11px/1.6 var(--mono);color:var(--g-dim)}
+  .td-idi li.new q{color:#fff}
+  .td-next,.td-empty{padding:9px 14px 12px;font:12px/1.5 var(--mono);color:var(--g-dim)}
+  .td-reads{list-style:none}
+  .td-reads button{display:block;width:100%;text-align:left;padding:11px 14px;border-bottom:1px solid #0b2a14;color:var(--g)}
+  .td-reads button:hover,.td-reads button:focus-visible{background:#04210d}
+  .td-reads b{display:block;font:600 14.5px/1.35 var(--mono);color:var(--g-hi)}
+  .td-reads .m{display:block;margin-top:3px;font:11.5px/1.4 var(--mono);color:var(--g-mid)}
+  .td-reads .m .old{color:var(--amber)}
+  .td-reads .s{display:block;margin-top:5px;font:12.5px/1.5 var(--mono);color:var(--g)}
+  .td-box{margin:12px 14px;padding:12px;border:1px solid var(--g-line);font:12.5px/1.55 var(--mono);color:var(--g-mid)}
+  .td-box b{color:var(--g);font-weight:600}
+  .td-box p+p{margin-top:8px}
+  .td-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .td-in{flex:1 1 160px;min-width:0;height:32px;padding:0 9px;background:#000;border:1px solid var(--g-dim);border-radius:0;color:var(--g-hi);font:13px/1 var(--mono)}
+  .td-in:focus,.td-ta:focus{outline:none;border-color:var(--g)}
+  .td-ta{display:block;width:100%;min-height:120px;padding:9px 10px;background:#000;border:1px solid var(--g-dim);border-radius:0;color:var(--g-hi);font:14px/1.6 var(--mono);resize:vertical}
+  .td-go{flex:none;height:32px;padding:0 12px;background:var(--g);color:#000;font:12.5px/1 var(--mono)}
+  .td-go:hover{background:var(--g-hi)}
+  .td-go.alt{background:none;border:1px solid var(--g-dim);color:var(--g)}
+  .td-go.alt:hover{background:var(--g);color:#000}
+  .td-go:disabled{opacity:.5;pointer-events:none}
+  .td-msg{min-height:1.4em;margin-top:6px;font:12px/1.4 var(--mono);color:var(--g-mid)}
+  .td-msg.bad{color:var(--amber)}
+  .td-form{padding:12px 14px;border-bottom:1px dashed var(--g-line)}
+  .td-form select{height:32px;padding:0 6px;background:#000;border:1px solid var(--g-dim);color:var(--g-hi);font:12.5px/1 var(--mono)}
+  .td-notes{list-style:none}
+  .td-notes li{padding:11px 14px;border-bottom:1px solid #0b2a14}
+  .td-notes .m{font:11.5px/1.4 var(--mono);color:var(--g-mid)}
+  .td-notes .m .tg{color:var(--g)}
+  .td-notes p{margin-top:5px;font:14px/1.6 var(--mono);color:var(--g-hi);white-space:pre-wrap;overflow-wrap:anywhere}
+  .td-notes .src{margin-top:4px;font:12px/1.4 var(--mono);color:var(--g-mid)}
+  .td-tools{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-bottom:1px dashed var(--g-line)}
+  .td-day{padding:10px 14px 4px;font:12px/1.4 var(--mono);color:var(--g-mid)}
+  .td-past{list-style:none;padding:0 14px 8px}
+  .td-past li{padding:4px 0;font:13.5px/1.5 var(--mono);color:var(--g)}
+  /* đọc bài: chữ có chân, dòng thoáng cho bài dài 20–30 phút */
+  .rd{background:#020a04}
+  .rd-art{max-width:70ch;margin:0 auto;padding:26px 22px 8px;font:17px/1.8 'Literata',Georgia,serif;color:#dff5e4}
+  .rd-art .rd-meta{font:12px/1.5 var(--mono);color:var(--g-mid);letter-spacing:.02em}
+  .rd-art h1{margin:8px 0 18px;font:600 28px/1.3 'Literata',Georgia,serif;color:#fff}
+  .rd-art h2{margin:30px 0 10px;font:600 21px/1.35 'Literata',Georgia,serif;color:var(--g-hi)}
+  .rd-art h3{margin:22px 0 8px;font:600 18px/1.4 'Literata',Georgia,serif;color:var(--g-hi)}
+  .rd-art p{margin:0 0 14px}
+  .rd-art ul,.rd-art ol{margin:0 0 14px 1.4em}
+  .rd-art li{margin:4px 0}
+  .rd-art blockquote{margin:16px 0;padding:6px 0 6px 16px;border-left:3px solid var(--g-dim);color:#bfe6c8;font-style:italic}
+  .rd-art code{font:14px/1 var(--mono);color:var(--g-hi)}
+  .rd-art a{color:var(--g-hi)}
+  .rd-art hr{margin:24px 0;border:0;border-top:1px dashed var(--g-line)}
+  .rd-art .rd-sum{margin:0 0 20px;padding:10px 14px;border:1px solid var(--g-line);font:14px/1.6 var(--mono);color:var(--g)}
+  .rd-src{font:13px/1.6 var(--mono)!important;color:var(--g-mid)}
+  .rd-src li{overflow-wrap:anywhere}
+  .rd-unsure{margin:10px 0 0;padding:8px 12px;border:1px dashed var(--amber);font:13px/1.55 var(--mono);color:var(--amber)}
+  .rd-done{max-width:70ch;margin:8px auto 40px;padding:16px 22px;border-top:1px solid var(--g-line);font:13px/1.55 var(--mono);color:var(--g-mid)}
+  .rd-done h2{font:600 15px/1.4 var(--mono);color:var(--g);margin-bottom:8px}
+  .rd-done .mine{margin-top:8px;padding:10px 12px;border-left:3px solid var(--g);font:14px/1.65 var(--mono);color:var(--g-hi);white-space:pre-wrap;overflow-wrap:anywhere}
   /* ---- Instagram: cửa sổ mở từ biểu tượng ---- */
   .app{position:absolute;left:calc(clamp(290px,25vw,380px) + 32px);top:14px;right:calc(clamp(320px,28vw,430px) + 46px);bottom:calc(var(--bar) + 12px);min-width:300px;min-height:220px;z-index:20}
   .ig{display:flex;flex-direction:column;height:100%}
   .ig .frame{flex:1;min-height:0;background:#fff}
   #w-poolsuite{right:18px}
-  /* note.chat: kiểu khung chat trang cá nhân (chữ giống dòng HaMi@studio, tên nhiều màu, ngày hồng) */
-  #w-note{left:auto;right:18px;width:min(460px,42vw);min-width:320px}
-  #w-note .tb{background:#101010;border-bottom-color:#2a2a2a}
-  .nt-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 12px 6px;background:#0b0b0b;font:13.5px/1.5 var(--mono);color:#f2f2f2;scrollbar-width:thin;scrollbar-color:#333 #0b0b0b}
-  /* mỗi tin: [năm-tháng-ngày giờ] Tên: tin nhắn — vạch xanh bên trái như log terminal */
-  .nt-msg{padding:6px 0 6px 12px;margin:0 0 10px;border-left:3px solid #1f8a3a}
-  .nt-line{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
-  .nt-ts{color:#7a7a7a}
-  .nt-who{font-weight:600}
-  .nt-rw{color:#7a7a7a}
-  .nt-text{color:#39ff6a}
-  .nt-acts{display:flex;gap:10px;margin-top:3px}
-  .nt-acts button{padding:0;color:#666;font:12px/1.4 var(--mono)}
-  .nt-acts button:hover,.nt-acts button:focus-visible{color:#39ff6a}
-  .nt-acts .nt-del:hover,.nt-acts .nt-del:focus-visible{color:#ff5c5c}
-  .nt-acts .nt-del.sure{color:#ff5c5c;font-weight:600}
-  .nt-replies{margin:6px 0 0 4px;padding-left:12px;border-left:1px dashed #2f5c38}
-  .nt-replies .nt-msg{margin:0;padding:4px 0 4px 10px;border-left:2px solid #145c27}
-  .nt-replyto{flex:0 0 100%;display:flex;align-items:center;gap:8px;font:12.5px/1.4 var(--mono);color:#7a7a7a}
-  .nt-replyto b{font-weight:600}
-  .nt-replyto button{height:auto!important;padding:0 6px!important;background:none!important;border:1px solid #333;color:#888!important;font:12px/18px var(--mono)!important}
-  .nt-form{flex:none;display:flex;flex-wrap:wrap;gap:6px;padding:8px;border-top:1px solid #2a2a2a;background:#101010}
-  .nt-form input{min-width:0;height:32px;padding:0 9px;background:#000;border:1px solid #333;border-radius:0;color:#f2f2f2;font:13.5px/1 var(--mono)}
-  .nt-form input:focus{outline:none;border-color:#b6ff6a}
-  .nt-form input::placeholder{color:#666}
-  #ntName{flex:0 0 100px;color:#b6ff6a}
-  #ntText{flex:1 1 140px}
-  .nt-form button{flex:none;height:32px;padding:0 12px;background:#b6ff6a;color:#000;font:13.5px/1 var(--mono)}
-  .nt-form button:hover{background:#ff9ad5}
   .ig-out{margin-left:auto;align-self:center;padding:0 10px;font:12px/1 var(--mono);color:var(--g-mid);white-space:nowrap}
   .ig .frame iframe{display:block;width:100%;height:100%;border:0}
 
@@ -385,7 +422,6 @@
     #w-letterboxd{order:6;flex:none;height:70vh;margin:12px}
     .win.full{bottom:var(--bar)!important;z-index:980!important}
     #w-poolsuite{right:0}
-    #w-note{right:0;width:auto;min-width:0}
     #w-spotify{position:fixed;left:0;right:0;bottom:var(--bar);height:var(--spmini);z-index:60;flex:none}
     #w-spotify:not(.big) .sp-ctl,#w-spotify:not(.big) .sp-foot,#w-spotify:not(.big) .sp-res,#w-spotify:not(.big) .sp-now{display:none!important}
     .sp-now{grid-template-columns:1fr;grid-template-rows:minmax(0,46%) minmax(0,1fr);padding:12px;gap:10px}
@@ -529,16 +565,16 @@
     <div class="wb" style="overflow:hidden;background:#fff"><iframe id="poolFrame" title="Poolsuite — summer radio" allow="autoplay; encrypted-media; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
   </section>
 
-  <!-- Note: ô chat ghi chú (tin tự xoá sau 7 ngày) -->
-  <section class="win app drag" id="w-note" data-app="note" aria-label="Note" hidden>
-    <div class="tb"><span class="t">note.chat</span><span class="r" id="ntLive">◌</span><button type="button" data-act="hide" aria-label="Ẩn khung note">_</button><button type="button" data-full aria-label="Mở rộng toàn màn hình" aria-pressed="false">⛶</button></div>
-    <div class="nt-list" id="ntList" role="log" aria-live="polite" aria-label="Tin nhắn"></div>
-    <form class="nt-form" id="ntForm" autocomplete="off">
-      <div class="nt-replyto" id="ntReplyTo" hidden>↳ reply <b id="ntReplyName"></b><button type="button" id="ntReplyX" aria-label="Huỷ trả lời">✕</button></div>
-      <label class="sr" for="ntName">Tên</label><input id="ntName" maxlength="24" placeholder="tên" autocomplete="nickname" spellcheck="false">
-      <label class="sr" for="ntText">Tin nhắn</label><input id="ntText" maxlength="600" placeholder="tin nhắn" enterkeyhint="send">
-      <button type="submit">gửi</button>
-    </form>
+  <!-- Hôm nay: 6 câu trong ngày, bài đọc dài (dồn lại tới khi đọc xong), ghi chép mã hoá, lịch sử -->
+  <section class="win app drag" id="w-today" data-app="today" aria-label="Hôm nay" hidden>
+    <div class="tb"><span class="t">hôm nay <i id="tdDate"></i></span><span class="r" id="tdUpd"></span><button type="button" data-act="hide" aria-label="Ẩn khung hôm nay">_</button><button type="button" data-full aria-label="Mở rộng toàn màn hình" aria-pressed="false">⛶</button></div>
+    <div class="tabs" role="tablist" aria-label="Hôm nay"><button type="button" role="tab" aria-selected="true" data-td="today">☀ hôm nay</button><button type="button" role="tab" aria-selected="false" data-td="notes">✎ ghi chép</button><button type="button" role="tab" aria-selected="false" data-td="hist">◷ lịch sử</button></div>
+    <div class="wb" id="tdBody"><p class="note">◌ đang tải…</p></div>
+  </section>
+  <!-- Đọc bài -->
+  <section class="win app drag" id="w-reader" data-app="reader" aria-label="Đọc bài" hidden>
+    <div class="tb"><span class="t">đọc <i id="rdT"></i></span><button type="button" data-act="hide" aria-label="Đóng bài đọc">_</button><button type="button" data-full aria-label="Mở rộng toàn màn hình" aria-pressed="false">⛶</button></div>
+    <div class="wb rd" id="rdBody"></div>
   </section>
 
   <!-- Instagram -->
@@ -557,6 +593,7 @@
   </footer>
   <div class="menu" id="menu" role="menu" hidden>
     <p>vy@studio · anrevy house</p>
+    <button type="button" role="menuitem" data-app="today">☀ hôm nay · bài đọc · ghi chép</button>
     <button type="button" role="menuitem" data-app="spotify">♪ spotify</button>
     <button type="button" role="menuitem" data-app="music">◎ new music</button>
     <button type="button" role="menuitem" data-app="letterboxd">▣ letterboxd</button>
@@ -573,7 +610,6 @@
     <a role="menuitem" href="https://www.pastemagazine.com/music" target="_blank" rel="noopener">☰ paste music ↗</a>
     <a role="menuitem" href="https://musicboard.app/albums?order_by=new" target="_blank" rel="noopener">☰ musicboard · album mới ↗</a>
     <p>✎ ghi chú</p>
-    <button type="button" role="menuitem" data-app="note">✎ note · chat</button>
     <a role="menuitem" href="https://keep.google.com/u/0/#home" target="_blank" rel="noopener">✎ google keep ↗</a>
     <a role="menuitem" href="https://app.standardnotes.com/" target="_blank" rel="noopener">✎ standard notes ↗</a>
     <a role="menuitem" href="https://anvy.nimbusweb.me/home" target="_blank" rel="noopener">✎ An Vy Nimbus ↗</a>
@@ -676,8 +712,8 @@
   /* ---------- 3. cửa sổ, thanh tác vụ, menu ---------- */
   let z = 10;
   const wins = {}, tasks = $('#tasks');
-  ['plaza', 'letterboxd', 'music', 'spotify', 'lastfm', 'instagram', 'poolsuite', 'note'].forEach(a => { wins[a] = $('#w-' + a); });
-  const NAMES = { plaza: 'plaza', spotify: 'spotify', music: 'new music', letterboxd: 'letterboxd', lastfm: 'last.fm', instagram: 'instagram', note: '✎ note' };
+  ['plaza', 'letterboxd', 'music', 'spotify', 'lastfm', 'instagram', 'poolsuite', 'today', 'reader'].forEach(a => { wins[a] = $('#w-' + a); });
+  const NAMES = { plaza: 'plaza', spotify: 'spotify', music: 'new music', letterboxd: 'letterboxd', lastfm: 'last.fm', instagram: 'instagram', today: '☀ hôm nay', reader: '▤ đọc' };
   function front(w){
     Object.values(wins).forEach(x => x.classList.remove('front'));
     w.classList.add('front'); w.style.zIndex = ++z;
@@ -697,7 +733,7 @@
     if (app === 'spotify' && spW.classList.contains('big')) setBig(false);
     if (w.classList.contains('full')) setFull(w, false);
     w.hidden = true; taskBtn(app).classList.add('min');
-    if (app !== 'note'){ HID.add(app); saveHid(); }
+    if (app !== 'today' && app !== 'reader'){ HID.add(app); saveHid(); }
     updBare();
   }
   function openApp(app){
@@ -709,7 +745,7 @@
     else if (app === 'spotify'){ if (narrow()) setBig(true); else $('#spQ').focus({ preventScroll: true }); }
     else if (narrow()) w.scrollIntoView({ block: 'start' });
     if (app === 'lastfm') lfPoll();
-    if (app === 'note') noteOpen();
+    if (app === 'today') tdRender();
     $('#menu').hidden = true; $('#start').setAttribute('aria-expanded', 'false');
   }
   // Poolsuite: _ ẩn (nhạc vẫn phát) · ✕ tắt hẳn
@@ -1679,155 +1715,293 @@
     }
   }
 
-  /* ================= NOTE.CHAT: tin nhắn chung, tự xoá sau 7 ngày ================= */
-  const NOTE_PFX = 'anrevy-house-9q2/notes/v1/';
-  let NOTE_BROKERS = ['wss://broker.emqx.io:8084/mqtt', 'wss://broker.hivemq.com:8884/mqtt'];
-  { const qb = new URLSearchParams(location.search).get('broker'); if (qb) NOTE_BROKERS = qb.split(','); }
-  const NOTE_LIB = 'https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js';
-  const WEEK = 7 * 864e5;
-  const NT = { msgs: new Map(), clients: [], started: false, last: 0, wipe: 0 };   // wipe: mốc "xoá toàn bộ" trong notes.json — bỏ mọi tin gửi trước mốc này
-  const ntList = $('#ntList'), ntName = $('#ntName'), ntText = $('#ntText');
-  ntName.value = ls.get('note-name') || '';
-  // màu tên theo từng tên: đỏ, xanh lá, xanh nước biển, vàng
-  const NT_COL = ['#ff5c5c', '#7dff6a', '#5cb8ff', '#ffd23f'];
-  function ntHash(name){ let h = 2166136261 >>> 0; for (const ch of name.toLowerCase()){ h ^= ch.codePointAt(0); h = Math.imul(h, 16777619) >>> 0; } return h; }
-  const ntColor = name => NT_COL[ntHash(name) % NT_COL.length];
-  // tin của mình: giữ khoá bí mật trên máy này; tin chỉ mang mã băm của khoá → chỉ người gửi xoá được
-  const ntOwn = () => ls.get('note-own') || {};
-  const ntHex = async t => [...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)))].map(x => x.toString(16).padStart(2, '0')).join('').slice(0, 32);
-  NT.gone = new Set(); NT.tomb = new Map();
-  async function ntTomb(id, k){
-    NT.tomb.set(id, k);
-    const m = NT.msgs.get(id);
-    if (m && m.h && await ntHex(k) === m.h){ NT.msgs.delete(id); NT.gone.add(id); ntPaint(); }
+  /* ================= HÔM NAY: 6 câu mỗi ngày · 2 bài đọc dài · ghi chép mã hoá · lịch sử =================
+     Nội dung do tác vụ buổi sáng soạn vào anrevy-house/studio/data/ (reads/, idioms/) — Studio chỉ đọc và hiển thị.
+     Ghi chép mã hoá ngay trên máy (AES-GCM, khoá sinh từ mật khẩu bằng PBKDF2) rồi mới lưu lên repo anvy-studio
+     bằng GitHub token của Vy; mật khẩu và token không nằm trong code, không ai khôi phục được mật khẩu. */
+  const VN_TZ = 'Asia/Ho_Chi_Minh', TD_DATA = '/anrevy-house/studio/data/';
+  const NOTES_REPO = 'tsukustukatadotojo-bit/anvy-studio', NOTES_DIR = 'data/notes/';
+  const IDIOM_AT = ['10:00', '12:00', '14:00', '16:00', '18:00', '20:00'];
+  const TD_WD = { Mon: 'thứ hai', Tue: 'thứ ba', Wed: 'thứ tư', Thu: 'thứ năm', Fri: 'thứ sáu', Sat: 'thứ bảy', Sun: 'chủ nhật' };
+  const NOTE_TYPES = { realize: 'câu tự nhận ra', quote: 'câu trích', info: 'thông tin mới' };
+  const LANG = { vi: 'tiếng Việt', en: 'English' };
+  function vnNow(d = new Date()){
+    const o = {}; new Intl.DateTimeFormat('en-CA', { timeZone: VN_TZ, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', weekday: 'short' }).formatToParts(d).forEach(p => { o[p.type] = p.value; });
+    return { date: `${o.year}-${o.month}-${o.day}`, hm: `${o.hour}:${o.minute}`, wd: o.weekday };
   }
-  const p2 = x => String(x).padStart(2, '0');
-  const ntTime = at => { const d = new Date(at); return `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())} ${p2(d.getHours())}:${p2(d.getMinutes())}:${p2(d.getSeconds())}`; };
-  function ntValid(m){
-    return m && typeof m === 'object' && /^[a-z0-9]{6,32}$/.test(m.id || '') && typeof m.n === 'string' && m.n.trim() && typeof m.t === 'string' && m.t.trim() &&
-      typeof m.at === 'number' && Date.now() - m.at <= WEEK && m.at < Date.now() + 6e5 && m.at > NT.wipe && (m.h == null || /^[0-9a-f]{32}$/.test(m.h)) &&
-      (m.r == null || (/^[a-z0-9]{6,32}$/.test(m.r) && typeof m.rn === 'string'));
-  }
-  function ntAdd(m){
-    if (!ntValid(m) || NT.msgs.has(m.id) || NT.gone.has(m.id)) return false;
-    NT.msgs.set(m.id, { id: m.id, n: m.n.trim().slice(0, 24), t: m.t.trim().slice(0, 600), at: m.at, h: m.h || '', r: m.r || '', rn: m.r ? String(m.rn || '').trim().slice(0, 24) : '' });
-    if (NT.tomb.has(m.id)) ntTomb(m.id, NT.tomb.get(m.id));
-    return true;
-  }
-  let ntPaintT = 0;
-  function ntPaint(){
-    clearTimeout(ntPaintT);
-    ntPaintT = setTimeout(() => {
-      const atBottom = ntList.scrollHeight - ntList.scrollTop - ntList.clientHeight < 60;
-      const list = [...NT.msgs.values()].filter(m => Date.now() - m.at <= WEEK).sort((a, b) => a.at - b.at);
-      const own = ntOwn(), byId = new Map(list.map(m => [m.id, m]));
-      // tin trả lời nằm dưới tin gốc (gốc của cả chuỗi); tin gốc đã xoá thì tin trả lời hiện như tin thường
-      const rootOf = m => { let x = m, k = 0; while (x.r && byId.has(x.r) && k++ < 20) x = byId.get(x.r); return x; };
-      const kids = new Map(), tops = [];
-      list.forEach(m => { const root = m.r ? rootOf(m) : m; if (root === m) tops.push(m); else (kids.get(root.id) || kids.set(root.id, []).get(root.id)).push(m); });
-      const one = m => `<div class="nt-msg" data-id="${esc(m.id)}"><p class="nt-line"><span class="nt-ts">[${esc(ntTime(m.at))}]</span> <b class="nt-who" style="color:${ntColor(m.n)}">${esc(m.n)}</b>${m.r ? ` <span class="nt-rw">replies</span> <b class="nt-who" style="color:${ntColor(m.rn || '?')}">${esc(m.rn || '?')}</b>` : ''}<span class="nt-rw">:</span> <span class="nt-text">${esc(m.t)}</span></p>
-        <div class="nt-acts"><button type="button" data-reply="${esc(m.id)}" aria-label="Trả lời ${esc(m.n)}">↳ reply</button>${own[m.id] ? `<button class="nt-del" type="button" data-del="${esc(m.id)}" aria-label="Xoá tin nhắn này">xoá</button>` : ''}</div></div>`;
-      ntList.innerHTML = tops.map(m => { const ks = kids.get(m.id); return ks ? one(m).replace(/<\/div>$/, `<div class="nt-replies">${ks.map(one).join('')}</div></div>`) : one(m); }).join('');
-      if (atBottom || NT.first){ ntList.scrollTop = ntList.scrollHeight; NT.first = false; }
-    }, 30);
-  }
-  function ntLive(){
-    const n = NT.clients.filter(c => c.connected).length;
-    $('#ntLive').textContent = n ? '◉' : '◌'; $('#ntLive').className = 'r' + (n ? ' on' : '');
-  }
-  function ntLoadLib(cb){
-    if (window.mqtt) return cb();
-    const srcs = [NOTE_LIB, NOTE_LIB.replace('https://cdn.jsdelivr.net/npm/', 'https://unpkg.com/')];
-    (function next(i){
-      if (i >= srcs.length) return;
-      const sc = document.createElement('script'); sc.src = srcs[i]; sc.async = true;
-      sc.onload = () => window.mqtt ? cb() : next(i + 1); sc.onerror = () => next(i + 1);
-      document.head.appendChild(sc);
-    })(0);
-  }
-  function ntConnect(){
-    const v0 = +(new URLSearchParams(location.search).get('nv') || 5);
-    NOTE_BROKERS.forEach(url => ntClient(url, v0));
-  }
-  // MQTT 5 để tin tự hết hạn sau 7 ngày trên máy chủ; máy chủ nào không hỗ trợ thì dùng bản 3.1.1
-  function ntClient(url, ver){
-    let c;
-    try { c = window.mqtt.connect(url, { clientId: 'anrevy_note_' + Math.random().toString(36).slice(2, 12), clean: true, keepalive: 30, reconnectPeriod: 6000, connectTimeout: 12000, protocolVersion: ver }); }
-    catch (e) { return; }
-    let ok = false;
-    c.on('connect', () => { ok = true; c.subscribe([NOTE_PFX + 'm/+', NOTE_PFX + 'd/+'], { qos: 1 }); ntLive(); });
-    c.on('close', ntLive); c.on('offline', ntLive); c.on('error', () => {});
-    c.on('message', (topic, payload) => {
-      if (!payload || !payload.length) return;
-      try {
-        const j = JSON.parse(new TextDecoder().decode(payload));
-        if (topic.startsWith(NOTE_PFX + 'd/')){ if (j && typeof j.k === 'string' && /^[a-z0-9]{6,32}$/.test(j.id || '')) ntTomb(j.id, j.k); }
-        else if (ntAdd(j)) ntPaint();
-      } catch (e) {}
-    });
-    NT.clients.push(c);
-    if (ver === 5) setTimeout(() => { if (!ok){ c.end(true); NT.clients.splice(NT.clients.indexOf(c), 1); ntClient(url, 4); } }, 15000);
-  }
-  function noteOpen(){
-    if (!NT.started){
-      NT.started = true; NT.first = true;
-      fetch('/anrevy-house/studio/data/notes.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(d => {
-        NT.wipe = Math.max(NT.wipe, +(d && d.wipe) || 0);
-        for (const [id, m] of NT.msgs) if (m.at <= NT.wipe) NT.msgs.delete(id);
-        ((d && d.items) || []).forEach(ntAdd); ntPaint();
-      }).catch(() => {});
-      ntLoadLib(ntConnect);
-    } else ntPaint();
-    setTimeout(() => (ntName.value ? ntText : ntName).focus({ preventScroll: true }), 0);
-  }
-  let ntRe = null;
-  function ntSetReply(m){
-    ntRe = m ? { id: m.id, n: m.n } : null;
-    $('#ntReplyTo').hidden = !m;
-    if (m){ $('#ntReplyName').textContent = m.n; $('#ntReplyName').style.color = ntColor(m.n); (ntName.value ? ntText : ntName).focus(); }
-  }
-  $('#ntReplyX').addEventListener('click', () => { ntSetReply(null); ntText.focus(); });
-  $('#ntForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    const n = ntName.value.trim().replace(/\s+/g, ' ').slice(0, 24), t = ntText.value.trim().slice(0, 600);
-    if (!n){ ntName.focus(); return; }
-    if (!t || Date.now() - NT.last < 700) return;
-    const live = NT.clients.filter(c => c.connected);
-    if (!live.length){ toast('◌ chưa kết nối, thử lại sau vài giây'); return; }
-    NT.last = Date.now();
-    const k = Array.from(crypto.getRandomValues(new Uint8Array(18)), x => x.toString(16).padStart(2, '0')).join('');
-    const m = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8), n, t, at: Date.now(), h: await ntHex(k) };
-    if (ntRe && NT.msgs.has(ntRe.id)){ m.r = ntRe.id; m.rn = ntRe.n; }
-    const own = ntOwn(); own[m.id] = k;
-    Object.keys(own).forEach(id => { if (+parseInt(id.slice(0, 8), 36) < Date.now() - WEEK - 864e5) delete own[id]; });
-    ls.set('note-own', own);
-    live.forEach(c => c.publish(NOTE_PFX + 'm/' + m.id, JSON.stringify(m), Object.assign({ qos: 1, retain: true }, c.options.protocolVersion === 5 ? { properties: { messageExpiryInterval: 7 * 86400 } } : {})));
-    ls.set('note-name', n); NT.last = Date.now();
-    ntAdd(m); ntSetReply(null); if (!m.r) NT.first = true; ntPaint(); ntText.value = ''; ntText.focus();
-  });
+  const dmy = d => { const [y, m, dd] = String(d || '').split('-'); return dd ? `${dd}/${m}` : ''; };
+  const getJSON = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
+  const TD = { tab: 'today', reads: [], idioms: null, hist: null, idx: [], done: new Set(), art: {}, notes: {}, day: '', shown: -1 };
+  const tdBody = $('#tdBody'), rdBody = $('#rdBody');
 
-  // xoá tin của chính mình: bấm "xoá" rồi bấm lần nữa để chắc chắn
-  ntList.addEventListener('click', e => {
-    const rb = e.target.closest('[data-reply]');
-    if (rb){ const m = NT.msgs.get(rb.dataset.reply); if (m) ntSetReply(m); return; }
-    const b = e.target.closest('[data-del]'); if (!b) return;
-    if (!b.classList.contains('sure')){
-      ntList.querySelectorAll('.nt-del.sure').forEach(x => { x.classList.remove('sure'); x.textContent = 'xoá'; });
-      b.classList.add('sure'); b.textContent = 'xoá thật?';
-      setTimeout(() => { if (b.isConnected){ b.classList.remove('sure'); b.textContent = 'xoá'; } }, 4000);
+  /* ---------- mã hoá ---------- */
+  const te = new TextEncoder(), tdec = new TextDecoder();
+  const b64e = u8 => { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
+  const b64d = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+  let KEY = null, SALT = null;
+  async function deriveKey(pw, salt){
+    const base = await crypto.subtle.importKey('raw', te.encode(pw), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: 310000, hash: 'SHA-256' }, base, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+  }
+  async function seal(obj, key = KEY){ const iv = crypto.getRandomValues(new Uint8Array(12)); const c = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, te.encode(JSON.stringify(obj))); return { v: 1, i: b64e(iv), c: b64e(new Uint8Array(c)) }; }
+  async function open_(box, key = KEY){ const p = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64d(box.i) }, key, b64d(box.c)); return JSON.parse(tdec.decode(p)); }
+
+  /* ---------- đọc / ghi repo anvy-studio ---------- */
+  const ghTok = () => ls.get('gh-tok') || '';
+  const ghH = () => ({ Authorization: 'Bearer ' + ghTok(), Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' });
+  const ghURL = p => `https://api.github.com/repos/${NOTES_REPO}/contents/${p}`;
+  async function ghRead(path){                        // có token: đọc thẳng qua API (luôn mới); không có: bản công khai (chậm ~5 phút)
+    try {
+      const r = ghTok() ? await fetch(ghURL(path) + '?ref=main', { headers: Object.assign(ghH(), { Accept: 'application/vnd.github.raw+json' }), cache: 'no-store' })
+        : await fetch(`https://raw.githubusercontent.com/${NOTES_REPO}/main/${path}?t=${Date.now()}`, { cache: 'no-store' });
+      return r.ok ? r.json() : null;
+    } catch (e) { return null; }
+  }
+  const b64utf8 = s => b64e(te.encode(s));
+  async function ghPut(path, text, msg){
+    let sha;
+    const g = await fetch(ghURL(path) + '?ref=main', { headers: ghH(), cache: 'no-store' });
+    if (g.ok) sha = (await g.json()).sha; else if (g.status === 401 || g.status === 403) throw new Error('token không đúng hoặc không có quyền ghi vào anvy-studio');
+    const r = await fetch(ghURL(path), { method: 'PUT', headers: ghH(), body: JSON.stringify(Object.assign({ message: msg, content: b64utf8(text), branch: 'main' }, sha ? { sha } : {})) });
+    if (!r.ok){ let m = 'HTTP ' + r.status; try { m = (await r.json()).message || m; } catch (e) {} throw new Error(r.status === 401 || r.status === 403 || r.status === 404 ? 'token không đúng hoặc không có quyền ghi vào anvy-studio' : m); }
+  }
+  async function idxLoad(){
+    const j = await ghRead(NOTES_DIR + 'index.json');
+    TD.idx = (j && Array.isArray(j.items)) ? j.items : [];
+    TD.done = new Set(TD.idx.filter(x => x.kind === 'read').map(x => x.read));
+  }
+  async function idxAdd(item){                        // mục lục chỉ có mã + ngày, không có nội dung
+    const j = await ghRead(NOTES_DIR + 'index.json');
+    const items = (j && Array.isArray(j.items)) ? j.items : [];
+    if (!items.some(x => x.id === item.id)) items.push(item);
+    await ghPut(NOTES_DIR + 'index.json', JSON.stringify({ items }, null, 1), 'mục lục ghi chép');
+    TD.idx = items; TD.done = new Set(items.filter(x => x.kind === 'read').map(x => x.read));
+  }
+  async function unlock(pw, pw2){
+    const chk = await ghRead(NOTES_DIR + 'check.enc');
+    if (chk && chk.s){
+      const salt = b64d(chk.s), key = await deriveKey(pw, salt);
+      try { if ((await open_(chk, key)).ok !== 'anvy-notes') throw 0; } catch (e) { throw new Error('sai mật khẩu'); }
+      KEY = key; SALT = salt; return;
+    }
+    // lần đầu: đặt mật khẩu (gõ 2 lần), lưu một hộp kiểm tra để lần sau biết gõ đúng hay sai
+    if (pw2 === undefined) throw new Error('first');
+    if (pw !== pw2) throw new Error('hai lần gõ không khớp');
+    if (pw.length < 6) throw new Error('mật khẩu cần ít nhất 6 ký tự');
+    if (!ghTok()) throw new Error('cần GitHub token trước để lưu mật khẩu lần đầu');
+    const salt = crypto.getRandomValues(new Uint8Array(16)), key = await deriveKey(pw, salt);
+    const box = Object.assign(await seal({ ok: 'anvy-notes' }, key), { s: b64e(salt) });
+    await ghPut(NOTES_DIR + 'check.enc', JSON.stringify(box), 'khoá ghi chép');
+    KEY = key; SALT = salt;
+  }
+  async function noteGet(id){
+    if (TD.notes[id]) return TD.notes[id];
+    const box = await ghRead(NOTES_DIR + id + '.enc'); if (!box || !KEY) return null;
+    try { return (TD.notes[id] = await open_(box)); } catch (e) { return null; }
+  }
+  async function noteSave(id, obj, idxItem){
+    await ghPut(NOTES_DIR + id + '.enc', JSON.stringify(await seal(obj)), 'ghi chép (mã hoá)');
+    TD.notes[id] = obj;
+    await idxAdd(idxItem);
+  }
+  // nhờ Claude: chép nội dung vào bộ nhớ tạm rồi mở Claude ở thẻ mới — trang không tự gửi gì đi đâu
+  async function askClaude(text){
+    let ok = false; try { await navigator.clipboard.writeText(text); ok = true; } catch (e) {}
+    const q = text.length < 1800 ? '?q=' + encodeURIComponent(text) : '';
+    window.open('https://claude.ai/new' + q, '_blank', 'noopener');
+    toast(ok ? '✦ đã chép nội dung — dán vào Claude nếu ô chat còn trống' : '✦ đã mở Claude');
+  }
+
+  /* ---------- markdown gọn cho bài đọc ---------- */
+  function md(src){
+    const inl = t => esc(t).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>').replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<i>$2</i>')
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    let out = '', para = [], list = null, quote = [];
+    const flush = () => {
+      if (para.length){ out += '<p>' + inl(para.join(' ')) + '</p>'; para = []; }
+      if (list){ out += `<${list.t}>` + list.items.map(x => '<li>' + inl(x) + '</li>').join('') + `</${list.t}>`; list = null; }
+      if (quote.length){ out += '<blockquote>' + inl(quote.join(' ')) + '</blockquote>'; quote = []; }
+    };
+    String(src || '').replace(/\r/g, '').split('\n').forEach(l => {
+      let m;
+      if (!l.trim()){ flush(); return; }
+      if ((m = /^(#{1,4})\s+(.*)$/.exec(l))){ flush(); const n = Math.min(4, m[1].length + 1); out += `<h${n}>${inl(m[2])}</h${n}>`; return; }
+      if (/^\s*(-{3,}|\*{3,})\s*$/.test(l)){ flush(); out += '<hr>'; return; }
+      if ((m = /^>\s?(.*)$/.exec(l))){ if (para.length || list) flush(); quote.push(m[1]); return; }
+      if ((m = /^\s*[-*•]\s+(.*)$/.exec(l))){ if (para.length || quote.length || (list && list.t !== 'ul')) flush(); (list = list || { t: 'ul', items: [] }).items.push(m[1]); return; }
+      if ((m = /^\s*\d+[.)]\s+(.*)$/.exec(l))){ if (para.length || quote.length || (list && list.t !== 'ol')) flush(); (list = list || { t: 'ol', items: [] }).items.push(m[1]); return; }
+      if (list && /^\s{2,}\S/.test(l)){ list.items[list.items.length - 1] += ' ' + l.trim(); return; }
+      if (list || quote.length) flush();
+      para.push(l.trim());
+    });
+    flush(); return out;
+  }
+
+  /* ---------- tải dữ liệu ---------- */
+  async function tdLoad(){
+    const t = vnNow(); TD.day = t.date;
+    const [idx, idi, hist] = await Promise.all([getJSON(TD_DATA + 'reads/index.json'), getJSON(TD_DATA + `idioms/${t.date}.json`), getJSON(TD_DATA + 'idioms/history.json')]);
+    TD.reads = (idx && Array.isArray(idx.items)) ? idx.items : []; TD.idioms = idi; TD.hist = hist;
+    await idxLoad();
+    $('#tdUpd').textContent = TD.reads.length ? '' : '◌';
+    tdRender();
+  }
+  const revealed = () => { const now = vnNow().hm; return ((TD.idioms && TD.idioms.items) || []).filter(x => (x.at || '') <= now); };
+  const kindRead = r => (r.kind === 'big' ? 'chủ đề lớn' : 'chủ đề nhỏ') + (r.topic ? ' · ' + r.topic : '') + ' · ' + (LANG[r.lang] || r.lang || '') + (r.minutes ? ' · ~' + r.minutes + ' phút' : '');
+
+  /* ---------- vẽ khung Hôm nay ---------- */
+  function tdRender(){
+    const t = vnNow();
+    $('#tdDate').textContent = '— ' + (TD_WD[t.wd] || '') + ' ' + dmy(t.date);
+    document.querySelectorAll('[data-td]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.td === TD.tab)));
+    if (TD.tab === 'notes') return notesRender();
+    if (TD.tab === 'hist') return histRender();
+    // 6 câu trong ngày: ra lần lượt 10h → 20h, câu mới nhất ở trên, không giải thích
+    const shown = revealed(), all = (TD.idioms && TD.idioms.items) || [];
+    TD.shown = shown.length;
+    const next = IDIOM_AT.find(h => h > t.hm && all.some(x => x.at === h)) || (!all.length ? IDIOM_AT.find(h => h > t.hm) : null);
+    let h = `<div class="td-sec"><b>❝ câu hôm nay</b><span>${shown.length}/6</span></div>`;
+    h += shown.length ? '<ol class="td-idi">' + shown.slice().reverse().map((x, n) => `<li${n === 0 ? ' class="new"' : ''}><span class="h">${esc(x.at || '')}</span><q>${esc(x.text || '')}</q>${x.kind ? `<span class="k">${esc(x.kind)}</span>` : ''}</li>`).join('') + '</ol>' : '';
+    h += next ? `<p class="td-next">câu tiếp theo · ${next}</p>` : (!shown.length ? '<p class="td-next">câu đầu tiên ra lúc 10:00</p>' : '');
+    // bài đọc: chưa đọc thì còn nằm đây, dồn qua các ngày
+    const queue = TD.reads.filter(r => !TD.done.has(r.id)).sort((a, b) => (b.date || '').localeCompare(a.date || '') || (a.id || '').localeCompare(b.id || ''));
+    h += `<div class="td-sec"><b>▤ bài đọc</b><span>${queue.length ? queue.length + ' bài chưa đọc' : ''}</span></div>`;
+    if (!TD.reads.length) h += '<p class="td-empty">◌ chưa có bài — bài mỗi ngày được soạn vào khoảng 5–6 giờ sáng.</p>';
+    else if (!queue.length) h += '<p class="td-empty">✓ đã đọc hết. Bài mới có vào sáng mai.</p>';
+    else h += '<ul class="td-reads">' + queue.map(r => `<li><button type="button" data-read="${esc(r.id)}"><b>${esc(r.title || '')}</b><span class="m">${r.date && r.date !== t.date ? `<span class="old">từ ${dmy(r.date)}</span> · ` : ''}${esc(kindRead(r))}</span>${r.summary ? `<span class="s">${esc(r.summary)}</span>` : ''}</button></li>`).join('') + '</ul>';
+    tdBody.innerHTML = h;
+    tdBody.querySelectorAll('[data-read]').forEach(b => b.addEventListener('click', () => openRead(b.dataset.read)));
+  }
+
+  /* ---------- ghi chép ---------- */
+  function lockBox(where){
+    const tok = ghTok();
+    return `<div class="td-box">
+      <p><b>🔒 ghi chép được khoá bằng mật khẩu</b> — mã hoá ngay trên máy này trước khi lưu; ai mở repo cũng chỉ thấy chuỗi ký tự vô nghĩa. Quên mật khẩu thì không ai mở lại được.</p>
+      <div class="td-row"><label class="sr" for="${where}Pw">Mật khẩu ghi chép</label><input class="td-in" id="${where}Pw" type="password" autocomplete="current-password" placeholder="mật khẩu ghi chép">
+      <input class="td-in" id="${where}Pw2" type="password" autocomplete="new-password" placeholder="gõ lại (lần đầu đặt mật khẩu)" hidden><button class="td-go" type="button" id="${where}Un">mở khoá</button></div>
+      <p class="td-msg" id="${where}Msg"></p>
+      <p><b>GitHub token</b> ${tok ? '✓ đã lưu trên máy này' : '— cần một lần để lưu ghi chép lên repo'}: tạo ở <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com → Fine-grained token</a>, chọn <b>Only select repositories → anvy-studio</b>, quyền <b>Contents: Read and write</b>.</p>
+      <div class="td-row"><label class="sr" for="${where}Tok">GitHub token</label><input class="td-in" id="${where}Tok" type="password" autocomplete="off" placeholder="${tok ? 'dán token mới để thay' : 'github_pat_…'}"><button class="td-go alt" type="button" id="${where}TokOk">lưu token</button>${tok ? `<button class="td-go alt" type="button" id="${where}TokX">xoá token</button>` : ''}</div>
+    </div>`;
+  }
+  function wireLock(where, after){
+    const pw = $('#' + where + 'Pw'), pw2 = $('#' + where + 'Pw2'), msg = $('#' + where + 'Msg');
+    const go = async () => {
+      if (!pw.value){ pw.focus(); return; }
+      msg.className = 'td-msg'; msg.textContent = '◌ đang mở khoá…'; $('#' + where + 'Un').disabled = true;
+      try { await unlock(pw.value, pw2.hidden ? undefined : pw2.value); msg.textContent = '✓ đã mở khoá'; after(); }
+      catch (e) {
+        if (e.message === 'first'){ pw2.hidden = false; pw2.focus(); msg.textContent = 'lần đầu: gõ lại mật khẩu để đặt'; }
+        else { msg.className = 'td-msg bad'; msg.textContent = '✕ ' + e.message; }
+      }
+      const b = $('#' + where + 'Un'); if (b) b.disabled = false;
+    };
+    $('#' + where + 'Un').addEventListener('click', go);
+    [pw, pw2].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') go(); }));
+    $('#' + where + 'TokOk').addEventListener('click', () => { const v = $('#' + where + 'Tok').value.trim(); if (!v) return; ls.set('gh-tok', v); toast('✓ đã lưu token trên máy này'); idxLoad().then(after); });
+    const x = $('#' + where + 'TokX'); if (x) x.addEventListener('click', () => { ls.del('gh-tok'); toast('đã xoá token khỏi máy này'); after(); });
+  }
+  async function notesRender(){
+    const tools = `<div class="td-tools"><a class="btn sm" href="https://claude.ai/new" target="_blank" rel="noopener">✦ claude ↗</a><a class="btn sm" href="https://keep.google.com/" target="_blank" rel="noopener">✎ google keep ↗</a>${KEY ? '<button class="btn sm" type="button" id="ntLock">🔒 khoá lại</button>' : ''}</div>`;
+    if (!KEY || !ghTok()){
+      tdBody.innerHTML = tools + lockBox('nt') + (KEY ? '' : '');
+      wireLock('nt', () => { if (TD.tab === 'notes') notesRender(); });
+      if (KEY && !ghTok()) $('#ntMsg').textContent = '✓ đã mở khoá — thêm GitHub token để lưu được ghi chép';
       return;
     }
-    const id = b.dataset.del, own = ntOwn(), k = own[id];
-    const live = NT.clients.filter(c => c.connected);
-    if (!k) return;
-    if (!live.length){ toast('◌ chưa kết nối, thử lại sau vài giây'); return; }
-    const tomb = JSON.stringify({ id, k, at: Date.now() });
-    live.forEach(c => {
-      c.publish(NOTE_PFX + 'd/' + id, tomb, Object.assign({ qos: 1, retain: true }, c.options.protocolVersion === 5 ? { properties: { messageExpiryInterval: 7 * 86400 } } : {}));
-      c.publish(NOTE_PFX + 'm/' + id, '', { qos: 1, retain: true });
+    tdBody.innerHTML = tools + `<div class="td-form">
+      <label class="sr" for="ntTxt">Nội dung</label><textarea class="td-ta" id="ntTxt" placeholder="câu mình chợt nhận ra, câu văn hay, thông tin mới…"></textarea>
+      <div class="td-row"><label class="sr" for="ntType">Loại</label><select id="ntType">${Object.entries(NOTE_TYPES).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>
+      <label class="sr" for="ntSrc">Nguồn</label><input class="td-in" id="ntSrc" placeholder="nguồn (sách, phim, người nói…)">
+      <label class="sr" for="ntTags">Tag</label><input class="td-in" id="ntTags" placeholder="tag, cách nhau bằng dấu phẩy"></div>
+      <div class="td-row"><button class="td-go" type="button" id="ntSave">lưu</button><button class="td-go alt" type="button" id="ntAsk">✦ nhờ Claude tóm tắt ý chính</button></div>
+      <p class="td-msg" id="ntMsg">nội dung chỉ rời máy khi bạn bấm ✦ Claude.</p>
+    </div><ul class="td-notes" id="ntList"><li class="m">◌ đang mở ghi chép…</li></ul>`;
+    $('#ntLock').addEventListener('click', () => { KEY = null; TD.notes = {}; notesRender(); });
+    $('#ntAsk').addEventListener('click', () => { const v = $('#ntTxt').value.trim(); if (!v){ $('#ntTxt').focus(); return; } askClaude('Tóm tắt và lọc giúp mình các ý chính của đoạn sau (gạch đầu dòng ngắn, giữ nguyên ngôn ngữ của đoạn):\n\n' + v); });
+    $('#ntSave').addEventListener('click', async () => {
+      const text = $('#ntTxt').value.trim(), msg = $('#ntMsg'); if (!text){ $('#ntTxt').focus(); return; }
+      const t = vnNow(), id = 'n-' + t.date.replace(/-/g, '') + '-' + t.hm.replace(':', '') + '-' + Math.random().toString(36).slice(2, 6);
+      const obj = { kind: 'note', type: $('#ntType').value, text, source: $('#ntSrc').value.trim(), tags: $('#ntTags').value.split(',').map(s => s.trim()).filter(Boolean), date: t.date, time: t.hm };
+      $('#ntSave').disabled = true; msg.className = 'td-msg'; msg.textContent = '◌ đang mã hoá & lưu…';
+      try { await noteSave(id, obj, { id, kind: 'note', date: t.date }); msg.textContent = '✓ đã lưu'; $('#ntTxt').value = ''; $('#ntSrc').value = ''; $('#ntTags').value = ''; listNotes(); }
+      catch (e) { msg.className = 'td-msg bad'; msg.textContent = '✕ ' + e.message; }
+      $('#ntSave').disabled = false;
     });
-    NT.msgs.delete(id); NT.gone.add(id); delete own[id]; ls.set('note-own', own); ntPaint();
-  });
+    listNotes();
+  }
+  async function listNotes(){
+    const ul = $('#ntList'); if (!ul) return;
+    const ids = TD.idx.filter(x => x.kind === 'note').map(x => x.id).reverse();
+    if (!ids.length){ ul.innerHTML = '<li class="m">chưa có ghi chép nào.</li>'; return; }
+    const list = await Promise.all(ids.map(id => noteGet(id).then(n => [id, n])));
+    if (!$('#ntList')) return;
+    ul.innerHTML = list.map(([id, n]) => n ? `<li><div class="m">${esc(dmy(n.date))}${n.time ? ' ' + esc(n.time) : ''} · ${esc(NOTE_TYPES[n.type] || n.type || '')}${(n.tags || []).length ? ' · ' + n.tags.map(x => `<span class="tg">#${esc(x)}</span>`).join(' ') : ''}</div><p>${esc(n.text || '')}</p>${n.source ? `<div class="src">— ${esc(n.source)}</div>` : ''}</li>` : `<li class="m">✕ không mở được một ghi chép (${esc(id)})</li>`).join('');
+  }
+
+  /* ---------- lịch sử ---------- */
+  function histRender(){
+    const done = TD.idx.filter(x => x.kind === 'read').slice().reverse().map(x => [x, TD.reads.find(r => r.id === x.read)]).filter(([, r]) => r);
+    let h = `<div class="td-sec"><b>✓ bài đã đọc</b><span>${done.length}</span></div>`;
+    h += done.length ? '<ul class="td-reads">' + done.map(([x, r]) => `<li><button type="button" data-read="${esc(r.id)}"><b>${esc(r.title || '')}</b><span class="m">xong ${dmy(x.date)} · ${esc(kindRead(r))}</span></button></li>`).join('') + '</ul>' : '<p class="td-empty">chưa có bài nào — đọc xong và ghi lại điều mình hiểu thì bài chuyển vào đây.</p>';
+    const items = ((TD.hist && TD.hist.items) || []).filter(x => x.date && x.date < TD.day);
+    const days = {}; items.forEach(x => { (days[x.date] = days[x.date] || []).push(x); });
+    const keys = Object.keys(days).sort().reverse().slice(0, 30);
+    h += `<div class="td-sec"><b>❝ câu những ngày trước</b><span>${keys.length ? keys.length + ' ngày' : ''}</span></div>`;
+    h += keys.length ? keys.map(d => `<p class="td-day">${dmy(d)}</p><ul class="td-past">${days[d].map(x => `<li>${esc(x.text || '')}</li>`).join('')}</ul>`).join('') : '<p class="td-empty">chưa có.</p>';
+    tdBody.innerHTML = h;
+    tdBody.querySelectorAll('[data-read]').forEach(b => b.addEventListener('click', () => openRead(b.dataset.read)));
+  }
+  document.querySelectorAll('[data-td]').forEach(b => b.addEventListener('click', () => { TD.tab = b.dataset.td; tdRender(); tdBody.scrollTop = 0; }));
+
+  /* ---------- đọc bài + hoàn thành ---------- */
+  async function openRead(id){
+    const meta = TD.reads.find(r => r.id === id) || { id };
+    openApp('reader'); $('#rdT').textContent = '— ' + (meta.title || '');
+    rdBody.innerHTML = '<p class="note">◌ đang tải bài…</p>'; rdBody.scrollTop = 0;
+    const a = TD.art[id] || (TD.art[id] = await getJSON(TD_DATA + `reads/${id}.json`));
+    if (!a){ rdBody.innerHTML = '<p class="note">✕ chưa tải được bài này, thử lại sau.</p>'; delete TD.art[id]; return; }
+    const src = (a.sources || []).filter(s => s && s.url);
+    rdBody.innerHTML = `<article class="rd-art" lang="${a.lang === 'en' ? 'en' : 'vi'}">
+      <p class="rd-meta">${esc(dmy(a.date))} · ${esc(kindRead(a))}</p><h1>${esc(a.title || '')}</h1>
+      ${a.summary ? `<p class="rd-sum">${esc(a.summary)}</p>` : ''}${md(a.body)}
+      ${(a.unsure || []).length ? `<div class="rd-unsure"><b>⚠ chỗ chưa kiểm chứng chắc chắn</b><ul>${a.unsure.map(x => '<li>' + esc(x) + '</li>').join('')}</ul></div>` : ''}
+      ${src.length ? `<h2>${a.lang === 'en' ? 'Sources' : 'Nguồn'}</h2><ol class="rd-src">${src.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title || s.url)}</a></li>`).join('')}</ol>` : ''}
+    </article><section class="rd-done" id="rdDone"></section>`;
+    doneRender(a);
+  }
+  async function doneRender(a){
+    const box = $('#rdDone'); if (!box) return;
+    if (TD.done.has(a.id)){
+      box.innerHTML = '<h2>✓ đã hoàn thành</h2>' + (KEY ? '<div class="mine" id="rdMine">◌ đang mở ghi chép…</div>' : '<p>Mở khoá ghi chép (trong ✎ ghi chép) để xem lại điều bạn đã viết.</p>');
+      if (KEY){ const n = await noteGet('r-' + a.id); const m = $('#rdMine'); if (m) m.textContent = n ? n.text : '✕ không mở được ghi chép này'; }
+      return;
+    }
+    if (!KEY || !ghTok()){
+      box.innerHTML = '<h2>✎ đọc xong rồi? ghi lại điều mình hiểu</h2><p>Có ghi chép thì bài mới chuyển vào Lịch sử. Cần mở khoá ghi chép trước:</p>' + lockBox('rd');
+      wireLock('rd', () => doneRender(a));
+      return;
+    }
+    box.innerHTML = `<h2>✎ điều mình hiểu được</h2><p>Viết lại bằng lời của bạn — lưu xong bài chuyển vào ◷ lịch sử.</p>
+      <label class="sr" for="rdNote">Điều mình hiểu được</label><textarea class="td-ta" id="rdNote" rows="7"></textarea>
+      <div class="td-row"><button class="td-go" type="button" id="rdSave">lưu & hoàn thành</button><button class="td-go alt" type="button" id="rdAsk">✦ hỏi Claude về bài này</button></div><p class="td-msg" id="rdMsg"></p>`;
+    $('#rdAsk').addEventListener('click', () => askClaude(`Mình vừa đọc bài “${a.title}”.` + ($('#rdNote').value.trim() ? `\nĐây là điều mình hiểu được:\n${$('#rdNote').value.trim()}\n\nMình hiểu đúng chưa, còn thiếu ý nào quan trọng?` : '\nGiải thích thêm giúp mình phần khó nhất của chủ đề này.')));
+    $('#rdSave').addEventListener('click', async () => {
+      const text = $('#rdNote').value.trim(), msg = $('#rdMsg'); if (!text){ $('#rdNote').focus(); return; }
+      const t = vnNow(); $('#rdSave').disabled = true; msg.className = 'td-msg'; msg.textContent = '◌ đang mã hoá & lưu…';
+      try {
+        await noteSave('r-' + a.id, { kind: 'read', read: a.id, title: a.title, text, date: t.date, time: t.hm }, { id: 'r-' + a.id, kind: 'read', read: a.id, date: t.date });
+        toast('✓ đã hoàn thành “' + (a.title || '') + '”'); doneRender(a); tdRender();
+      } catch (e) { msg.className = 'td-msg bad'; msg.textContent = '✕ ' + e.message; $('#rdSave').disabled = false; }
+    });
+  }
+  // mỗi nửa phút: tới giờ thì hiện câu mới; sang ngày mới thì tải lại
+  setInterval(() => {
+    if (!opened) return;
+    if (vnNow().date !== TD.day){ tdLoad(); return; }
+    if (TD.tab === 'today' && revealed().length !== TD.shown) tdRender();
+  }, 30000);
 
   /* ================= INSTAGRAM ================= */
   let igCur = IG_USERS[0];
@@ -1846,10 +2020,10 @@
   async function openDesk(){
     if (opened) return; opened = true;
     $('#desk').hidden = false; document.body.classList.remove('locked');
-    ['plaza', 'spotify', 'music', 'letterboxd', 'lastfm', 'note'].forEach(taskBtn);
-    taskBtn('note').classList.add('min');
+    ['today', 'plaza', 'spotify', 'music', 'letterboxd', 'lastfm'].forEach(taskBtn);
+    openApp('today'); tdLoad();                      // thẻ Hôm nay hiện ngay khi mở Studio
     $('#plFrame').src = 'https://plaza.one/';
-    front(wins.music);
+    if (!narrow()) front(wins.today);
     HID.forEach(app => { if (wins[app] && app !== 'instagram'){ wins[app].hidden = true; taskBtn(app).classList.add('min'); } });
     updBare();
     renderChips(); spFoot();
