@@ -340,12 +340,20 @@
   .td-msg{min-height:1.4em;margin-top:6px;font:12px/1.4 var(--mono);color:var(--g-mid)}
   .td-msg.bad{color:var(--amber)}
   .mq-form{padding:10px 14px 4px}
-  .mq-t{min-height:58px;font-size:14px}
-  .mq-s{flex:1 1 180px;min-width:0;height:32px;padding:0 9px;background:#000;border:1px solid var(--g-dim);border-radius:0;color:var(--g-hi);font:12.5px/1 var(--mono)}
-  .mq-s:focus{outline:none;border-color:var(--g)}
+  .mq-t{min-height:84px;font-size:14px;resize:none;overflow:auto}
+  .nt-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px}
+  .nt-hint{font:11px/1.4 var(--mono);color:var(--g-dim)}
+  @media (hover:none){.nt-hint{visibility:hidden}}
+  .nt-big{margin-left:auto;padding:1px 8px;background:none;border:1px solid var(--g-dim);color:var(--g);font:11.5px/1.5 var(--mono);cursor:pointer}
+  .nt-big:hover,.nt-big:focus-visible{background:var(--g);color:#000;outline:none}
+  .td-sec .nt-big{margin-left:10px}
+  #w-today.full .nt-wrap{max-width:780px;margin:0 auto;padding:6px 8px 40px}
+  #w-today.full .mq-t{min-height:34vh;font-size:16.5px;line-height:1.7;padding:14px 16px}
+  #w-today.full .mq-list q{font-size:16.5px;line-height:1.7}
+  #w-today.full .mq-list li{padding:12px 60px 12px 16px}
   .mq-list{list-style:none;padding:2px 0 6px}
   .mq-list li{position:relative;padding:8px 52px 8px 14px;border-bottom:1px solid #0b2a14}
-  .mq-list q{display:block;quotes:'“' '”';font:14.5px/1.55 var(--mono);color:var(--g-hi);white-space:pre-wrap;overflow-wrap:anywhere}
+  .mq-list q{display:block;quotes:none;font:14.5px/1.6 var(--mono);color:var(--g-hi);white-space:pre-wrap;overflow-wrap:anywhere}
   .mq-list .src{display:block;margin-top:3px;font:12px/1.4 var(--mono);color:var(--g-mid)}
   .mq-list .mq-del{position:absolute;right:12px;bottom:8px;margin:0}
   .td-day{padding:10px 14px 4px;font:12px/1.4 var(--mono);color:var(--g-mid)}
@@ -567,7 +575,7 @@
   <!-- Hôm nay: 7 câu trong ngày, câu hay tự chép, bài đọc dài (dồn lại tới khi đọc xong), ghi chép sau bài đọc, lịch sử -->
   <section class="win app drag" id="w-today" data-app="today" aria-label="Hôm nay" hidden>
     <div class="tb"><span class="t">hôm nay <i id="tdDate"></i></span><span class="r" id="tdUpd"></span><button type="button" data-act="hide" aria-label="Ẩn khung hôm nay">_</button><button type="button" data-full aria-label="Mở rộng toàn màn hình" aria-pressed="false">⛶</button></div>
-    <div class="tabs" role="tablist" aria-label="Hôm nay"><button type="button" role="tab" aria-selected="true" data-td="today">☀ hôm nay</button><button type="button" role="tab" aria-selected="false" data-td="hist">◷ lịch sử</button></div>
+    <div class="tabs" role="tablist" aria-label="Hôm nay"><button type="button" role="tab" aria-selected="true" data-td="today">☀ hôm nay</button><button type="button" role="tab" aria-selected="false" data-td="note">✎ note</button><button type="button" role="tab" aria-selected="false" data-td="hist">◷ lịch sử</button></div>
     <div class="wb" id="tdBody"><p class="note">◌ đang tải…</p></div>
   </section>
   <!-- Đọc bài -->
@@ -1718,7 +1726,7 @@
      Ghi chép sau bài đọc là chữ thường (không khoá): gõ tới đâu tự lưu tới đó — lưu ngay trên máy này và gửi lên
      máy chủ chuyển tin công cộng (tin giữ lại), rồi bot gallery-sync (15 phút một lần) chép vào
      anrevy-house/studio/data/readnotes.json để máy nào mở Studio cũng thấy. Có ghi chép thì bài chuyển vào Lịch sử.
-     "Câu hay mình đọc được" (Vy tự chép) đi đúng đường đó, lưu vào anrevy-house/studio/data/myquotes.json. */
+     Mục ✎ note (Vy tự viết) đi đúng đường đó, lưu vào anrevy-house/studio/data/myquotes.json. */
   const VN_TZ = 'Asia/Ho_Chi_Minh', TD_DATA = '/anrevy-house/studio/data/';
   const IDIOM_AT = ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'];
   const TD_WD = { Mon: 'thứ hai', Tue: 'thứ ba', Wed: 'thứ tư', Thu: 'thứ năm', Fri: 'thứ sáu', Sat: 'thứ bảy', Sun: 'chủ nhật' };
@@ -1747,21 +1755,21 @@
   const rnText = id => { const v = rnGet(id); return v && v.t ? v.t : ''; };
   const rnDone = () => Object.keys(Object.assign({}, RN.web, RN.local)).filter(id => rnText(id));
   function rnWeb(id, v){ if (!rnOk(id, v)) return false; const o = RN.web[id]; if (o && o.at >= v.at) return false; RN.web[id] = { t: v.t.slice(0, 8000), at: v.at }; return true; }
-  /* câu hay mình đọc được: { mã: { t: câu, s: nguồn, d: ngày, at } } — t rỗng nghĩa là đã xoá */
+  /* note: { mã: { t: nội dung, d: ngày, at } } — t rỗng nghĩa là đã xoá */
   const MQ_PFX = 'anrevy-house-9q2/quotes/v1/q/';
   const MQ = { local: {}, web: {} };
   const mqOk = (id, v) => /^[a-z0-9]{8,24}$/.test(id) && v && typeof v.t === 'string' && typeof v.at === 'number' && v.at > 0 && /^\d{4}-\d{2}-\d{2}$/.test(v.d || '');
   { const j = ls.get('my-quotes'); if (j && typeof j === 'object' && !Array.isArray(j)) Object.entries(j).forEach(([id, v]) => { if (mqOk(id, v)) MQ.local[id] = v; }); }
   const mqGet = id => { const a = MQ.local[id], b = MQ.web[id]; return !a ? b : !b ? a : (a.at >= b.at ? a : b); };
   const mqAll = () => Object.keys(Object.assign({}, MQ.web, MQ.local)).map(id => Object.assign({ id }, mqGet(id))).filter(q => q.t).sort((a, b) => b.at - a.at);
-  function mqWeb(id, v){ if (!mqOk(id, v)) return false; const o = MQ.web[id]; if (o && o.at >= v.at) return false; MQ.web[id] = { t: v.t.slice(0, 2000), s: String(v.s || '').slice(0, 300), d: v.d, at: v.at }; return true; }
+  function mqWeb(id, v){ if (!mqOk(id, v)) return false; const o = MQ.web[id]; if (o && o.at >= v.at) return false; MQ.web[id] = { t: v.t.slice(0, 8000), s: String(v.s || '').slice(0, 300), d: v.d, at: v.at }; return true; }
   function mqPublish(id, v){
     const live = RN.clients.filter(c => c.connected); if (!live.length) return false;
     live.forEach(c => c.publish(MQ_PFX + id, JSON.stringify({ id, t: v.t, s: v.s, d: v.d, at: v.at }), { qos: 1, retain: true }));
     return true;
   }
   function mqSave(id, t, src, d){
-    const v = { t: String(t || '').slice(0, 2000), s: String(src || '').slice(0, 300), d, at: Date.now() };
+    const v = { t: String(t || '').slice(0, 8000), s: String(src || '').slice(0, 300), d, at: Date.now() };
     MQ.local[id] = v; ls.set('my-quotes', MQ.local);
     if (mqPublish(id, v)) MQ.web[id] = Object.assign({}, v);
   }
@@ -1816,7 +1824,7 @@
   function rnChanged(id){                                    // có bản mới từ máy khác: vẽ lại danh sách (không đụng ô đang gõ)
     clearTimeout(rnT);
     rnT = setTimeout(() => {
-      if (TD.tab === 'today' || TD.tab === 'hist') tdRender();
+      tdRender();
       const ta = $('#rdNote');
       if (ta && ta.dataset.id === id && document.activeElement !== ta && ta.value !== rnText(id)){ ta.value = rnText(id); rdDel(); }
     }, 120);
@@ -1873,10 +1881,11 @@
   /* ---------- vẽ khung Hôm nay ---------- */
   function tdRender(){
     const t = vnNow();
-    const act = document.activeElement, keep = act && (act.id === 'mqT' || act.id === 'mqS') ? { id: act.id, a: act.selectionStart, b: act.selectionEnd } : null;
+    const act = document.activeElement, keep = act && act.id === 'mqT' ? { id: act.id, a: act.selectionStart, b: act.selectionEnd } : null;
     $('#tdDate').textContent = '— ' + (TD_WD[t.wd] || '') + ' ' + dmy(t.date);
     document.querySelectorAll('[data-td]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.td === TD.tab)));
     if (TD.tab === 'hist') return histRender();
+    if (TD.tab === 'note') return noteRender(keep);
     // 7 câu trong ngày: ra lần lượt 8h → 20h (2 tiếng một câu), câu mới nhất ở trên, không giải thích
     const shown = revealed(), all = (TD.idioms && TD.idioms.items) || [];
     TD.shown = shown.length;
@@ -1884,12 +1893,6 @@
     let h = `<div class="td-sec"><b>❝ câu hôm nay</b><span>${shown.length}/${all.length || IDIOM_AT.length}</span></div>`;
     h += shown.length ? '<ol class="td-idi">' + shown.slice().reverse().map((x, n) => `<li${n === 0 ? ' class="new"' : ''}><span class="h">${esc(x.at || '')}</span><q>${esc(x.text || '')}</q>${x.kind ? `<span class="k">${esc(x.kind)}</span>` : ''}</li>`).join('') + '</ol>' : '';
     h += next ? `<p class="td-next">câu tiếp theo · ${next}</p>` : (!shown.length ? `<p class="td-next">câu đầu tiên ra lúc ${IDIOM_AT[0]}</p>` : '');
-    // câu hay chính mình đọc được trong hôm nay
-    const mine = mqAll().filter(q => q.d === t.date);
-    h += `<div class="td-sec"><b>✎ câu hay mình đọc được</b><span>${mine.length ? mine.length + ' câu hôm nay' : ''}</span></div>
-      <div class="mq-form"><label class="sr" for="mqT">Câu hay vừa đọc được</label><textarea class="td-ta mq-t" id="mqT" rows="2" placeholder="chép lại câu hay vừa đọc…"></textarea>
-      <div class="td-row"><label class="sr" for="mqS">Nguồn</label><input class="mq-s" id="mqS" placeholder="nguồn · không bắt buộc" autocomplete="off"><button class="td-go" type="button" id="mqAdd">lưu</button></div></div>`;
-    h += mine.length ? '<ul class="mq-list">' + mine.map(q => mqItem(q)).join('') + '</ul>' : '';
     // bài đọc: chưa có ghi chép thì còn nằm đây, dồn qua các ngày
     const done = new Set(rnDone());
     const queue = TD.reads.filter(r => !done.has(r.id)).sort((a, b) => (b.date || '').localeCompare(a.date || '') || (a.id || '').localeCompare(b.id || ''));
@@ -1899,9 +1902,23 @@
     else h += '<ul class="td-reads">' + queue.map(r => `<li><button type="button" data-read="${esc(r.id)}"><b>${esc(r.title || '')}</b><span class="m">${r.date && r.date !== t.date ? `<span class="old">từ ${dmy(r.date)}</span> · ` : ''}${esc(kindRead(r))}</span>${r.summary ? `<span class="s">${esc(r.summary)}</span>` : ''}</button></li>`).join('') + '</ul>';
     tdBody.innerHTML = h;
     tdBody.querySelectorAll('[data-read]').forEach(b => b.addEventListener('click', () => openRead(b.dataset.read)));
+  }
+
+  /* ---------- note: mục riêng, viết tự do, mở rộng được để dễ viết, dễ nhìn ---------- */
+  function noteRender(keep){
+    const all = mqAll(), today = TD.day || vnNow().date, byDay = {};
+    all.forEach(q => { (byDay[q.d] = byDay[q.d] || []).push(q); });
+    const days = Object.keys(byDay).sort().reverse();
+    const big = $('#w-today').classList.contains('full');
+    let h = `<div class="nt-wrap"><div class="td-sec"><b>✎ note</b><span>${all.length ? all.length + ' note' : ''}</span><button type="button" class="nt-big" id="ntBig" aria-pressed="${big}">${big ? '⤡ thu nhỏ' : '⤢ mở rộng'}</button></div>
+      <div class="mq-form"><label class="sr" for="mqT">Viết note</label><textarea class="td-ta mq-t" id="mqT" rows="3" placeholder="viết note…"></textarea>
+      <div class="nt-row"><span class="nt-hint">Ctrl + Enter để lưu</span><button class="td-go" type="button" id="mqAdd">lưu</button></div></div>`;
+    h += days.length ? days.map(d => `<p class="td-day">${d === today ? 'hôm nay' : dmy(d)}</p><ul class="mq-list">${byDay[d].map(q => mqItem(q)).join('')}</ul>`).join('') : '<p class="td-empty">chưa có note nào.</p>';
+    tdBody.innerHTML = h + '</div>';
+    $('#ntBig').addEventListener('click', () => { setFull($('#w-today'), !$('#w-today').classList.contains('full')); tdRender(); });
     mqWire(keep);
   }
-  const mqItem = q => `<li><q>${esc(q.t)}</q>${q.s ? `<span class="src">— ${esc(q.s)}</span>` : ''}<button type="button" class="rd-del mq-del" data-mq="${esc(q.id)}" aria-label="Xoá câu này">xoá</button></li>`;
+  const mqItem = q => `<li><q>${esc(q.t)}</q><span class="src">${esc(vnNow(new Date(q.at)).hm)}</span><button type="button" class="rd-del mq-del" data-mq="${esc(q.id)}" aria-label="Xoá note này">xoá</button></li>`;
   function mqDelWire(root){                                  // nút xoá nhỏ: bấm 2 lần mới xoá
     root.querySelectorAll('[data-mq]').forEach(b => b.addEventListener('click', () => {
       if (!b.dataset.arm){ b.dataset.arm = '1'; b.textContent = 'xoá thật?'; setTimeout(() => { if (b.isConnected && b.dataset.arm){ delete b.dataset.arm; b.textContent = 'xoá'; } }, 3000); return; }
@@ -1909,18 +1926,18 @@
     }));
   }
   function mqWire(keep){
-    const ta = $('#mqT'), src = $('#mqS'); if (!ta) return;
-    ta.value = TD.mqT || ''; src.value = TD.mqS || '';
-    ta.addEventListener('input', () => { TD.mqT = ta.value; }); src.addEventListener('input', () => { TD.mqS = src.value; });
+    const ta = $('#mqT'); if (!ta) return;
+    const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight + 2, innerHeight * .6) + 'px'; };
+    ta.value = TD.mqT || ''; grow();
+    ta.addEventListener('input', () => { TD.mqT = ta.value; grow(); });
     const add = () => {
       const t = ta.value.trim(); if (!t){ ta.focus(); return; }
       const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-      mqSave(id, t, src.value.trim(), vnNow().date);
-      TD.mqT = ''; TD.mqS = ''; tdRender(); toast('✓ đã lưu câu hay'); const n = $('#mqT'); if (n) n.focus({ preventScroll: true });
+      mqSave(id, t, '', vnNow().date);
+      TD.mqT = ''; tdRender(); toast('✓ đã lưu note'); const n = $('#mqT'); if (n) n.focus({ preventScroll: true });
     };
     $('#mqAdd').addEventListener('click', add);
     ta.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)){ e.preventDefault(); add(); } });
-    src.addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); add(); } });
     mqDelWire(tdBody);
     if (keep){ const el = $('#' + keep.id); if (el){ el.focus({ preventScroll: true }); try { el.setSelectionRange(keep.a, keep.b); } catch (e) {} } }
   }
@@ -1930,10 +1947,6 @@
     const done = rnDone().map(id => [id, rnGet(id), TD.reads.find(r => r.id === id)]).filter(([, , r]) => r).sort((a, b) => b[1].at - a[1].at);
     let h = `<div class="td-sec"><b>✓ bài đã đọc</b><span>${done.length}</span></div>`;
     h += done.length ? '<ul class="td-reads">' + done.map(([id, n, r]) => `<li><button type="button" data-read="${esc(r.id)}"><b>${esc(r.title || '')}</b><span class="m">xong ${dmy(vnNow(new Date(n.at)).date)} · ${esc(kindRead(r))}</span><span class="s nt">${esc(n.t)}</span></button></li>`).join('') + '</ul>' : '<p class="td-empty">chưa có bài nào — đọc xong và ghi lại điều mình hiểu thì bài chuyển vào đây.</p>';
-    const mineOld = mqAll().filter(q => q.d < TD.day), md_ = {}; mineOld.forEach(q => { (md_[q.d] = md_[q.d] || []).push(q); });
-    const mk = Object.keys(md_).sort().reverse();
-    h += `<div class="td-sec"><b>✎ câu hay mình đọc được</b><span>${mineOld.length ? mineOld.length + ' câu' : ''}</span></div>`;
-    h += mk.length ? mk.map(d => `<p class="td-day">${dmy(d)}</p><ul class="mq-list">${md_[d].map(q => mqItem(q)).join('')}</ul>`).join('') : '<p class="td-empty">câu hay bạn chép trong ☀ hôm nay sẽ nằm ở đây từ ngày hôm sau.</p>';
     const items = ((TD.hist && TD.hist.items) || []).filter(x => x.date && x.date < TD.day);
     const days = {}; items.forEach(x => { (days[x.date] = days[x.date] || []).push(x); });
     const keys = Object.keys(days).sort().reverse().slice(0, 30);
@@ -1941,9 +1954,13 @@
     h += keys.length ? keys.map(d => `<p class="td-day">${dmy(d)}</p><ul class="td-past">${days[d].map(x => `<li>${esc(x.text || '')}</li>`).join('')}</ul>`).join('') : '<p class="td-empty">chưa có.</p>';
     tdBody.innerHTML = h;
     tdBody.querySelectorAll('[data-read]').forEach(b => b.addEventListener('click', () => openRead(b.dataset.read)));
-    mqDelWire(tdBody);
   }
   document.querySelectorAll('[data-td]').forEach(b => b.addEventListener('click', () => { TD.tab = b.dataset.td; tdRender(); tdBody.scrollTop = 0; }));
+  // phóng to / thu nhỏ khung bằng nút ⛶ hay phím Esc: cập nhật nút ⤢ của mục note
+  const ntSync = () => setTimeout(() => { if (TD.tab === 'note') tdRender(); }, 0);
+  $('#w-today [data-full]').addEventListener('click', ntSync);
+  $('#w-today .tb').addEventListener('dblclick', ntSync);
+  addEventListener('keydown', e => { if (e.key === 'Escape') ntSync(); });
 
   /* ---------- đọc bài + ghi chép tự lưu ---------- */
   async function openRead(id){
