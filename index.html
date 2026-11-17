@@ -349,13 +349,41 @@
   .td-sec .nt-big{margin-left:10px}
   #w-today.full .nt-wrap{max-width:780px;margin:0 auto;padding:6px 8px 40px}
   #w-today.full .mq-t{min-height:34vh;font-size:16.5px;line-height:1.7;padding:14px 16px}
-  #w-today.full .mq-list q{font-size:16.5px;line-height:1.7}
-  #w-today.full .mq-list li{padding:12px 60px 12px 16px}
-  .mq-list{list-style:none;padding:2px 0 6px}
-  .mq-list li{position:relative;padding:8px 52px 8px 14px;border-bottom:1px solid #0b2a14}
-  .mq-list q{display:block;quotes:none;font:14.5px/1.6 var(--mono);color:var(--g-hi);white-space:pre-wrap;overflow-wrap:anywhere}
-  .mq-list .src{display:block;margin-top:3px;font:12px/1.4 var(--mono);color:var(--g-mid)}
-  .mq-list .mq-del{position:absolute;right:12px;bottom:8px;margin:0}
+  #w-today.full .nt-tx{font-size:16.5px;line-height:1.75}
+  #w-today.full .nt-ttl{font-size:16.5px}
+  #w-today.full .nt-list li{padding:12px 16px}
+  #w-today.full .nt-ti{height:40px;font-size:16.5px}
+  .nt-ti{display:block;width:100%;height:34px;margin-bottom:6px;padding:0 10px;background:#000;border:1px solid var(--g-dim);border-radius:0;color:var(--g-hi);font:600 14px/1 var(--mono)}
+  .nt-ti[hidden]{display:none}
+  .nt-ti:focus{outline:none;border-color:var(--g)}
+  .nt-tags{display:flex;gap:6px}
+  .nt-tag{padding:3px 13px;border:1px solid var(--g-dim);border-radius:999px;background:none;color:var(--g);font:12.5px/1.4 var(--mono);cursor:pointer}
+  .nt-tag:hover,.nt-tag:focus-visible{border-color:var(--g);outline:none}
+  .nt-tag[aria-pressed="true"]{background:var(--g);color:#000;border-color:var(--g)}
+  .nt-row .td-go{margin-left:auto}
+  .nt-row .nt-hint{margin-left:auto}
+  .nt-row .nt-hint+.td-go{margin-left:0}
+  .nt-x{margin-left:auto;padding:0 4px;background:none;border:0;color:var(--g-mid);font:12px/1.4 var(--mono);cursor:pointer;text-decoration:underline}
+  .nt-x+.td-go{margin-left:0}
+  .nt-sec b{font-size:13px;letter-spacing:.04em}
+  .nt-sec.free b{color:#ff5f5f}
+  .nt-list{list-style:none;padding:2px 0 6px}
+  .nt-list li{padding:9px 14px;border-bottom:1px solid #0b2a14}
+  .nt-tx{font:14.5px/1.6 var(--mono);color:var(--g-hi);white-space:pre-wrap;overflow-wrap:anywhere}
+  .nt-free .nt-tx{color:#ff5f5f}
+  .nt-act{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;margin-top:5px}
+  .nt-meta{margin-right:auto;font:11.5px/1.4 var(--mono);color:var(--g-mid)}
+  .nt-act button{padding:0 2px;background:none;border:0;font:11px/1.4 var(--mono);color:var(--g-dim);cursor:pointer}
+  .nt-act button:hover,.nt-act button:focus-visible{color:var(--g);text-decoration:underline;outline:none}
+  .nt-act .nt-del:hover,.nt-act .nt-del:focus-visible{color:var(--amber)}
+  .nt-ttl{display:flex;align-items:baseline;gap:8px;width:100%;padding:0;background:none;border:0;text-align:left;color:var(--g-hi);font:600 14.5px/1.5 var(--mono);cursor:pointer}
+  .nt-ttl i{flex:none;font-style:normal;color:var(--g-mid)}
+  .nt-ttl span{flex:1;min-width:0;overflow-wrap:anywhere}
+  .nt-ttl small{flex:none;font:400 11.5px/1.4 var(--mono);color:var(--g-mid)}
+  .nt-ttl:hover span,.nt-ttl:focus-visible span{text-decoration:underline;outline:none}
+  .nt-luan .nt-tx{margin:8px 0 0 4px;padding-left:12px;border-left:2px solid var(--g-dim)}
+  .nt-pend{color:var(--amber)}
+  .nt-legend{padding:10px 14px 16px;font:11px/1.4 var(--mono);color:var(--g-dim)}
   .td-day{padding:10px 14px 4px;font:12px/1.4 var(--mono);color:var(--g-mid)}
   .td-past{list-style:none;padding:0 14px 8px}
   .td-past li{padding:4px 0;font:13.5px/1.5 var(--mono);color:var(--g)}
@@ -1742,7 +1770,7 @@
 
   /* ---------- ghi chép sau bài đọc: { mã bài: { t: chữ, at: lúc lưu } } — t rỗng nghĩa là đã xoá ---------- */
   const RN_PFX = 'anrevy-house-9q2/reads/v1/n/';
-  let RN_BROKERS = ['wss://broker.emqx.io:8084/mqtt', 'wss://broker.hivemq.com:8884/mqtt'];
+  let RN_BROKERS = ['wss://broker.emqx.io:8084/mqtt', 'wss://broker.hivemq.com:8884/mqtt', 'wss://test.mosquitto.org:8081/mqtt'];   // gửi qua 3 máy chủ cho chắc
   { const qb = new URLSearchParams(location.search).get('broker'); if (qb) RN_BROKERS = qb.split(','); }
   const RN_LIB = 'https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js';
   const RN = { local: {}, web: {}, clients: [], started: false };
@@ -1755,24 +1783,37 @@
   const rnText = id => { const v = rnGet(id); return v && v.t ? v.t : ''; };
   const rnDone = () => Object.keys(Object.assign({}, RN.web, RN.local)).filter(id => rnText(id));
   function rnWeb(id, v){ if (!rnOk(id, v)) return false; const o = RN.web[id]; if (o && o.at >= v.at) return false; RN.web[id] = { t: v.t.slice(0, 8000), at: v.at }; return true; }
-  /* note: { mã: { t: nội dung, d: ngày, at } } — t rỗng nghĩa là đã xoá */
+  /* note: { mã: { t: nội dung, c: mục ('' = Note, 'doi' = Đời, 'luan' = Luận), ti: tiêu đề, d: ngày, at } } — t rỗng nghĩa là đã xoá.
+     Không để mất note: bản trên máy giữ mãi (lưới an toàn); tới khi bot ghi vào myquotes.json (MQ.saved) thì mới coi là
+     đã lưu vĩnh viễn trên web; chưa thấy trong file thì Studio tự gửi lại. */
   const MQ_PFX = 'anrevy-house-9q2/quotes/v1/q/';
-  const MQ = { local: {}, web: {} };
+  const MQ = { local: {}, web: {}, saved: {} };
   const mqOk = (id, v) => /^[a-z0-9]{8,24}$/.test(id) && v && typeof v.t === 'string' && typeof v.at === 'number' && v.at > 0 && /^\d{4}-\d{2}-\d{2}$/.test(v.d || '');
   { const j = ls.get('my-quotes'); if (j && typeof j === 'object' && !Array.isArray(j)) Object.entries(j).forEach(([id, v]) => { if (mqOk(id, v)) MQ.local[id] = v; }); }
   const mqGet = id => { const a = MQ.local[id], b = MQ.web[id]; return !a ? b : !b ? a : (a.at >= b.at ? a : b); };
   const mqAll = () => Object.keys(Object.assign({}, MQ.web, MQ.local)).map(id => Object.assign({ id }, mqGet(id))).filter(q => q.t).sort((a, b) => b.at - a.at);
-  function mqWeb(id, v){ if (!mqOk(id, v)) return false; const o = MQ.web[id]; if (o && o.at >= v.at) return false; MQ.web[id] = { t: v.t.slice(0, 8000), s: String(v.s || '').slice(0, 300), d: v.d, at: v.at }; return true; }
+  const mqCat = c => (c === 'doi' || c === 'luan') ? c : '';
+  function mqWeb(id, v){ if (!mqOk(id, v)) return false; const o = MQ.web[id]; if (o && o.at >= v.at) return false; MQ.web[id] = { t: v.t.slice(0, 20000), c: mqCat(v.c), ti: String(v.ti || '').slice(0, 200), d: v.d, at: v.at }; return true; }
   function mqPublish(id, v){
     const live = RN.clients.filter(c => c.connected); if (!live.length) return false;
-    live.forEach(c => c.publish(MQ_PFX + id, JSON.stringify({ id, t: v.t, s: v.s, d: v.d, at: v.at }), { qos: 1, retain: true }));
+    live.forEach(c => c.publish(MQ_PFX + id, JSON.stringify({ id, t: v.t, c: v.c || '', ti: v.ti || '', d: v.d, at: v.at }), { qos: 1, retain: true }));
     return true;
   }
-  function mqSave(id, t, src, d){
-    const v = { t: String(t || '').slice(0, 8000), s: String(src || '').slice(0, 300), d, at: Date.now() };
+  function mqSave(id, f){
+    const v = { t: String(f.t || '').slice(0, 20000), c: mqCat(f.c), ti: String(f.ti || '').slice(0, 200), d: f.d, at: Date.now() };
     MQ.local[id] = v; ls.set('my-quotes', MQ.local);
     if (mqPublish(id, v)) MQ.web[id] = Object.assign({}, v);
   }
+  // chưa thấy trong myquotes.json sau 10 phút → gửi lại (phòng máy chủ chuyển tin làm rơi tin)
+  function mqResend(){ Object.entries(MQ.local).forEach(([id, v]) => { if ((MQ.saved[id] || 0) < v.at && Date.now() - v.at > 6e5) mqPublish(id, v); }); }
+  async function mqRefresh(){
+    const q = await getJSON(TD_DATA + 'myquotes.json'); if (!q || !q.items) return;
+    let ch = false;
+    Object.entries(q.items).forEach(([id, v]) => { if (v && typeof v.at === 'number' && (MQ.saved[id] || 0) < v.at){ MQ.saved[id] = v.at; ch = true; } if (mqWeb(id, v)) ch = true; });
+    mqResend();
+    if (ch && TD.tab === 'note') tdRender();
+  }
+  setInterval(() => { if (!document.hidden && RN.started) mqRefresh(); }, 150000);
   function rnPublish(id, v){
     const live = RN.clients.filter(c => c.connected); if (!live.length) return false;
     live.forEach(c => c.publish(RN_PFX + id, JSON.stringify({ id, t: v.t, at: v.at }), { qos: 1, retain: true }));
@@ -1817,7 +1858,7 @@
   async function rnLoad(){
     const [j, q] = await Promise.all([getJSON(TD_DATA + 'readnotes.json'), getJSON(TD_DATA + 'myquotes.json')]);
     Object.entries((j && j.items) || {}).forEach(([id, v]) => rnWeb(id, v));
-    Object.entries((q && q.items) || {}).forEach(([id, v]) => mqWeb(id, v));
+    Object.entries((q && q.items) || {}).forEach(([id, v]) => { mqWeb(id, v); if (v && typeof v.at === 'number') MQ.saved[id] = Math.max(MQ.saved[id] || 0, v.at); });
     if (!RN.started){ RN.started = true; rnLib(rnConnect); }
   }
   let rnT = 0;
@@ -1881,7 +1922,7 @@
   /* ---------- vẽ khung Hôm nay ---------- */
   function tdRender(){
     const t = vnNow();
-    const act = document.activeElement, keep = act && act.id === 'mqT' ? { id: act.id, a: act.selectionStart, b: act.selectionEnd } : null;
+    const act = document.activeElement, keep = act && (act.id === 'mqT' || act.id === 'mqTi') ? { id: act.id, a: act.selectionStart, b: act.selectionEnd } : null;
     $('#tdDate').textContent = '— ' + (TD_WD[t.wd] || '') + ' ' + dmy(t.date);
     document.querySelectorAll('[data-td]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.td === TD.tab)));
     if (TD.tab === 'hist') return histRender();
@@ -1904,40 +1945,83 @@
     tdBody.querySelectorAll('[data-read]').forEach(b => b.addEventListener('click', () => openRead(b.dataset.read)));
   }
 
-  /* ---------- note: mục riêng, viết tự do, mở rộng được để dễ viết, dễ nhìn ---------- */
+  /* ---------- note: viết ở trên; chọn thẻ Luận / Đời trước khi lưu để xếp vào mục, không chọn thì nằm ở mục Note ----------
+     Note (chữ đỏ, chưa xếp mục, nút xoá ngay dưới) · Đời (note ngắn, hiện toàn bộ) · Luận (chỉ hiện tiêu đề, bấm để đọc) */
+  const NT_CAT = { doi: 'Đời', luan: 'Luận' };
+  const firstLine = t => String(t || '').trim().split('\n')[0].replace(/\s+/g, ' ').slice(0, 90);
+  const ntMeta = q => `${q.d === (TD.day || vnNow().date) ? 'hôm nay' : dmy(q.d)} ${vnNow(new Date(q.at)).hm}${(MQ.saved[q.id] || 0) < q.at ? ' <span class="nt-pend" title="đã gửi, đang ghi vĩnh viễn lên web (vài phút)">↻</span>' : ''}`;
   function noteRender(keep){
-    const all = mqAll(), today = TD.day || vnNow().date, byDay = {};
-    all.forEach(q => { (byDay[q.d] = byDay[q.d] || []).push(q); });
-    const days = Object.keys(byDay).sort().reverse();
-    const big = $('#w-today').classList.contains('full');
-    let h = `<div class="nt-wrap"><div class="td-sec"><b>✎ note</b><span>${all.length ? all.length + ' note' : ''}</span><button type="button" class="nt-big" id="ntBig" aria-pressed="${big}">${big ? '⤡ thu nhỏ' : '⤢ mở rộng'}</button></div>
-      <div class="mq-form"><label class="sr" for="mqT">Viết note</label><textarea class="td-ta mq-t" id="mqT" rows="3" placeholder="viết note…"></textarea>
-      <div class="nt-row"><span class="nt-hint">Ctrl + Enter để lưu</span><button class="td-go" type="button" id="mqAdd">lưu</button></div></div>`;
-    h += days.length ? days.map(d => `<p class="td-day">${d === today ? 'hôm nay' : dmy(d)}</p><ul class="mq-list">${byDay[d].map(q => mqItem(q)).join('')}</ul>`).join('') : '<p class="td-empty">chưa có note nào.</p>';
+    const all = mqAll(), big = $('#w-today').classList.contains('full');
+    if (TD.ntEdit && !mqGet(TD.ntEdit)) TD.ntEdit = null;
+    const ed = TD.ntEdit, tag = TD.ntTag || '';
+    const free = all.filter(q => !q.c), doi = all.filter(q => q.c === 'doi'), luan = all.filter(q => q.c === 'luan');
+    const acts = (q, extra) => `<div class="nt-act"><span class="nt-meta">${ntMeta(q)}</span>${extra || ''}<button type="button" data-ed="${esc(q.id)}">sửa</button><button type="button" class="nt-del" data-mq="${esc(q.id)}" aria-label="Xoá note này">xoá</button></div>`;
+    let h = `<div class="nt-wrap"><div class="td-sec"><b>✎ ${ed ? 'sửa note' : 'viết note'}</b><span></span><button type="button" class="nt-big" id="ntBig" aria-pressed="${big}">${big ? '⤡ thu nhỏ' : '⤢ mở rộng'}</button></div>
+      <div class="mq-form">
+        <label class="sr" for="mqTi">Tiêu đề</label><input class="nt-ti" id="mqTi" placeholder="tiêu đề" autocomplete="off"${tag === 'luan' ? '' : ' hidden'}>
+        <label class="sr" for="mqT">Viết note</label><textarea class="td-ta mq-t" id="mqT" rows="3" placeholder="viết note…"></textarea>
+        <div class="nt-row"><span class="nt-tags" role="group" aria-label="Lưu vào mục">${['luan', 'doi'].map(c => `<button type="button" class="nt-tag" data-tag="${c}" aria-pressed="${tag === c}">${NT_CAT[c]}</button>`).join('')}</span>
+          ${ed ? '<button type="button" class="nt-x" id="mqCancel">huỷ</button>' : '<span class="nt-hint">Ctrl + Enter để lưu</span>'}<button class="td-go" type="button" id="mqAdd">${ed ? 'cập nhật' : 'lưu'}</button></div></div>`;
+    // NOTE: chưa chọn mục — chữ đỏ, nút xoá ngay bên dưới, có thể chuyển sang Đời / Luận
+    h += `<div class="td-sec nt-sec free"><b>note</b><span>${free.length || ''}</span></div>`;
+    h += free.length ? '<ul class="nt-list nt-free">' + free.map(q => `<li><p class="nt-tx">${esc(q.t)}</p>${acts(q, `<button type="button" data-mv="doi" data-id="${esc(q.id)}">→ Đời</button><button type="button" data-mv="luan" data-id="${esc(q.id)}">→ Luận</button>`)}</li>`).join('') + '</ul>'
+      : '<p class="td-empty">note không chọn thẻ Luận hay Đời sẽ nằm ở đây.</p>';
+    // ĐỜI: note ngắn, hiện toàn bộ
+    h += `<div class="td-sec nt-sec"><b>Đời</b><span>${doi.length || ''}</span></div>`;
+    h += doi.length ? '<ul class="nt-list nt-doi">' + doi.map(q => `<li><p class="nt-tx">${esc(q.t)}</p>${acts(q)}</li>`).join('') + '</ul>' : '<p class="td-empty">chưa có.</p>';
+    // LUẬN: chỉ tiêu đề; bấm vào để mở đọc
+    h += `<div class="td-sec nt-sec"><b>Luận</b><span>${luan.length || ''}</span></div>`;
+    h += luan.length ? '<ul class="nt-list nt-luan">' + luan.map(q => { const open = TD.ntOpen === q.id;
+      return `<li><button type="button" class="nt-ttl" data-open="${esc(q.id)}" aria-expanded="${open}"><i>${open ? '▾' : '▸'}</i><span>${esc(q.ti || firstLine(q.t))}</span><small>${q.d === (TD.day || vnNow().date) ? 'hôm nay' : dmy(q.d)}</small></button>${open ? `<p class="nt-tx">${esc(q.t)}</p>${acts(q)}` : ''}</li>`; }).join('') + '</ul>' : '<p class="td-empty">chưa có.</p>';
+    h += '<p class="nt-legend"><span class="nt-pend">↻</span> đang ghi lên web (vài phút) · không có dấu là đã lưu vĩnh viễn</p>';
     tdBody.innerHTML = h + '</div>';
     $('#ntBig').addEventListener('click', () => { setFull($('#w-today'), !$('#w-today').classList.contains('full')); tdRender(); });
+    tdBody.querySelectorAll('[data-open]').forEach(b => b.addEventListener('click', () => { TD.ntOpen = TD.ntOpen === b.dataset.open ? null : b.dataset.open; tdRender(); }));
+    tdBody.querySelectorAll('[data-mv]').forEach(b => b.addEventListener('click', () => {
+      const q = mqGet(b.dataset.id); if (!q || !q.t) return;
+      mqSave(b.dataset.id, { t: q.t, c: b.dataset.mv, ti: q.ti || (b.dataset.mv === 'luan' ? firstLine(q.t) : ''), d: q.d });
+      toast('✓ đã chuyển vào ' + NT_CAT[b.dataset.mv]); tdRender();
+    }));
+    tdBody.querySelectorAll('[data-ed]').forEach(b => b.addEventListener('click', () => {
+      const q = mqGet(b.dataset.ed); if (!q) return;
+      TD.ntEdit = b.dataset.ed; TD.mqT = q.t; TD.mqTi = q.ti || ''; TD.ntTag = q.c || '';
+      tdRender(); tdBody.scrollTop = 0; const t = $('#mqT'); if (t) t.focus({ preventScroll: true });
+    }));
     mqWire(keep);
   }
-  const mqItem = q => `<li><q>${esc(q.t)}</q><span class="src">${esc(vnNow(new Date(q.at)).hm)}</span><button type="button" class="rd-del mq-del" data-mq="${esc(q.id)}" aria-label="Xoá note này">xoá</button></li>`;
   function mqDelWire(root){                                  // nút xoá nhỏ: bấm 2 lần mới xoá
     root.querySelectorAll('[data-mq]').forEach(b => b.addEventListener('click', () => {
       if (!b.dataset.arm){ b.dataset.arm = '1'; b.textContent = 'xoá thật?'; setTimeout(() => { if (b.isConnected && b.dataset.arm){ delete b.dataset.arm; b.textContent = 'xoá'; } }, 3000); return; }
-      const q = mqGet(b.dataset.mq); if (q) mqSave(b.dataset.mq, '', '', q.d); tdRender();
+      const q = mqGet(b.dataset.mq); if (q) mqSave(b.dataset.mq, { t: '', c: q.c, ti: '', d: q.d });
+      if (TD.ntEdit === b.dataset.mq){ TD.ntEdit = null; TD.mqT = ''; TD.mqTi = ''; TD.ntTag = ''; }
+      toast('đã xoá note'); tdRender();
     }));
   }
   function mqWire(keep){
-    const ta = $('#mqT'); if (!ta) return;
+    const ta = $('#mqT'), ti = $('#mqTi'); if (!ta) return;
     const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.min(ta.scrollHeight + 2, innerHeight * .6) + 'px'; };
-    ta.value = TD.mqT || ''; grow();
+    ta.value = TD.mqT || ''; ti.value = TD.mqTi || ''; grow();
     ta.addEventListener('input', () => { TD.mqT = ta.value; grow(); });
+    ti.addEventListener('input', () => { TD.mqTi = ti.value; });
+    tdBody.querySelectorAll('[data-tag]').forEach(b => b.addEventListener('click', () => {    // bấm lại thẻ đang chọn để bỏ chọn
+      TD.ntTag = TD.ntTag === b.dataset.tag ? '' : b.dataset.tag;
+      tdBody.querySelectorAll('[data-tag]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.tag === TD.ntTag)));
+      ti.hidden = TD.ntTag !== 'luan'; if (!ti.hidden && !ti.value) ti.focus({ preventScroll: true });
+    }));
     const add = () => {
       const t = ta.value.trim(); if (!t){ ta.focus(); return; }
-      const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-      mqSave(id, t, '', vnNow().date);
-      TD.mqT = ''; tdRender(); toast('✓ đã lưu note'); const n = $('#mqT'); if (n) n.focus({ preventScroll: true });
+      const c = TD.ntTag || '', title = c === 'luan' ? (ti.value.trim() || firstLine(t)) : ti.value.trim();
+      const id = TD.ntEdit || Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+      const old = TD.ntEdit ? mqGet(id) : null;
+      mqSave(id, { t, c, ti: title, d: old && old.d ? old.d : vnNow().date });
+      TD.mqT = ''; TD.mqTi = ''; TD.ntTag = ''; TD.ntEdit = null; if (c === 'luan') TD.ntOpen = null;
+      tdRender(); toast('✓ đã lưu vào ' + (c ? NT_CAT[c] : 'Note'));
+      const n = $('#mqT'); if (n) n.focus({ preventScroll: true });
     };
     $('#mqAdd').addEventListener('click', add);
+    const cancel = $('#mqCancel'); if (cancel) cancel.addEventListener('click', () => { TD.ntEdit = null; TD.mqT = ''; TD.mqTi = ''; TD.ntTag = ''; tdRender(); });
     ta.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)){ e.preventDefault(); add(); } });
+    ti.addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); ta.focus(); } });
     mqDelWire(tdBody);
     if (keep){ const el = $('#' + keep.id); if (el){ el.focus({ preventScroll: true }); try { el.setSelectionRange(keep.a, keep.b); } catch (e) {} } }
   }
