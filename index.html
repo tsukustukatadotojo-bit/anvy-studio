@@ -323,6 +323,18 @@
   .td-idi li.new q{color:#fff}
   .td-next,.td-empty{padding:9px 14px 12px;font:12px/1.5 var(--mono);color:var(--g-dim)}
   .td-reads{list-style:none}
+  .td-rm{display:flex;gap:7px;width:100%;padding:8px 14px 9px;text-align:left;font:11.5px/1.45 var(--mono);color:var(--g-mid);border-bottom:1px dashed var(--g-line)}
+  .td-rm:hover,.td-rm:focus-visible{color:var(--g-hi);background:#04210d}
+  .td-rm i{font-style:normal;flex:none}
+  .td-rml{list-style:none;padding:6px 14px 4px;font:12px/1.55 var(--mono);color:var(--g)}
+  .td-rml>li{padding:3px 0}
+  .td-rml .r{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+  .td-rml small{flex:none;color:var(--g-dim)}
+  .td-rml .past{opacity:.45}
+  .td-rml .cur>b,.td-rml li.cur{color:var(--g-hi)}
+  .td-rml ul{list-style:none;margin:3px 0 4px 16px;color:var(--g-mid)}
+  .td-rml ul li.cur{color:var(--g-hi);font-weight:600}
+  .td-rmn{padding:4px 14px 10px;font:11px/1.5 var(--mono);color:var(--g-dim);border-bottom:1px dashed var(--g-line)}
   .td-reads button{display:block;width:100%;text-align:left;padding:11px 14px;border-bottom:1px solid #0b2a14;color:var(--g)}
   .td-reads button:hover,.td-reads button:focus-visible{background:#04210d}
   .td-reads b{display:block;font:600 14.5px/1.35 var(--mono);color:var(--g-hi)}
@@ -403,6 +415,20 @@
   .rd-art hr{margin:24px 0;border:0;border-top:1px dashed var(--g-line)}
   .rd-art .rd-sum{margin:0 0 20px;padding:10px 14px;border:1px solid var(--g-line);font:14px/1.6 var(--mono);color:var(--g)}
   .rd-src{font:13px/1.6 var(--mono)!important;color:var(--g-mid)}
+  .rd-x{margin:30px 0 0;padding-top:4px;border-top:1px dashed var(--g-line)}
+  .rd-x h2{margin:16px 0 10px;font:600 15px/1.4 var(--mono);color:var(--g-hi);letter-spacing:.02em}
+  .rd-x .rd-hint{margin:-4px 0 10px;font:12px/1.5 var(--mono);color:var(--g-mid)}
+  .rd-conn{list-style:none;margin:0!important}
+  .rd-conn li{margin:0 0 10px}
+  .rd-conn small{font:12px/1 var(--mono);color:var(--g-mid)}
+  .rd-conn .why{display:block;font-size:15px;line-height:1.6;color:#bfe6c8}
+  .rd-go{padding:0;background:none;border:0;font:inherit;color:var(--g-hi);text-align:left;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  .rd-chk summary{cursor:pointer;color:#fff;line-height:1.6}
+  .rd-chk summary::marker{color:var(--g-mid)}
+  .rd-chk details[open] summary{color:var(--g-hi)}
+  .rd-chk .ans{margin:8px 0 6px;padding:6px 0 4px 14px;border-left:2px solid var(--g-dim);font-size:16px;color:#cfeedd}
+  .rd-chk .ans p{margin:0 0 8px}
+  .rd-chk .ans .rd-go{font:13px/1.5 var(--mono)}
   .rd-src li{overflow-wrap:anywhere}
   .rd-unsure{margin:10px 0 0;padding:8px 12px;border:1px dashed var(--amber);font:13px/1.55 var(--mono);color:var(--amber)}
   .rd-done{max-width:70ch;margin:8px auto 40px;padding:16px 22px;border-top:1px solid var(--g-line);font:13px/1.55 var(--mono);color:var(--g-mid)}
@@ -1765,7 +1791,38 @@
   }
   const dmy = d => { const [y, m, dd] = String(d || '').split('-'); return dd ? `${dd}/${m}` : ''; };
   const getJSON = u => fetch(u, { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null);
-  const TD = { tab: 'today', reads: [], idioms: null, hist: null, art: {}, day: '', shown: -1 };
+  const TD = { tab: 'today', reads: [], idioms: null, hist: null, art: {}, day: '', shown: -1, cur: null, rmOpen: false };
+  // lộ trình đọc (studio/data/curriculum.json): 4 mạch mỗi ngày, mỗi chặng 4 tuần
+  const TRACK = { A: 'A · nền tảng', B: 'B · đời sống vận hành', C: 'C · con người & ứng xử', D: 'D · tư duy' };
+  const ROLE = { review: 'ôn giãn cách', week: 'tổng kết tuần', stage: 'tổng kết chặng', case: 'tình huống tuần', quiz: 'tự kiểm tra tuần', stagequiz: 'tự kiểm tra chặng', year: 'tổng kết năm' };
+  const dNum = s => Date.parse(s + 'T00:00:00Z') / 864e5, dAdd = (s, n) => new Date((dNum(s) + n) * 864e5).toISOString().slice(0, 10);
+  function curPos(day){                                      // đang ở chặng nào, tuần nào của lộ trình
+    const c = TD.cur; if (!c || !c.stages) return null;
+    if (day < c.intro_start) return null;
+    if (day < c.stage1_start) return { phase: 'intro', label: c.intro.title, level: 1 };
+    let n = dNum(day) - dNum(c.stage1_start); const level = 1 + Math.floor(n / 364); n %= 364;
+    const base = dAdd(c.stage1_start, (level - 1) * 364);
+    if (n < 336){ const si = Math.floor(n / 28), wi = Math.floor((n % 28) / 7), st = c.stages[si];
+      return { phase: 'stage', level, base, stage: si + 1, week: wi + 1, label: `chặng ${si + 1}/12 · ${st.title} — tuần ${wi + 1}/4: ${st.weeks[wi].title}` }; }
+    const cw = Math.floor((n - 336) / 7);
+    return { phase: 'cross', level, base, week: cw + 1, label: `${c.cross.title} — tuần ${cw + 1}/4` };
+  }
+  function roadmap(day){
+    const p = curPos(day); if (!p) return '';
+    const c = TD.cur, base = p.base || c.stage1_start, rng = (a, n) => `${dmy(a)}–${dmy(dAdd(a, n - 1))}`;
+    let h = `<button type="button" class="td-rm" id="tdRm" aria-expanded="${TD.rmOpen}"><i>${TD.rmOpen ? '▾' : '▸'}</i><span>${p.level > 1 ? 'năm ' + p.level + ' · ' : ''}${esc(p.label)}</span></button>`;
+    if (!TD.rmOpen) return h;
+    h += '<ol class="td-rml">';
+    if (p.level === 1) h += `<li class="${p.phase === 'intro' ? 'cur' : 'past'}"><div class="r"><span><b>mở đầu</b> · ${esc(c.intro.title.replace(/^Mở đầu:\s*/, ''))}</span><small>${rng(c.intro_start, 5)}</small></div></li>`;
+    c.stages.forEach((st, i) => {
+      const a = dAdd(base, i * 28), now = p.phase === 'stage' && p.stage === i + 1, past = p.phase === 'cross' || (p.phase === 'stage' && i + 1 < p.stage);
+      h += `<li class="${now ? 'cur' : past ? 'past' : ''}"><div class="r"><span><b>${i + 1}</b> · ${esc(st.title)}</span><small>${rng(a, 28)}</small></div>`;
+      if (now) h += '<ul>' + st.weeks.map((w, j) => `<li class="${j + 1 === p.week ? 'cur' : j + 1 < p.week ? 'past' : ''}">tuần ${j + 1} · ${esc(w.title)}</li>`).join('') + '</ul>';
+      h += '</li>';
+    });
+    h += `<li class="${p.phase === 'cross' ? 'cur' : ''}"><div class="r"><span><b>✦</b> · ${esc(c.cross.title)}</span><small>${rng(dAdd(base, 336), 28)}</small></div></li></ol>`;
+    return h + '<p class="td-rmn">mỗi ngày 4 bài cùng chủ đề tuần · thứ tư ôn giãn cách · chủ nhật tổng kết, tình huống, tự kiểm tra</p>';
+  }
   const tdBody = $('#tdBody'), rdBody = $('#rdBody');
 
   /* ---------- ghi chép sau bài đọc: { mã bài: { t: chữ, at: lúc lưu } } — t rỗng nghĩa là đã xoá ---------- */
@@ -1911,13 +1968,14 @@
   /* ---------- tải dữ liệu ---------- */
   async function tdLoad(){
     const t = vnNow(); TD.day = t.date;
-    const [idx, idi, hist] = await Promise.all([getJSON(TD_DATA + 'reads/index.json'), getJSON(TD_DATA + `idioms/${t.date}.json`), getJSON(TD_DATA + 'idioms/history.json'), rnLoad()]);
-    TD.reads = (idx && Array.isArray(idx.items)) ? idx.items : []; TD.idioms = idi; TD.hist = hist;
+    const [idx, idi, hist, cur] = await Promise.all([getJSON(TD_DATA + 'reads/index.json'), getJSON(TD_DATA + `idioms/${t.date}.json`), getJSON(TD_DATA + 'idioms/history.json'), TD.cur ? null : getJSON(TD_DATA + 'curriculum.json'), rnLoad()]);
+    TD.reads = (idx && Array.isArray(idx.items)) ? idx.items : []; TD.idioms = idi; TD.hist = hist; if (cur && cur.stages) TD.cur = cur;
     $('#tdUpd').textContent = TD.reads.length ? '' : '◌';
     tdRender();
   }
   const revealed = () => { const now = vnNow().hm; return ((TD.idioms && TD.idioms.items) || []).filter(x => (x.at || '') <= now); };
-  const kindRead = r => (r.kind === 'big' ? 'chủ đề lớn' : 'chủ đề nhỏ') + (r.topic ? ' · ' + r.topic : '') + ' · ' + (LANG[r.lang] || r.lang || '') + (r.minutes ? ' · ~' + r.minutes + ' phút' : '');
+  const kindRead = r => (r.track && TRACK[r.track] ? TRACK[r.track] + (ROLE[r.role] ? ' · ' + ROLE[r.role] : '') : (r.kind === 'big' ? 'chủ đề lớn' : 'chủ đề nhỏ'))
+    + (r.topic && !ROLE[r.role] ? ' · ' + r.topic : '') + ' · ' + (LANG[r.lang] || r.lang || '') + (r.minutes ? ' · ~' + r.minutes + ' phút' : '');
 
   /* ---------- vẽ khung Hôm nay ---------- */
   function tdRender(){
@@ -1937,12 +1995,13 @@
     // bài đọc: chưa có ghi chép thì còn nằm đây, dồn qua các ngày
     const done = new Set(rnDone());
     const queue = TD.reads.filter(r => !done.has(r.id)).sort((a, b) => (b.date || '').localeCompare(a.date || '') || (a.id || '').localeCompare(b.id || ''));
-    h += `<div class="td-sec"><b>▤ bài đọc</b><span>${queue.length ? queue.length + ' bài chưa đọc' : ''}</span></div>`;
+    h += `<div class="td-sec"><b>▤ bài đọc</b><span>${queue.length ? queue.length + ' bài chưa đọc' : ''}</span></div>` + roadmap(t.date);
     if (!TD.reads.length) h += '<p class="td-empty">◌ chưa có bài — bài mỗi ngày được soạn vào khoảng 5–6 giờ sáng.</p>';
     else if (!queue.length) h += '<p class="td-empty">✓ đã đọc hết. Bài mới có vào sáng mai.</p>';
     else h += '<ul class="td-reads">' + queue.map(r => `<li><button type="button" data-read="${esc(r.id)}"><b>${esc(r.title || '')}</b><span class="m">${r.date && r.date !== t.date ? `<span class="old">từ ${dmy(r.date)}</span> · ` : ''}${esc(kindRead(r))}</span>${r.summary ? `<span class="s">${esc(r.summary)}</span>` : ''}</button></li>`).join('') + '</ul>';
     tdBody.innerHTML = h;
     tdBody.querySelectorAll('[data-read]').forEach(b => b.addEventListener('click', () => openRead(b.dataset.read)));
+    const rm = $('#tdRm'); if (rm) rm.addEventListener('click', () => { TD.rmOpen = !TD.rmOpen; tdRender(); });
   }
 
   /* ---------- note: viết ở trên; chọn thẻ Luận / Đời trước khi lưu để xếp vào mục, không chọn thì nằm ở mục Note ----------
@@ -2056,11 +2115,25 @@
     const src = (a.sources || []).filter(s => s && s.url);
     rdBody.innerHTML = `<article class="rd-art" lang="${a.lang === 'en' ? 'en' : 'vi'}">
       <p class="rd-meta">${esc(dmy(a.date))} · ${esc(kindRead(a))}</p><h1>${esc(a.title || '')}</h1>
-      ${a.summary ? `<p class="rd-sum">${esc(a.summary)}</p>` : ''}${md(a.body)}
+      ${a.summary ? `<p class="rd-sum">${esc(a.summary)}</p>` : ''}${md(a.body)}${rdExtra(a)}
       ${(a.unsure || []).length ? `<div class="rd-unsure"><b>⚠ chỗ chưa kiểm chứng chắc chắn</b><ul>${a.unsure.map(x => '<li>' + esc(x) + '</li>').join('')}</ul></div>` : ''}
       ${src.length ? `<h2>${a.lang === 'en' ? 'Sources' : 'Nguồn'}</h2><ol class="rd-src">${src.map(s => `<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title || s.url)}</a></li>`).join('')}</ol>` : ''}
     </article><section class="rd-done" id="rdDone"></section>`;
+    rdBody.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => openRead(b.dataset.go)));
     noteBox(a);
+  }
+  // 3 mục cuối bài của lộ trình: nối với bài cũ, tự kiểm tra (đáp án ẩn), một việc nhỏ để thử
+  function rdExtra(a){
+    const find = id => id && TD.reads.find(x => x.id === id);
+    const go = (r, pre) => `<button type="button" class="rd-go" data-go="${esc(r.id)}">${pre || ''}${esc(r.title || '')}</button>`;
+    const conn = (a.connect || []).filter(c => c && (c.id || c.title)), chk = (a.check || []).filter(c => c && c.q);
+    let h = '';
+    if (conn.length) h += `<section class="rd-x" lang="vi"><h2>↔ kết nối</h2><ul class="rd-conn">${conn.map(c => { const r = find(c.id);
+      return `<li>${r ? go(r) : `<b>${esc(c.title || c.id)}</b>`}${r && r.date ? ` <small>${dmy(r.date)}</small>` : ''}${c.why ? `<span class="why">${esc(c.why)}</span>` : ''}</li>`; }).join('')}</ul></section>`;
+    if (chk.length) h += `<section class="rd-x" lang="vi"><h2>? tự kiểm tra</h2><p class="rd-hint">trả lời trong đầu trước, rồi bấm vào câu hỏi để xem đáp án</p><ol class="rd-chk">${chk.map(c => { const r = find(c.from);
+      return `<li><details><summary>${esc(c.q)}</summary><div class="ans">${md(c.a || '')}${r && r.id !== a.id ? go(r, '↩ đọc lại: ') : ''}</div></details></li>`; }).join('')}</ol></section>`;
+    if (a.try) h += `<section class="rd-x" lang="vi"><h2>→ thử ngoài đời</h2>${md(a.try)}</section>`;
+    return h;
   }
   function rdDel(){ const d = $('#rdDel'), ta = $('#rdNote'); if (d && ta){ d.hidden = !ta.value.trim(); d.textContent = 'xoá'; delete d.dataset.arm; } }
   function noteBox(a){
