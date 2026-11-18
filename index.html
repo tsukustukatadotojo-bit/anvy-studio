@@ -2280,7 +2280,7 @@
     return Object.keys(Object.assign({}, CH.web, CH.local)).map(id => { const a = CH.local[id], b = CH.web[id]; return Object.assign({ id }, !a ? b : !b ? a : (a.at >= b.at ? a : b)); });
   }
   const chShown = () => CH.him.filter(m => m.tsn <= Date.now());
-  const chUnread = () => chShown().filter(m => m.k !== 'react' && m.tsn > CH.seen).length;
+  const chUnread = () => chShown().filter(m => !m.k && m.tsn > CH.seen).length;
   function chPublish(id, v){
     const live = RN.clients.filter(c => c.connected); if (!live.length) return false;
     live.forEach(c => c.publish(CHAT_PFX + id, JSON.stringify(Object.assign({ id }, chPick(v))), { qos: 1, retain: true }));
@@ -2298,9 +2298,10 @@
     if (prof && typeof prof === 'object') CH.prof = prof;
     const seen = new Set(), him = [];
     mons.forEach(j => ((j && j.items) || []).forEach(m => {
-      const tsn = m && typeof m.t === 'string' && m.t.trim() ? Date.parse(m.ts) : NaN;
+      const kk = m && (m.k === 'react' || m.k === 'seen') ? m.k : '';   // react: thả tim; seen: đã xem tin của Vy (chưa trả lời)
+      const tsn = m && (kk === 'seen' ? typeof m.re === 'string' : typeof m.t === 'string' && m.t.trim()) ? Date.parse(m.ts) : NaN;
       if (!m || !m.id || seen.has(m.id) || !(tsn > 0)) return;
-      seen.add(m.id); him.push({ id: String(m.id), t: m.t.slice(0, 4000), tsn, re: typeof m.re === 'string' ? m.re : '', k: m.k === 'react' ? 'react' : '' });
+      seen.add(m.id); him.push({ id: String(m.id), t: String(m.t || '').slice(0, 4000), tsn, re: typeof m.re === 'string' ? m.re : '', k: kk });
     }));
     CH.him = him.sort((a, b) => a.tsn - b.tsn);
     Object.entries((me && me.items) || {}).forEach(([id, v]) => { if (v && typeof v.at === 'number') CH.saved[id] = Math.max(CH.saved[id] || 0, v.at); chWeb(id, v); });
@@ -2319,7 +2320,7 @@
   }
   const chVisible = () => !wins.chat.hidden && !document.hidden && (wins.chat.classList.contains('front') || narrow());
   function chMarkSeen(){
-    const last = Math.max(0, ...chShown().filter(m => m.k !== 'react').map(m => m.tsn));
+    const last = Math.max(0, ...chShown().filter(m => !m.k).map(m => m.tsn));
     if (last > CH.seen){ CH.seen = last; ls.set('tn-seen', last); }
     chBadge();
   }
@@ -2343,7 +2344,7 @@
     const fresh = chShown().filter(m => m.tsn > CH.told);
     if (fresh.length){
       CH.told = fresh[fresh.length - 1].tsn; fresh.forEach(m => CH.pops.add(m.id));
-      const msgs = fresh.filter(m => m.k !== 'react'), last = msgs[msgs.length - 1];
+      const msgs = fresh.filter(m => !m.k), last = msgs[msgs.length - 1];
       if (last){
         const pre = last.t.replace(/\s+/g, ' ').slice(0, 70) + (last.t.length > 70 ? '…' : '');
         if (chVisible()) ting();
@@ -2357,7 +2358,7 @@
   }
   function chPlan(){                                 // hẹn đúng giờ tin kế tiếp; 25 giây trước đó hiện "đang nhập…"
     CH.timers.forEach(clearTimeout); CH.timers = [];
-    const now = Date.now(), nx = CH.him.find(m => m.tsn > now && m.k !== 'react'), nr = CH.him.find(m => m.tsn > now);
+    const now = Date.now(), nx = CH.him.find(m => m.tsn > now && !m.k), nr = CH.him.find(m => m.tsn > now);
     if (nr && nr.tsn - now < 6 * 36e5) CH.timers.push(setTimeout(chTick, nr.tsn - now + 300));
     if (nx && nx.tsn - now < 6 * 36e5){
       const on = () => { CH.typing = true; chRender(); };
@@ -2373,7 +2374,7 @@
     return d < 5 ? 'Đang hoạt động' : d < 60 ? `Hoạt động ${Math.round(d)} phút trước` : d < 1440 ? `Hoạt động ${Math.round(d / 60)} giờ trước` : '';
   }
   function chHead(){
-    const last = chShown().filter(m => m.k !== 'react').pop();
+    const last = chShown().filter(m => !m.k).pop();
     $('#chAct').textContent = CH.typing ? 'Đang nhập…' : last ? chAgo(last.tsn) : '';
   }
   const WDN = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
@@ -2393,10 +2394,10 @@
     if (wins.chat.hidden) return chBadge();
     const near = chBody.scrollHeight - chBody.scrollTop - chBody.clientHeight < 90;
     const shown = chShown();
-    const hisReact = new Set(shown.filter(m => m.k === 'react').map(m => m.re));
+    const hisReact = new Set(shown.filter(m => m.k === 'react').map(m => m.re)), hisSeen = new Set(shown.filter(m => m.k === 'seen').map(m => m.re));
     const myReact = new Set(), mine = [];
     chMine().forEach(m => { if (m.k === 'react'){ if (m.t && m.re) myReact.add(m.re); } else if (m.t) mine.push(m); });
-    const all = shown.filter(m => m.k !== 'react').map(m => ({ who: 'him', id: m.id, t: m.t, ms: m.tsn, re: m.re }))
+    const all = shown.filter(m => !m.k).map(m => ({ who: 'him', id: m.id, t: m.t, ms: m.tsn, re: m.re }))
       .concat(mine.map(m => ({ who: 'me', id: m.id, t: m.t, ms: m.at, ok: (CH.saved[m.id] || 0) >= m.at || !!(CH.web[m.id] && CH.web[m.id].at >= m.at) })))
       .concat(chCalls().map(c => ({ who: 'me', call: true, id: 'call' + c.s, ms: c.s, dur: c.d })))
       .sort((a, b) => a.ms - b.ms).slice(-400);
@@ -2420,7 +2421,7 @@
                            : `<div class="ig-row me ${pos}${r ? ' react' : ''}">${b}</div>`;
     });
     const last = all[all.length - 1];
-    if (last && last.who === 'me' && !last.call && !CH.typing) h += `<p class="ig-st">${!last.ok ? 'Đang gửi…' : replied.has(last.id) || hisReact.has(last.id) ? 'Đã xem' : 'Đã gửi'}</p>`;
+    if (last && last.who === 'me' && !last.call && !CH.typing) h += `<p class="ig-st">${!last.ok ? 'Đang gửi…' : replied.has(last.id) || hisReact.has(last.id) || hisSeen.has(last.id) ? 'Đã xem' : 'Đã gửi'}</p>`;
     if (CH.typing) h += `<div class="ig-row him one"><span class="ig-av" aria-hidden="true">${esc(chInit())}</span><div class="ig-bw"><div class="ig-b ig-typing" aria-label="đang nhập"><i></i><i></i><i></i></div></div></div>`;
     chBody.innerHTML = h + '</div>';
     CH.pops.clear();
