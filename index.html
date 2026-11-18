@@ -716,7 +716,7 @@
 
   <!-- Tin nhắn: kiểu khung chat Instagram (nền tối). Tin của nhân vật hiện đúng giờ của nó; Vy nhắn lại; nút gọi mở màn hình cuộc gọi im lặng -->
   <section class="win app drag" id="w-chat" data-app="chat" aria-label="Tin nhắn" hidden>
-    <div class="tb"><span class="t">tin nhắn</span><span class="r" id="chSt"></span><button type="button" id="chBell" aria-label="Bật thông báo trên máy này" title="bật thông báo" hidden>!</button><button type="button" data-act="hide" aria-label="Ẩn khung tin nhắn">_</button><button type="button" data-full aria-label="Mở rộng toàn màn hình" aria-pressed="false">⛶</button></div>
+    <div class="tb"><span class="t">tin nhắn</span><span class="r" id="chSt"></span><button type="button" data-act="hide" aria-label="Ẩn khung tin nhắn">_</button><button type="button" data-full aria-label="Mở rộng toàn màn hình" aria-pressed="false">⛶</button></div>
     <div class="ig-hd"><span class="ig-av" id="chAv" aria-hidden="true">A</span><div class="ig-who"><b id="chName">Anh</b><small id="chAct"></small></div><button type="button" class="ig-ic" id="chCall" aria-label="Gọi thoại"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button></div>
     <div class="wb" id="chBody" aria-live="polite"></div>
     <form class="ig-form" id="chForm" autocomplete="off"><div class="ig-pill"><label class="sr" for="chIn">Nhắn tin</label><textarea id="chIn" rows="1" placeholder="Nhắn tin..." enterkeyhint="send"></textarea><button type="submit" class="ig-send" id="chSend" hidden>Gửi</button><button type="button" class="ig-ic sm" id="chHeart" aria-label="Gửi trái tim"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div></form>
@@ -1970,7 +1970,7 @@
     Object.entries(RN.local).forEach(([id, v]) => { const w = RN.web[id]; if (!w || w.at < v.at){ if (rnPublish(id, v)) RN.web[id] = { t: v.t, at: v.at }; } });
     Object.entries(MQ.local).forEach(([id, v]) => { const w = MQ.web[id]; if (!w || w.at < v.at){ if (mqPublish(id, v)) MQ.web[id] = Object.assign({}, v); } });
     Object.entries(CH.local).forEach(([id, v]) => { const w = CH.web[id]; if (!w || w.at < v.at){ if (chPublish(id, v)) CH.web[id] = Object.assign({}, v); } });
-    chPushFlush(); chRender();
+    chRender();
   }
   function rnSave(id, text){
     const v = { t: String(text || '').slice(0, 8000), at: Date.now() };
@@ -2307,7 +2307,7 @@
     Object.entries(CH.local).forEach(([id, v]) => { if ((CH.saved[id] || 0) < v.at && Date.now() - v.at > 6e5) chPublish(id, v); });   // chưa thấy trên web sau 10 phút → gửi lại
     $('#chAv').textContent = $('#chCallAv').textContent = chInit(); $('#chName').textContent = $('#chCallName').textContent = chName();
     if (!CH.loaded){                                  // lần đầu: tin đã hiện từ trước không báo lại; chỉ đếm chưa đọc
-      CH.loaded = true; pushSub().then(chBell); CH.told = Math.max(CH.seen, ...chShown().map(m => m.tsn), 0);
+      CH.loaded = true; CH.told = Math.max(CH.seen, ...chShown().map(m => m.tsn), 0);
       const n = chUnread(); if (first && n) setTimeout(() => toast(`✉ ${n} tin nhắn mới từ ${chName()}`), 1800);
     }
     chTick(); chRender(); chPlan();
@@ -2349,7 +2349,6 @@
         if (chVisible()) ting();
         else {
           toast(`✉ ${chName()}: ${pre}`); ting();
-          try { if (window.Notification && Notification.permission === 'granted' && document.hidden){ const n = new Notification(chName(), { body: last.t.slice(0, 160), tag: 'studio-chat', icon: 'icons/icon-192.png' }); n.onclick = () => { focus(); openApp('chat'); n.close(); }; } } catch (e) {}
         }
       }
       CH.typing = false; chRender(); chPlan();
@@ -2432,7 +2431,6 @@
     CH.stick = true; chRender();
     if (!CH.loaded) chLoad();
     if (!narrow()) chIn.focus({ preventScroll: true });
-    chBell();
   }
   wins.chat.addEventListener('pointerdown', () => setTimeout(chMarkSeen, 0));
   // chạm hai lần vào tin của anh để thả tim (chạm hai lần nữa để bỏ)
@@ -2463,52 +2461,6 @@
   }
   $('#chForm').addEventListener('submit', e => { e.preventDefault(); const t = chIn.value.trim(); if (!t) return; chIn.value = ''; chGrow(); chSend(t); });
   $('#chHeart').addEventListener('click', () => chSend('❤'));
-  /* Thông báo về máy (Web Push): bấm nút ! → cho phép thông báo → máy đăng ký nhận tin; bot báo tin của Anh khi tới giờ,
-     kể cả lúc đã đóng Studio (Android: Chrome; máy tính: trình duyệt đang chạy). Khoá riêng chỉ nằm trong secret của repo. */
-  const VAPID_PUB = 'BKpqMvBNYXkEHog7ABzicwcR1iu3FXQHNdsJGRgy9G0zGfemA7xQuGggWJ1aDmzajjD6UV9pPI-mKnwpD5gYYvU', PUSH_PFX = 'anrevy-house-9q2/push/v1/s/';
-  const unb64u = s => Uint8Array.from(atob((s + '='.repeat((4 - s.length % 4) % 4)).replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
-  const canPush = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
-  async function pushSub(){                         // đăng ký (hoặc làm mới 3 ngày một lần) — chỉ khi đã được phép
-    if (!canPush() || Notification.permission !== 'granted') return false;
-    try {
-      const reg = await navigator.serviceWorker.ready, key = unb64u(VAPID_PUB);
-      let sub = await reg.pushManager.getSubscription();
-      if (sub && sub.options && sub.options.applicationServerKey){
-        const a = new Uint8Array(sub.options.applicationServerKey);
-        if (a.length !== key.length || a.some((x, i) => x !== key[i])){ await sub.unsubscribe(); sub = null; }
-      }
-      if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key });
-      const j = sub.toJSON(), h = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(j.endpoint)));
-      const id = [...h.slice(0, 10)].map(x => x.toString(16).padStart(2, '0')).join(''), last = ls.get('tn-push') || {};
-      if (last.id !== id || Date.now() - (last.at || 0) > 3 * 864e5){
-        CH.pushPending = { id, v: { t: JSON.stringify({ endpoint: j.endpoint, keys: j.keys }), d: vnNow().date, at: Date.now() } };
-        if (!RN.started){ RN.started = true; rnLib(rnConnect); }
-        chPushFlush();
-      }
-      return true;
-    } catch (e) { return false; }
-  }
-  function chPushFlush(){
-    const p = CH.pushPending; if (!p) return;
-    const live = RN.clients.filter(c => c.connected); if (!live.length) return;
-    live.forEach(c => c.publish(PUSH_PFX + p.id, JSON.stringify(Object.assign({ id: p.id }, p.v)), { qos: 1, retain: true }));
-    ls.set('tn-push', { id: p.id, at: p.v.at }); CH.pushPending = null;
-  }
-  function chBell(){                                 // nút ! hiện tới khi máy này đã bật thông báo
-    const b = $('#chBell'), N = window.Notification;
-    b.hidden = !N || N.permission === 'denied' || (N.permission === 'granted' && (!canPush() || !!ls.get('tn-push')));
-  }
-  $('#chBell').addEventListener('click', async e => {
-    e.stopPropagation();
-    try {
-      const r = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
-      if (r !== 'granted') toast('thông báo chưa được bật');
-      else if (await pushSub()) toast('✓ đã bật thông báo — tin của ' + chName() + ' sẽ báo về máy này cả khi đóng Studio');
-      else toast('✓ đã bật thông báo khi Studio đang mở');
-    } catch (err) {}
-    setTimeout(chBell, 1500);
-  });
-  if (canPush()) navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.type === 'open-chat' && opened) openApp('chat'); });
   // cuộc gọi: màn hình như đang gọi, không có âm thanh, không dùng micro
   const CALL = { ui: $('#chCallUI'), s: 0, on: 0, iv: 0, to: 0 };
   function callOpen(){
@@ -2555,7 +2507,6 @@
     ['today', 'chat', 'plaza', 'spotify', 'music', 'letterboxd', 'lastfm'].forEach(taskBtn);
     taskBtn('chat').classList.add('min');
     openApp('today'); tdLoad(); chLoad(true);        // thẻ Hôm nay hiện ngay khi mở Studio; tin nhắn tải ngầm, có tin mới thì báo
-    if (/[?&]chat\b/.test(location.search)){ openApp('chat'); try { history.replaceState(null, '', location.pathname); } catch (e) {} }   // mở từ thông báo
     $('#plFrame').src = 'https://plaza.one/';
     if (!narrow()) front(wins.today);
     HID.forEach(app => { if (wins[app] && app !== 'instagram'){ wins[app].hidden = true; taskBtn(app).classList.add('min'); } });
