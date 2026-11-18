@@ -1970,7 +1970,7 @@
     Object.entries(RN.local).forEach(([id, v]) => { const w = RN.web[id]; if (!w || w.at < v.at){ if (rnPublish(id, v)) RN.web[id] = { t: v.t, at: v.at }; } });
     Object.entries(MQ.local).forEach(([id, v]) => { const w = MQ.web[id]; if (!w || w.at < v.at){ if (mqPublish(id, v)) MQ.web[id] = Object.assign({}, v); } });
     Object.entries(CH.local).forEach(([id, v]) => { const w = CH.web[id]; if (!w || w.at < v.at){ if (chPublish(id, v)) CH.web[id] = Object.assign({}, v); } });
-    chRender();
+    chPushFlush(); chRender();
   }
   function rnSave(id, text){
     const v = { t: String(text || '').slice(0, 8000), at: Date.now() };
@@ -2307,7 +2307,7 @@
     Object.entries(CH.local).forEach(([id, v]) => { if ((CH.saved[id] || 0) < v.at && Date.now() - v.at > 6e5) chPublish(id, v); });   // chưa thấy trên web sau 10 phút → gửi lại
     $('#chAv').textContent = $('#chCallAv').textContent = chInit(); $('#chName').textContent = $('#chCallName').textContent = chName();
     if (!CH.loaded){                                  // lần đầu: tin đã hiện từ trước không báo lại; chỉ đếm chưa đọc
-      CH.loaded = true; CH.told = Math.max(CH.seen, ...chShown().map(m => m.tsn), 0);
+      CH.loaded = true; pushSub().then(chBell); CH.told = Math.max(CH.seen, ...chShown().map(m => m.tsn), 0);
       const n = chUnread(); if (first && n) setTimeout(() => toast(`✉ ${n} tin nhắn mới từ ${chName()}`), 1800);
     }
     chTick(); chRender(); chPlan();
@@ -2463,14 +2463,52 @@
   }
   $('#chForm').addEventListener('submit', e => { e.preventDefault(); const t = chIn.value.trim(); if (!t) return; chIn.value = ''; chGrow(); chSend(t); });
   $('#chHeart').addEventListener('click', () => chSend('❤'));
-  function chBell(){                                 // nút ! : xin quyền hiện thông báo của máy (máy tính; điện thoại cần cài Studio thành app)
-    const b = $('#chBell'); b.hidden = !(window.Notification && Notification.permission === 'default');
+  /* Thông báo về máy (Web Push): bấm nút ! → cho phép thông báo → máy đăng ký nhận tin; bot báo tin của Anh khi tới giờ,
+     kể cả lúc đã đóng Studio (Android: Chrome; máy tính: trình duyệt đang chạy). Khoá riêng chỉ nằm trong secret của repo. */
+  const VAPID_PUB = 'BKpqMvBNYXkEHog7ABzicwcR1iu3FXQHNdsJGRgy9G0zGfemA7xQuGggWJ1aDmzajjD6UV9pPI-mKnwpD5gYYvU', PUSH_PFX = 'anrevy-house-9q2/push/v1/s/';
+  const unb64u = s => Uint8Array.from(atob((s + '='.repeat((4 - s.length % 4) % 4)).replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+  const canPush = () => 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+  async function pushSub(){                         // đăng ký (hoặc làm mới 3 ngày một lần) — chỉ khi đã được phép
+    if (!canPush() || Notification.permission !== 'granted') return false;
+    try {
+      const reg = await navigator.serviceWorker.ready, key = unb64u(VAPID_PUB);
+      let sub = await reg.pushManager.getSubscription();
+      if (sub && sub.options && sub.options.applicationServerKey){
+        const a = new Uint8Array(sub.options.applicationServerKey);
+        if (a.length !== key.length || a.some((x, i) => x !== key[i])){ await sub.unsubscribe(); sub = null; }
+      }
+      if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key });
+      const j = sub.toJSON(), h = new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(j.endpoint)));
+      const id = [...h.slice(0, 10)].map(x => x.toString(16).padStart(2, '0')).join(''), last = ls.get('tn-push') || {};
+      if (last.id !== id || Date.now() - (last.at || 0) > 3 * 864e5){
+        CH.pushPending = { id, v: { t: JSON.stringify({ endpoint: j.endpoint, keys: j.keys }), d: vnNow().date, at: Date.now() } };
+        if (!RN.started){ RN.started = true; rnLib(rnConnect); }
+        chPushFlush();
+      }
+      return true;
+    } catch (e) { return false; }
+  }
+  function chPushFlush(){
+    const p = CH.pushPending; if (!p) return;
+    const live = RN.clients.filter(c => c.connected); if (!live.length) return;
+    live.forEach(c => c.publish(PUSH_PFX + p.id, JSON.stringify(Object.assign({ id: p.id }, p.v)), { qos: 1, retain: true }));
+    ls.set('tn-push', { id: p.id, at: p.v.at }); CH.pushPending = null;
+  }
+  function chBell(){                                 // nút ! hiện tới khi máy này đã bật thông báo
+    const b = $('#chBell'), N = window.Notification;
+    b.hidden = !N || N.permission === 'denied' || (N.permission === 'granted' && (!canPush() || !!ls.get('tn-push')));
   }
   $('#chBell').addEventListener('click', async e => {
     e.stopPropagation();
-    try { const r = await Notification.requestPermission(); toast(r === 'granted' ? '✓ đã bật thông báo tin nhắn trên máy này' : 'thông báo chưa được bật'); } catch (err) {}
-    chBell();
+    try {
+      const r = Notification.permission === 'granted' ? 'granted' : await Notification.requestPermission();
+      if (r !== 'granted') toast('thông báo chưa được bật');
+      else if (await pushSub()) toast('✓ đã bật thông báo — tin của ' + chName() + ' sẽ báo về máy này cả khi đóng Studio');
+      else toast('✓ đã bật thông báo khi Studio đang mở');
+    } catch (err) {}
+    setTimeout(chBell, 1500);
   });
+  if (canPush()) navigator.serviceWorker.addEventListener('message', e => { if (e.data && e.data.type === 'open-chat' && opened) openApp('chat'); });
   // cuộc gọi: màn hình như đang gọi, không có âm thanh, không dùng micro
   const CALL = { ui: $('#chCallUI'), s: 0, on: 0, iv: 0, to: 0 };
   function callOpen(){
@@ -2517,6 +2555,7 @@
     ['today', 'chat', 'plaza', 'spotify', 'music', 'letterboxd', 'lastfm'].forEach(taskBtn);
     taskBtn('chat').classList.add('min');
     openApp('today'); tdLoad(); chLoad(true);        // thẻ Hôm nay hiện ngay khi mở Studio; tin nhắn tải ngầm, có tin mới thì báo
+    if (/[?&]chat\b/.test(location.search)){ openApp('chat'); try { history.replaceState(null, '', location.pathname); } catch (e) {} }   // mở từ thông báo
     $('#plFrame').src = 'https://plaza.one/';
     if (!narrow()) front(wins.today);
     HID.forEach(app => { if (wins[app] && app !== 'instagram'){ wins[app].hidden = true; taskBtn(app).classList.add('min'); } });
