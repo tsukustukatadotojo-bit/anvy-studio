@@ -310,6 +310,32 @@
   .lf-list .ib{flex:none;width:26px;height:24px;border:1px solid var(--g-dim);color:var(--g);font:12px/1 var(--mono)}
   .lf-list .ib:hover{background:var(--g);color:#000}
 
+  /* ---- TIN NHẮN ---- */
+  #w-chat{left:auto;right:18px;width:clamp(330px,28vw,440px);z-index:23}
+  .tn-list{list-style:none;display:flex;flex-direction:column;gap:7px;padding:12px 12px 16px}
+  .tn-day{align-self:center;margin:12px 0 3px;font:11px/1 var(--mono);color:var(--g-dim);letter-spacing:.06em}
+  .tn-m{display:flex;flex-direction:column;max-width:86%}
+  .tn-m p{padding:8px 11px;font:14px/1.55 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere}
+  .tn-m.him{align-self:flex-start}
+  .tn-m.him p{border:1px solid var(--g-dim);background:#03140a;color:var(--g-hi)}
+  .tn-m.me{align-self:flex-end;align-items:flex-end}
+  .tn-m.me p{background:var(--g);color:#000}
+  .tn-m+.tn-m.him.same,.tn-m+.tn-m.me.same{margin-top:-4px}
+  .tn-h{margin-top:3px;font:10.5px/1.2 var(--mono);color:var(--g-dim)}
+  .tn-h .pend{color:var(--amber)}
+  .tn-h .seen{color:var(--g-mid)}
+  .tn-m.fresh p{animation:tnIn .5s ease-out}
+  @keyframes tnIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .tn-new{align-self:center;margin:6px 0;padding:2px 10px;border:1px dashed var(--amber);font:11px/1.4 var(--mono);color:var(--amber)}
+  .tn-empty{padding:28px 18px;font:13px/1.7 var(--mono);color:var(--g-mid);text-align:center}
+  .tn-form{flex:none;display:flex;align-items:flex-end;gap:8px;padding:8px 10px;border-top:1px solid var(--g-dim);background:#000}
+  .tn-in{flex:1;min-width:0;height:38px;max-height:30vh;padding:8px 10px;resize:none;background:#000;border:1px solid var(--g-dim);border-radius:0;color:var(--g-hi);font:14px/1.5 var(--mono)}
+  .tn-in:focus{outline:none;border-color:var(--g)}
+  .tn-form .td-go{height:38px}
+  #w-chat.full .tn-list{max-width:760px;width:100%;margin:0 auto}
+  #w-chat.full .tn-form{padding-left:max(10px,calc(50% - 380px));padding-right:max(10px,calc(50% - 380px))}
+  .tasks button[data-n]::after{content:attr(data-n);display:inline-block;min-width:18px;margin-left:8px;padding:2px 5px;background:var(--amber);color:#000;font:600 11px/14px var(--mono);text-align:center}
+
   /* ---- HÔM NAY (7 câu · câu hay của mình · bài đọc · ghi chép · lịch sử) & ĐỌC BÀI ---- */
   #w-today{z-index:21}
   #w-reader{left:max(18px,7vw);right:max(18px,7vw);z-index:22}
@@ -497,6 +523,7 @@
     .np-dev{height:38px;max-width:96px}
     #w-spotify.big{left:0;right:0;top:auto;bottom:var(--bar);height:84vh;height:84dvh}
     .app{position:fixed;left:0;right:0;top:0;bottom:calc(var(--bar) + var(--spmini));min-width:0;z-index:50}
+    #w-chat{left:0;right:0;width:auto;z-index:55}
     .taskbar{position:fixed;left:0;right:0;bottom:0;height:var(--bar);margin:0;gap:10px;padding:0 max(10px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(10px,env(safe-area-inset-left,0px));font-size:24px}
     .start{height:46px;padding:0 18px}
     .tasks{gap:10px}
@@ -638,6 +665,13 @@
     <div class="wb rd" id="rdBody"></div>
   </section>
 
+  <!-- Tin nhắn: nhân vật nhắn trong ngày (mỗi tin hiện đúng giờ của nó), Vy nhắn lại -->
+  <section class="win app drag" id="w-chat" data-app="chat" aria-label="Tin nhắn" hidden>
+    <div class="tb"><span class="t">tin nhắn <i id="chName"></i></span><span class="r" id="chSt"></span><button type="button" id="chBell" aria-label="Bật thông báo trên máy này" title="bật thông báo" hidden>!</button><button type="button" data-act="hide" aria-label="Ẩn khung tin nhắn">_</button><button type="button" data-full aria-label="Mở rộng toàn màn hình" aria-pressed="false">⛶</button></div>
+    <div class="wb" id="chBody" aria-live="polite"><p class="note">◌ đang tải…</p></div>
+    <form class="tn-form" id="chForm" autocomplete="off"><label class="sr" for="chIn">Nhắn tin</label><textarea class="tn-in" id="chIn" rows="1" placeholder="nhắn…" enterkeyhint="send"></textarea><button class="td-go" type="submit" id="chSend">gửi</button></form>
+  </section>
+
   <!-- Instagram -->
   <section class="win app drag" id="w-instagram" data-app="instagram" aria-label="Instagram" hidden>
     <div class="tb"><span class="t">instagram</span><button type="button" data-act="close" aria-label="Ẩn Instagram">_</button></div>
@@ -655,6 +689,7 @@
   <div class="menu" id="menu" role="menu" hidden>
     <p>vy@studio · anrevy house</p>
     <button type="button" role="menuitem" data-app="today">☀ hôm nay · bài đọc · ghi chép</button>
+    <button type="button" role="menuitem" data-app="chat">✉ tin nhắn</button>
     <button type="button" role="menuitem" data-app="spotify">♪ spotify</button>
     <button type="button" role="menuitem" data-app="music">◎ new music</button>
     <button type="button" role="menuitem" data-app="letterboxd">▣ letterboxd</button>
@@ -772,8 +807,8 @@
   /* ---------- 3. cửa sổ, thanh tác vụ, menu ---------- */
   let z = 10;
   const wins = {}, tasks = $('#tasks');
-  ['plaza', 'letterboxd', 'music', 'spotify', 'lastfm', 'instagram', 'poolsuite', 'today', 'reader'].forEach(a => { wins[a] = $('#w-' + a); });
-  const NAMES = { plaza: 'plaza', spotify: 'spotify', music: 'new music', letterboxd: 'letterboxd', lastfm: 'last.fm', instagram: 'instagram', today: '☀ hôm nay', reader: '▤ đọc' };
+  ['plaza', 'letterboxd', 'music', 'spotify', 'lastfm', 'instagram', 'poolsuite', 'today', 'reader', 'chat'].forEach(a => { wins[a] = $('#w-' + a); });
+  const NAMES = { plaza: 'plaza', spotify: 'spotify', music: 'new music', letterboxd: 'letterboxd', lastfm: 'last.fm', instagram: 'instagram', today: '☀ hôm nay', reader: '▤ đọc', chat: '✉ tin nhắn' };
   function front(w){
     Object.values(wins).forEach(x => x.classList.remove('front'));
     w.classList.add('front'); w.style.zIndex = ++z;
@@ -793,7 +828,7 @@
     if (app === 'spotify' && spW.classList.contains('big')) setBig(false);
     if (w.classList.contains('full')) setFull(w, false);
     w.hidden = true; taskBtn(app).classList.add('min');
-    if (app !== 'today' && app !== 'reader'){ HID.add(app); saveHid(); }
+    if (app !== 'today' && app !== 'reader' && app !== 'chat'){ HID.add(app); saveHid(); }
     updBare();
   }
   function openApp(app){
@@ -806,6 +841,7 @@
     else if (narrow()) w.scrollIntoView({ block: 'start' });
     if (app === 'lastfm') lfPoll();
     if (app === 'today') tdRender();
+    if (app === 'chat') chOpen();
     $('#menu').hidden = true; $('#start').setAttribute('aria-expanded', 'false');
   }
   // Poolsuite: _ ẩn (nhạc vẫn phát) · ✕ tắt hẳn
@@ -1879,6 +1915,8 @@
   function rnFlush(){                                        // bản trên máy mới hơn bản trên web → gửi lên
     Object.entries(RN.local).forEach(([id, v]) => { const w = RN.web[id]; if (!w || w.at < v.at){ if (rnPublish(id, v)) RN.web[id] = { t: v.t, at: v.at }; } });
     Object.entries(MQ.local).forEach(([id, v]) => { const w = MQ.web[id]; if (!w || w.at < v.at){ if (mqPublish(id, v)) MQ.web[id] = Object.assign({}, v); } });
+    Object.entries(CH.local).forEach(([id, v]) => { const w = CH.web[id]; if (!w || w.at < v.at){ if (chPublish(id, v)) CH.web[id] = Object.assign({}, v); } });
+    chRender();
   }
   function rnSave(id, text){
     const v = { t: String(text || '').slice(0, 8000), at: Date.now() };
@@ -1899,13 +1937,14 @@
   function rnConnect(){
     RN_BROKERS.forEach(url => {
       let c; try { c = window.mqtt.connect(url, { clientId: 'anrevy_rn_' + Math.random().toString(36).slice(2, 12), clean: true, keepalive: 30, reconnectPeriod: 6000, connectTimeout: 12000, protocolVersion: 4 }); } catch (e) { return; }
-      c.on('connect', () => { c.subscribe([RN_PFX + '+', MQ_PFX + '+'], { qos: 1 }); setTimeout(rnFlush, 1500); rnStatus(); });
+      c.on('connect', () => { c.subscribe([RN_PFX + '+', MQ_PFX + '+', CHAT_PFX + '+'], { qos: 1 }); setTimeout(rnFlush, 1500); rnStatus(); });
       c.on('close', rnStatus); c.on('offline', rnStatus); c.on('error', () => {});
       c.on('message', (topic, payload) => {
         if (!payload || !payload.length) return;
         try {
           const m = JSON.parse(new TextDecoder().decode(payload));
           if (topic.startsWith(MQ_PFX)){ const id = topic.slice(MQ_PFX.length); if (m.id === id && mqWeb(id, m)) rnChanged(''); return; }
+          if (topic.startsWith(CHAT_PFX)){ const id = topic.slice(CHAT_PFX.length); if (m.id === id && chWeb(id, m)) chRender(); return; }
           const id = topic.slice(RN_PFX.length); if (m.id === id && rnWeb(id, m)) rnChanged(id);
         } catch (e) {}
       });
@@ -2168,6 +2207,149 @@
     if (TD.tab === 'today' && revealed().length !== TD.shown) tdRender();
   }, 30000);
 
+  /* ================= TIN NHẮN =================
+     Tin của nhân vật: studio/data/chat/YYYY-MM.json { items: [{ id, ts: giờ hiện (ISO, giờ VN), t: chữ, re: mã tin của Vy được trả lời }] }
+       — soạn sẵn từ sáng, tin nào tới giờ mới hiện. Hồ sơ: studio/data/chat/profile.json { name, status }.
+     Tin của Vy: gửi qua máy chủ chuyển tin như note; bot ghi studio/data/chat/me.json { items: { mã: { t, d, at } } }.
+     Bản trên máy giữ mãi; chưa thấy trong me.json sau 10 phút thì tự gửi lại. */
+  const CH_DATA = TD_DATA + 'chat/', CHAT_PFX = 'anrevy-house-9q2/chat/v1/m/';
+  function chOk(id, v){ return /^[a-z0-9]{8,24}$/.test(id) && v && typeof v.t === 'string' && typeof v.at === 'number' && v.at > 0 && /^\d{4}-\d{2}-\d{2}$/.test(v.d || ''); }
+  const CH = { him: [], web: {}, local: {}, saved: {}, prof: {}, seen: Number(ls.get('tn-seen')) || 0, told: 0, loaded: false, newFrom: 0 };
+  { const j = ls.get('tn-me'); if (j && typeof j === 'object' && !Array.isArray(j)) Object.entries(j).forEach(([id, v]) => { if (chOk(id, v)) CH.local[id] = v; }); }
+  const chBody = $('#chBody'), chIn = $('#chIn');
+  const chName = () => CH.prof.name || 'anh';
+  const hmOf = ms => vnNow(new Date(ms)).hm, dayOf = ms => vnNow(new Date(ms)).date;
+  function chWeb(id, v){ if (!chOk(id, v)) return false; const o = CH.web[id]; if (o && o.at >= v.at) return false; CH.web[id] = { t: v.t.slice(0, 4000), d: v.d, at: v.at }; return true; }
+  function chMine(){
+    return Object.keys(Object.assign({}, CH.web, CH.local)).map(id => { const a = CH.local[id], b = CH.web[id]; return Object.assign({ id }, !a ? b : !b ? a : (a.at >= b.at ? a : b)); }).filter(m => m.t);
+  }
+  const chShown = () => CH.him.filter(m => m.tsn <= Date.now());
+  const chUnread = () => chShown().filter(m => m.tsn > CH.seen).length;
+  function chPublish(id, v){
+    const live = RN.clients.filter(c => c.connected); if (!live.length) return false;
+    live.forEach(c => c.publish(CHAT_PFX + id, JSON.stringify({ id, t: v.t, d: v.d, at: v.at }), { qos: 1, retain: true }));
+    return true;
+  }
+  function chMonths(){ const d = vnNow().date, y = +d.slice(0, 4), m = +d.slice(5, 7), p = m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, '0')}`; return [p, d.slice(0, 7)]; }
+  async function chLoad(first){
+    const ms = chMonths();
+    const [prof, me, ...mons] = await Promise.all([getJSON(CH_DATA + 'profile.json'), getJSON(CH_DATA + 'me.json'), ...ms.map(m => getJSON(CH_DATA + m + '.json'))]);
+    if (prof && typeof prof === 'object') CH.prof = prof;
+    const seen = new Set(), him = [];
+    mons.forEach(j => ((j && j.items) || []).forEach(m => {
+      const tsn = m && typeof m.t === 'string' && m.t.trim() ? Date.parse(m.ts) : NaN;
+      if (!m || !m.id || seen.has(m.id) || !(tsn > 0)) return;
+      seen.add(m.id); him.push({ id: String(m.id), t: m.t.slice(0, 4000), tsn, re: m.re || '' });
+    }));
+    CH.him = him.sort((a, b) => a.tsn - b.tsn);
+    Object.entries((me && me.items) || {}).forEach(([id, v]) => { if (v && typeof v.at === 'number') CH.saved[id] = Math.max(CH.saved[id] || 0, v.at); chWeb(id, v); });
+    Object.entries(CH.local).forEach(([id, v]) => { if ((CH.saved[id] || 0) < v.at && Date.now() - v.at > 6e5) chPublish(id, v); });   // chưa thấy trên web sau 10 phút → gửi lại
+    $('#chName').textContent = '— ' + chName() + (CH.prof.status ? ' · ' + CH.prof.status : '');
+    if (!CH.loaded){                                  // lần đầu: tin đã hiện từ trước không báo lại; chỉ đếm chưa đọc
+      CH.loaded = true; CH.told = Math.max(CH.seen, ...chShown().map(m => m.tsn), 0);
+      const n = chUnread(); if (first && n) setTimeout(() => toast(`✉ ${n} tin nhắn mới từ ${chName()}`), 1800);
+    }
+    chTick(); chRender();
+  }
+  function chBadge(){
+    const n = chUnread(), b = tasks.querySelector('[data-app="chat"]');
+    if (b){ if (n) b.dataset.n = n > 9 ? '9+' : String(n); else delete b.dataset.n; }
+    document.title = (n ? `(${n}) ` : '') + 'Studio';
+  }
+  const chVisible = () => !wins.chat.hidden && !document.hidden && (wins.chat.classList.contains('front') || narrow());
+  function chMarkSeen(){
+    const last = Math.max(0, ...chShown().map(m => m.tsn));
+    if (last > CH.seen){ CH.seen = last; ls.set('tn-seen', last); }
+    chBadge();
+  }
+  let chAC = null;
+  function ting(){                                   // tiếng "ting" ngắn, tự tạo — không tải file
+    try {
+      chAC = chAC || new (window.AudioContext || window.webkitAudioContext)();
+      if (chAC.state === 'suspended') chAC.resume();
+      const t = chAC.currentTime;
+      [[880, 0], [1320, .09]].forEach(([f, d]) => {
+        const o = chAC.createOscillator(), g = chAC.createGain();
+        o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0, t + d);
+        g.gain.linearRampToValueAtTime(.12, t + d + .015); g.gain.exponentialRampToValueAtTime(.0008, t + d + .42);
+        o.connect(g).connect(chAC.destination); o.start(t + d); o.stop(t + d + .45);
+      });
+    } catch (e) {}
+  }
+  addEventListener('pointerdown', () => { if (chAC && chAC.state === 'suspended') chAC.resume().catch(() => {}); }, { passive: true });
+  function chTick(){                                 // mỗi 15 giây: tin nào tới giờ thì hiện, báo tin mới
+    if (!CH.loaded) return;
+    const fresh = chShown().filter(m => m.tsn > CH.told);
+    if (fresh.length){
+      CH.told = fresh[fresh.length - 1].tsn; CH.newFrom = fresh[0].tsn;
+      const last = fresh[fresh.length - 1], pre = last.t.replace(/\s+/g, ' ').slice(0, 70) + (last.t.length > 70 ? '…' : '');
+      if (chVisible()) ting();
+      else {
+        toast(`✉ ${chName()}: ${pre}`); ting();
+        try { if (window.Notification && Notification.permission === 'granted' && document.hidden){ const n = new Notification(chName(), { body: last.t.slice(0, 160), tag: 'studio-chat', icon: 'icons/icon-192.png' }); n.onclick = () => { focus(); openApp('chat'); n.close(); }; } } catch (e) {}
+      }
+      chRender();
+    }
+    if (chVisible()) chMarkSeen(); else chBadge();
+  }
+  setInterval(chTick, 15000);
+  setInterval(() => { if (opened && !document.hidden) chLoad(); }, 180000);     // tin trả lời mới: tải lại 3 phút một lần
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && opened){ chLoad(); } });
+  function chRender(){
+    if (wins.chat.hidden) return chBadge();
+    const near = chBody.scrollHeight - chBody.scrollTop - chBody.clientHeight < 80;
+    const re = new Set(chShown().map(m => m.re).filter(Boolean));
+    const all = chShown().map(m => ({ who: 'him', id: m.id, t: m.t, ms: m.tsn }))
+      .concat(chMine().map(m => ({ who: 'me', id: m.id, t: m.t, ms: m.at, st: re.has(m.id) ? 'seen' : (CH.saved[m.id] || 0) >= m.at ? 'ok' : 'pend' })))
+      .sort((a, b) => a.ms - b.ms).slice(-300);
+    if (!all.length){
+      chBody.innerHTML = `<p class="tn-empty">✉<br>${CH.prof.ready ? `chưa có tin nào — ${esc(chName())} sẽ nhắn sớm thôi.` : 'khung tin nhắn đã sẵn sàng.<br>nhân vật đang được dựng — dựng xong là bắt đầu nhắn, từ 6 giờ sáng tới lời chúc ngủ ngon buổi tối.'}</p>`;
+      return chBadge();
+    }
+    const today = vnNow().date, yday = vnNow(new Date(Date.now() - 864e5)).date;
+    let h = '<ol class="tn-list">', lastDay = '', prev = null, newMark = false;
+    all.forEach(m => {
+      const d = dayOf(m.ms);
+      if (d !== lastDay){ h += `<li class="tn-day">${d === today ? 'hôm nay' : d === yday ? 'hôm qua' : dmy(d) + '/' + d.slice(0, 4)}</li>`; lastDay = d; prev = null; }
+      if (!newMark && m.who === 'him' && m.ms > CH.seen && CH.seen){ h += '<li class="tn-new">tin mới</li>'; newMark = true; }
+      const same = prev && prev.who === m.who && m.ms - prev.ms < 5 * 6e4;
+      const st = m.who === 'me' ? (m.st === 'seen' ? ' · <span class="seen">đã xem</span>' : m.st === 'ok' ? ' · ✓' : ' · <span class="pend" title="đang gửi lên web">↻</span>') : '';
+      h += `<li class="tn-m ${m.who}${same ? ' same' : ''}${m.who === 'him' && m.ms >= CH.newFrom && Date.now() - m.ms < 6e4 ? ' fresh' : ''}"><p>${esc(m.t)}</p><span class="tn-h">${hmOf(m.ms)}${st}</span></li>`;
+      prev = m;
+    });
+    chBody.innerHTML = h + '</ol>';
+    if (near || CH.stick){ chBody.scrollTop = chBody.scrollHeight; CH.stick = false; }
+    if (chVisible()) chMarkSeen(); else chBadge();
+  }
+  function chOpen(){
+    CH.stick = true; chRender();
+    if (!CH.loaded) chLoad();
+    if (!narrow()) chIn.focus({ preventScroll: true });
+    chBell();
+  }
+  wins.chat.addEventListener('pointerdown', () => setTimeout(chMarkSeen, 0));
+  function chGrow(){ chIn.style.height = 'auto'; chIn.style.height = Math.min(chIn.scrollHeight + 2, innerHeight * .3) + 'px'; }
+  chIn.addEventListener('input', chGrow);
+  chIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && !narrow()){ e.preventDefault(); $('#chForm').requestSubmit(); } });
+  $('#chForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const t = chIn.value.trim(); if (!t) return;
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+    const v = { t: t.slice(0, 4000), d: vnNow().date, at: Date.now() };
+    CH.local[id] = v; ls.set('tn-me', CH.local);
+    if (chPublish(id, v)) CH.web[id] = Object.assign({}, v);
+    chIn.value = ''; chGrow(); CH.stick = true; chRender();
+    if (!RN.started){ RN.started = true; rnLib(rnConnect); }
+  });
+  function chBell(){                                 // nút ! : xin quyền hiện thông báo của máy (máy tính; điện thoại cần cài Studio thành app)
+    const b = $('#chBell'); b.hidden = !(window.Notification && Notification.permission === 'default');
+  }
+  $('#chBell').addEventListener('click', async e => {
+    e.stopPropagation();
+    try { const r = await Notification.requestPermission(); toast(r === 'granted' ? '✓ đã bật thông báo tin nhắn trên máy này' : 'thông báo chưa được bật'); } catch (err) {}
+    chBell();
+  });
+
   /* ================= INSTAGRAM ================= */
   let igCur = IG_USERS[0];
   function igShow(u){
@@ -2185,8 +2367,9 @@
   async function openDesk(){
     if (opened) return; opened = true;
     $('#desk').hidden = false; document.body.classList.remove('locked');
-    ['today', 'plaza', 'spotify', 'music', 'letterboxd', 'lastfm'].forEach(taskBtn);
-    openApp('today'); tdLoad();                      // thẻ Hôm nay hiện ngay khi mở Studio
+    ['today', 'chat', 'plaza', 'spotify', 'music', 'letterboxd', 'lastfm'].forEach(taskBtn);
+    taskBtn('chat').classList.add('min');
+    openApp('today'); tdLoad(); chLoad(true);        // thẻ Hôm nay hiện ngay khi mở Studio; tin nhắn tải ngầm, có tin mới thì báo
     $('#plFrame').src = 'https://plaza.one/';
     if (!narrow()) front(wins.today);
     HID.forEach(app => { if (wins[app] && app !== 'instagram'){ wins[app].hidden = true; taskBtn(app).classList.add('min'); } });
