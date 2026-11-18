@@ -310,31 +310,80 @@
   .lf-list .ib{flex:none;width:26px;height:24px;border:1px solid var(--g-dim);color:var(--g);font:12px/1 var(--mono)}
   .lf-list .ib:hover{background:var(--g);color:#000}
 
-  /* ---- TIN NHẮN ---- */
-  #w-chat{left:auto;right:18px;width:clamp(330px,28vw,440px);z-index:23}
-  .tn-list{list-style:none;display:flex;flex-direction:column;gap:7px;padding:12px 12px 16px}
-  .tn-day{align-self:center;margin:12px 0 3px;font:11px/1 var(--mono);color:var(--g-dim);letter-spacing:.06em}
-  .tn-m{display:flex;flex-direction:column;max-width:86%}
-  .tn-m p{padding:8px 11px;font:14px/1.55 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere}
-  .tn-m.him{align-self:flex-start}
-  .tn-m.him p{border:1px solid var(--g-dim);background:#03140a;color:var(--g-hi)}
-  .tn-m.me{align-self:flex-end;align-items:flex-end}
-  .tn-m.me p{background:var(--g);color:#000}
-  .tn-m+.tn-m.him.same,.tn-m+.tn-m.me.same{margin-top:-4px}
-  .tn-h{margin-top:3px;font:10.5px/1.2 var(--mono);color:var(--g-dim)}
-  .tn-h .pend{color:var(--amber)}
-  .tn-h .seen{color:var(--g-mid)}
-  .tn-m.fresh p{animation:tnIn .5s ease-out}
-  @keyframes tnIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-  .tn-new{align-self:center;margin:6px 0;padding:2px 10px;border:1px dashed var(--amber);font:11px/1.4 var(--mono);color:var(--amber)}
-  .tn-empty{padding:28px 18px;font:13px/1.7 var(--mono);color:var(--g-mid);text-align:center}
-  .tn-form{flex:none;display:flex;align-items:flex-end;gap:8px;padding:8px 10px;border-top:1px solid var(--g-dim);background:#000}
-  .tn-in{flex:1;min-width:0;height:38px;max-height:30vh;padding:8px 10px;resize:none;background:#000;border:1px solid var(--g-dim);border-radius:0;color:var(--g-hi);font:14px/1.5 var(--mono)}
-  .tn-in:focus{outline:none;border-color:var(--g)}
-  .tn-form .td-go{height:38px}
-  #w-chat.full .tn-list{max-width:760px;width:100%;margin:0 auto}
-  #w-chat.full .tn-form{padding-left:max(10px,calc(50% - 380px));padding-right:max(10px,calc(50% - 380px))}
+  /* ---- TIN NHẮN: kiểu khung chat Instagram, nền tối ---- */
+  #w-chat{left:auto;right:18px;width:clamp(340px,28vw,440px);z-index:23}
+  #w-chat .wb,.ig-hd,.ig-form,.ig-callui{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  .ig-hd{flex:none;display:flex;align-items:center;gap:11px;padding:8px 8px 8px 14px;background:#000;border-bottom:1px solid #262626}
+  .ig-av{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:linear-gradient(145deg,#4a4a4a,#1f1f1f);color:#f5f5f5;font-weight:600;font-size:12px;line-height:1;user-select:none}
+  .ig-hd .ig-av{width:38px;height:38px;font-size:15px}
+  .ig-who{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+  .ig-who b{font-size:15.5px;font-weight:600;color:#f5f5f5}
+  .ig-who small{min-height:14px;font-size:12px;color:#a8a8a8}
+  .ig-ic{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;color:#f5f5f5}
+  .ig-ic:hover,.ig-ic:focus-visible{background:#1f1f1f;outline:none}
+  .ig-ic svg,.ig-cb svg,.ig-callb svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .ig-ic.sm{width:34px;height:34px}
+  #chBody{background:#000;overscroll-behavior:contain}
+  .ig-list{display:flex;flex-direction:column;padding:10px 12px 12px}
+  .ig-ts{align-self:center;margin:18px 0 8px;font-size:11.5px;font-weight:600;color:#a8a8a8}
+  .ig-row{display:flex;align-items:flex-end;gap:8px;margin-top:2px}
+  .ig-row.first,.ig-row.one{margin-top:8px}
+  .ig-row.me{justify-content:flex-end}
+  .ig-row .ig-av.ghost{visibility:hidden}
+  .ig-row.react{margin-bottom:15px}
+  .ig-bw{position:relative;display:flex;min-width:0;max-width:74%}
+  .ig-b{padding:8px 13px;border-radius:22px;background:#262626;color:#f5f5f5;font-size:15px;line-height:1.38;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+  .ig-row.me .ig-b{background:linear-gradient(140deg,#a334fa 0%,#6a4bf7 52%,#2f7cf6 100%);color:#fff}
+  .ig-row.him.first .ig-b{border-bottom-left-radius:6px}
+  .ig-row.him.mid .ig-b{border-top-left-radius:6px;border-bottom-left-radius:6px}
+  .ig-row.him.last .ig-b{border-top-left-radius:6px}
+  .ig-row.me.first .ig-b{border-bottom-right-radius:6px}
+  .ig-row.me.mid .ig-b{border-top-right-radius:6px;border-bottom-right-radius:6px}
+  .ig-row.me.last .ig-b{border-top-right-radius:6px}
+  .ig-row .ig-b.big{padding:2px 2px 0;background:none!important}
+  .ig-hrt{display:block;width:44px;height:44px;fill:#ff3040}
+  .ig-r .ig-hrt{width:13px;height:13px}
+  .ig-b.fresh{animation:igIn .35s ease-out}
+  @keyframes igIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+  .ig-r{position:absolute;bottom:-14px;display:grid;place-items:center;height:22px;padding:0 6px;border-radius:11px;background:#262626;border:2px solid #000;font-style:normal;font-size:12px;line-height:1;color:#ff3040}
+  .ig-row.him .ig-r{left:8px}
+  .ig-row.me .ig-r{right:8px}
+  .ig-r.pop{animation:igPop .35s ease-out}
+  @keyframes igPop{0%{transform:scale(.3)}70%{transform:scale(1.25)}100%{transform:none}}
+  .ig-st{align-self:flex-end;margin:4px 4px 0;font-size:11.5px;color:#a8a8a8}
+  .ig-typing{display:flex;gap:4px;padding:14px 14px}
+  .ig-typing i{width:7px;height:7px;border-radius:50%;background:#a8a8a8;animation:igDot 1.2s infinite}
+  .ig-typing i:nth-child(2){animation-delay:.15s}
+  .ig-typing i:nth-child(3){animation-delay:.3s}
+  @keyframes igDot{0%,60%,100%{opacity:.35;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+  .ig-callb{display:flex;align-items:center;gap:11px;padding:10px 16px 10px 12px;border-radius:22px;background:#262626;color:#f5f5f5;font-size:14.5px}
+  .ig-callb svg{width:20px;height:20px}
+  .ig-callb span{display:flex;flex-direction:column;gap:2px}
+  .ig-callb small{font-size:12.5px;color:#a8a8a8}
+  .ig-empty{padding:40px 22px;color:#a8a8a8;font-size:14px;line-height:1.6;text-align:center}
+  .ig-empty b{display:block;margin:12px 0 4px;color:#f5f5f5;font-size:17px}
+  .ig-empty .ig-av{width:84px;height:84px;margin:0 auto;font-size:32px}
+  .ig-form{flex:none;padding:8px 12px 12px;background:#000}
+  .ig-pill{display:flex;align-items:flex-end;gap:4px;min-height:44px;padding:4px 5px 4px 16px;border:1px solid #363636;border-radius:22px;background:#000}
+  .ig-pill:focus-within{border-color:#555}
+  .ig-pill textarea{flex:1;min-width:0;height:34px;max-height:30vh;padding:7px 0;resize:none;border:0;outline:none;background:none;color:#f5f5f5;font-family:inherit;font-size:15px;line-height:1.35}
+  .ig-pill textarea::placeholder{color:#8e8e8e}
+  .ig-send{flex:none;height:34px;padding:0 10px;color:#0095f6;font-family:inherit;font-weight:600;font-size:15px}
+  .ig-send:hover{color:#fff}
   .tasks button[data-n]::after{content:attr(data-n);display:inline-block;min-width:18px;margin-left:8px;padding:2px 5px;background:var(--amber);color:#000;font:600 11px/14px var(--mono);text-align:center}
+  /* cuộc gọi: chỉ là màn hình, không có âm thanh nào */
+  .ig-callui{position:fixed;inset:0;z-index:1050;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:14vh 20px calc(9vh + env(safe-area-inset-bottom,0px));background:radial-gradient(130% 85% at 50% 22%,#2c2c34 0%,#111115 58%,#000 100%);color:#f5f5f5;user-select:none;-webkit-user-select:none}
+  .ig-cmain{display:flex;flex-direction:column;align-items:center;gap:10px}
+  .ig-cav{width:116px;height:116px;margin-bottom:10px;font-size:44px;box-shadow:0 0 0 6px rgba(255,255,255,.05),0 0 0 14px rgba(255,255,255,.025)}
+  .ig-callui.ring .ig-cav{animation:igRing 2.2s ease-in-out infinite}
+  @keyframes igRing{0%,100%{box-shadow:0 0 0 6px rgba(255,255,255,.05),0 0 0 14px rgba(255,255,255,.025)}50%{box-shadow:0 0 0 12px rgba(255,255,255,.08),0 0 0 26px rgba(255,255,255,.03)}}
+  .ig-cmain b{font-size:27px;font-weight:600}
+  .ig-cmain small{font-size:15.5px;color:#c9c9c9;font-variant-numeric:tabular-nums}
+  .ig-cbtns{display:flex;gap:30px}
+  .ig-cb{display:grid;place-items:center;width:66px;height:66px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff}
+  .ig-cb[aria-pressed="true"]{background:#f5f5f5;color:#000}
+  .ig-cb.end{background:#ff3b30}
+  .ig-cb:focus-visible{outline:2px solid #fff;outline-offset:3px}
 
   /* ---- HÔM NAY (7 câu · câu hay của mình · bài đọc · ghi chép · lịch sử) & ĐỌC BÀI ---- */
   #w-today{z-index:21}
@@ -665,12 +714,17 @@
     <div class="wb rd" id="rdBody"></div>
   </section>
 
-  <!-- Tin nhắn: nhân vật nhắn trong ngày (mỗi tin hiện đúng giờ của nó), Vy nhắn lại -->
+  <!-- Tin nhắn: kiểu khung chat Instagram (nền tối). Tin của nhân vật hiện đúng giờ của nó; Vy nhắn lại; nút gọi mở màn hình cuộc gọi im lặng -->
   <section class="win app drag" id="w-chat" data-app="chat" aria-label="Tin nhắn" hidden>
-    <div class="tb"><span class="t">tin nhắn <i id="chName"></i></span><span class="r" id="chSt"></span><button type="button" id="chBell" aria-label="Bật thông báo trên máy này" title="bật thông báo" hidden>!</button><button type="button" data-act="hide" aria-label="Ẩn khung tin nhắn">_</button><button type="button" data-full aria-label="Mở rộng toàn màn hình" aria-pressed="false">⛶</button></div>
-    <div class="wb" id="chBody" aria-live="polite"><p class="note">◌ đang tải…</p></div>
-    <form class="tn-form" id="chForm" autocomplete="off"><label class="sr" for="chIn">Nhắn tin</label><textarea class="tn-in" id="chIn" rows="1" placeholder="nhắn…" enterkeyhint="send"></textarea><button class="td-go" type="submit" id="chSend">gửi</button></form>
+    <div class="tb"><span class="t">tin nhắn</span><span class="r" id="chSt"></span><button type="button" id="chBell" aria-label="Bật thông báo trên máy này" title="bật thông báo" hidden>!</button><button type="button" data-act="hide" aria-label="Ẩn khung tin nhắn">_</button><button type="button" data-full aria-label="Mở rộng toàn màn hình" aria-pressed="false">⛶</button></div>
+    <div class="ig-hd"><span class="ig-av" id="chAv" aria-hidden="true">A</span><div class="ig-who"><b id="chName">Anh</b><small id="chAct"></small></div><button type="button" class="ig-ic" id="chCall" aria-label="Gọi thoại"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button></div>
+    <div class="wb" id="chBody" aria-live="polite"></div>
+    <form class="ig-form" id="chForm" autocomplete="off"><div class="ig-pill"><label class="sr" for="chIn">Nhắn tin</label><textarea id="chIn" rows="1" placeholder="Nhắn tin..." enterkeyhint="send"></textarea><button type="submit" class="ig-send" id="chSend" hidden>Gửi</button><button type="button" class="ig-ic sm" id="chHeart" aria-label="Gửi trái tim"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div></form>
   </section>
+  <div class="ig-callui" id="chCallUI" role="dialog" aria-label="Cuộc gọi thoại" hidden>
+    <div class="ig-cmain"><span class="ig-av ig-cav" id="chCallAv" aria-hidden="true">A</span><b id="chCallName">Anh</b><small id="chCallSt">Đang gọi…</small></div>
+    <div class="ig-cbtns"><button type="button" class="ig-cb" id="chSpk" aria-pressed="false" aria-label="Loa ngoài"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button><button type="button" class="ig-cb" id="chMute" aria-pressed="false" aria-label="Tắt tiếng"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v4M8 23h8"/></svg></button><button type="button" class="ig-cb end" id="chEnd" aria-label="Kết thúc cuộc gọi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-3.33-2.67m-2.67-3.34a19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/><path d="M23 1 1 23"/></svg></button></div>
+  </div>
 
   <!-- Instagram -->
   <section class="win app drag" id="w-instagram" data-app="instagram" aria-label="Instagram" hidden>
@@ -2207,28 +2261,35 @@
     if (TD.tab === 'today' && revealed().length !== TD.shown) tdRender();
   }, 30000);
 
-  /* ================= TIN NHẮN =================
-     Tin của nhân vật: studio/data/chat/YYYY-MM.json { items: [{ id, ts: giờ hiện (ISO, giờ VN), t: chữ, re: mã tin của Vy được trả lời }] }
-       — soạn sẵn từ sáng, tin nào tới giờ mới hiện. Hồ sơ: studio/data/chat/profile.json { name, status }.
-     Tin của Vy: gửi qua máy chủ chuyển tin như note; bot ghi studio/data/chat/me.json { items: { mã: { t, d, at } } }.
-     Bản trên máy giữ mãi; chưa thấy trong me.json sau 10 phút thì tự gửi lại. */
-  const CH_DATA = TD_DATA + 'chat/', CHAT_PFX = 'anrevy-house-9q2/chat/v1/m/';
-  function chOk(id, v){ return /^[a-z0-9]{8,24}$/.test(id) && v && typeof v.t === 'string' && typeof v.at === 'number' && v.at > 0 && /^\d{4}-\d{2}-\d{2}$/.test(v.d || ''); }
-  const CH = { him: [], web: {}, local: {}, saved: {}, prof: {}, seen: Number(ls.get('tn-seen')) || 0, told: 0, loaded: false, newFrom: 0 };
-  { const j = ls.get('tn-me'); if (j && typeof j === 'object' && !Array.isArray(j)) Object.entries(j).forEach(([id, v]) => { if (chOk(id, v)) CH.local[id] = v; }); }
+  /* ================= TIN NHẮN (kiểu khung chat Instagram) =================
+     Tin của nhân vật: studio/data/chat/YYYY-MM.json { items: [{ id, ts: giờ hiện (ISO, giờ VN), t, re?: mã tin của Vy được trả lời, k?: 'react' (thả tim tin re) }] }
+       — soạn sẵn, tin nào tới giờ mới hiện. Hồ sơ: studio/data/chat/profile.json { name, ready }.
+     Tin của Vy: gửi qua máy chủ chuyển tin như note; bot ghi studio/data/chat/me.json { items: { mã: { t, d, at, k?, re? } } }.
+       Thả tim = một mục k 'react' (t '❤', bỏ tim thì t rỗng). Bản trên máy giữ mãi; chưa thấy trên web sau 10 phút thì tự gửi lại.
+     Cuộc gọi: chỉ là màn hình, im lặng hoàn toàn, không dùng micro; nhật ký cuộc gọi chỉ lưu trên máy này. */
+  const CH_DATA = TD_DATA + 'chat/', CHAT_PFX = 'anrevy-house-9q2/chat/v1/m/', CH_RE = /^[A-Za-z0-9-]{1,40}$/;
+  function chOk(id, v){ return /^[a-z0-9]{8,24}$/.test(id) && v && typeof v.t === 'string' && typeof v.at === 'number' && v.at > 0 && /^\d{4}-\d{2}-\d{2}$/.test(v.d || '') && (!v.re || CH_RE.test(v.re)) && (!v.k || v.k === 'react'); }
+  const chPick = v => Object.assign({ t: v.t.slice(0, 4000), d: v.d, at: v.at }, v.k === 'react' ? { k: 'react' } : {}, v.re ? { re: v.re } : {});
+  const CH = { him: [], web: {}, local: {}, saved: {}, prof: {}, seen: Number(ls.get('tn-seen')) || 0, told: 0, loaded: false, typing: false, timers: [], pops: new Set() };
+  { const j = ls.get('tn-me'); if (j && typeof j === 'object' && !Array.isArray(j)) Object.entries(j).forEach(([id, v]) => { if (chOk(id, v)) CH.local[id] = chPick(v); }); }
   const chBody = $('#chBody'), chIn = $('#chIn');
-  const chName = () => CH.prof.name || 'anh';
-  const hmOf = ms => vnNow(new Date(ms)).hm, dayOf = ms => vnNow(new Date(ms)).date;
-  function chWeb(id, v){ if (!chOk(id, v)) return false; const o = CH.web[id]; if (o && o.at >= v.at) return false; CH.web[id] = { t: v.t.slice(0, 4000), d: v.d, at: v.at }; return true; }
+  const chName = () => CH.prof.name || 'Anh', chInit = () => (chName().trim()[0] || 'A').toUpperCase();
+  const dayOf = ms => vnNow(new Date(ms)).date;
+  function chWeb(id, v){ if (!chOk(id, v)) return false; const o = CH.web[id]; if (o && o.at >= v.at) return false; CH.web[id] = chPick(v); return true; }
   function chMine(){
-    return Object.keys(Object.assign({}, CH.web, CH.local)).map(id => { const a = CH.local[id], b = CH.web[id]; return Object.assign({ id }, !a ? b : !b ? a : (a.at >= b.at ? a : b)); }).filter(m => m.t);
+    return Object.keys(Object.assign({}, CH.web, CH.local)).map(id => { const a = CH.local[id], b = CH.web[id]; return Object.assign({ id }, !a ? b : !b ? a : (a.at >= b.at ? a : b)); });
   }
   const chShown = () => CH.him.filter(m => m.tsn <= Date.now());
-  const chUnread = () => chShown().filter(m => m.tsn > CH.seen).length;
+  const chUnread = () => chShown().filter(m => m.k !== 'react' && m.tsn > CH.seen).length;
   function chPublish(id, v){
     const live = RN.clients.filter(c => c.connected); if (!live.length) return false;
-    live.forEach(c => c.publish(CHAT_PFX + id, JSON.stringify({ id, t: v.t, d: v.d, at: v.at }), { qos: 1, retain: true }));
+    live.forEach(c => c.publish(CHAT_PFX + id, JSON.stringify(Object.assign({ id }, chPick(v))), { qos: 1, retain: true }));
     return true;
+  }
+  function chPut(id, v){                             // lưu trên máy + gửi lên máy chủ chuyển tin
+    CH.local[id] = chPick(v); ls.set('tn-me', CH.local);
+    if (chPublish(id, v)) CH.web[id] = chPick(v);
+    if (!RN.started){ RN.started = true; rnLib(rnConnect); }
   }
   function chMonths(){ const d = vnNow().date, y = +d.slice(0, 4), m = +d.slice(5, 7), p = m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, '0')}`; return [p, d.slice(0, 7)]; }
   async function chLoad(first){
@@ -2239,17 +2300,17 @@
     mons.forEach(j => ((j && j.items) || []).forEach(m => {
       const tsn = m && typeof m.t === 'string' && m.t.trim() ? Date.parse(m.ts) : NaN;
       if (!m || !m.id || seen.has(m.id) || !(tsn > 0)) return;
-      seen.add(m.id); him.push({ id: String(m.id), t: m.t.slice(0, 4000), tsn, re: m.re || '' });
+      seen.add(m.id); him.push({ id: String(m.id), t: m.t.slice(0, 4000), tsn, re: typeof m.re === 'string' ? m.re : '', k: m.k === 'react' ? 'react' : '' });
     }));
     CH.him = him.sort((a, b) => a.tsn - b.tsn);
     Object.entries((me && me.items) || {}).forEach(([id, v]) => { if (v && typeof v.at === 'number') CH.saved[id] = Math.max(CH.saved[id] || 0, v.at); chWeb(id, v); });
     Object.entries(CH.local).forEach(([id, v]) => { if ((CH.saved[id] || 0) < v.at && Date.now() - v.at > 6e5) chPublish(id, v); });   // chưa thấy trên web sau 10 phút → gửi lại
-    $('#chName').textContent = '— ' + chName() + (CH.prof.status ? ' · ' + CH.prof.status : '');
+    $('#chAv').textContent = $('#chCallAv').textContent = chInit(); $('#chName').textContent = $('#chCallName').textContent = chName();
     if (!CH.loaded){                                  // lần đầu: tin đã hiện từ trước không báo lại; chỉ đếm chưa đọc
       CH.loaded = true; CH.told = Math.max(CH.seen, ...chShown().map(m => m.tsn), 0);
       const n = chUnread(); if (first && n) setTimeout(() => toast(`✉ ${n} tin nhắn mới từ ${chName()}`), 1800);
     }
-    chTick(); chRender();
+    chTick(); chRender(); chPlan();
   }
   function chBadge(){
     const n = chUnread(), b = tasks.querySelector('[data-app="chat"]');
@@ -2258,7 +2319,7 @@
   }
   const chVisible = () => !wins.chat.hidden && !document.hidden && (wins.chat.classList.contains('front') || narrow());
   function chMarkSeen(){
-    const last = Math.max(0, ...chShown().map(m => m.tsn));
+    const last = Math.max(0, ...chShown().filter(m => m.k !== 'react').map(m => m.tsn));
     if (last > CH.seen){ CH.seen = last; ls.set('tn-seen', last); }
     chBadge();
   }
@@ -2277,47 +2338,93 @@
     } catch (e) {}
   }
   addEventListener('pointerdown', () => { if (chAC && chAC.state === 'suspended') chAC.resume().catch(() => {}); }, { passive: true });
-  function chTick(){                                 // mỗi 15 giây: tin nào tới giờ thì hiện, báo tin mới
+  function chTick(){                                 // tin nào tới giờ thì hiện, báo tin mới
     if (!CH.loaded) return;
     const fresh = chShown().filter(m => m.tsn > CH.told);
     if (fresh.length){
-      CH.told = fresh[fresh.length - 1].tsn; CH.newFrom = fresh[0].tsn;
-      const last = fresh[fresh.length - 1], pre = last.t.replace(/\s+/g, ' ').slice(0, 70) + (last.t.length > 70 ? '…' : '');
-      if (chVisible()) ting();
-      else {
-        toast(`✉ ${chName()}: ${pre}`); ting();
-        try { if (window.Notification && Notification.permission === 'granted' && document.hidden){ const n = new Notification(chName(), { body: last.t.slice(0, 160), tag: 'studio-chat', icon: 'icons/icon-192.png' }); n.onclick = () => { focus(); openApp('chat'); n.close(); }; } } catch (e) {}
+      CH.told = fresh[fresh.length - 1].tsn; fresh.forEach(m => CH.pops.add(m.id));
+      const msgs = fresh.filter(m => m.k !== 'react'), last = msgs[msgs.length - 1];
+      if (last){
+        const pre = last.t.replace(/\s+/g, ' ').slice(0, 70) + (last.t.length > 70 ? '…' : '');
+        if (chVisible()) ting();
+        else {
+          toast(`✉ ${chName()}: ${pre}`); ting();
+          try { if (window.Notification && Notification.permission === 'granted' && document.hidden){ const n = new Notification(chName(), { body: last.t.slice(0, 160), tag: 'studio-chat', icon: 'icons/icon-192.png' }); n.onclick = () => { focus(); openApp('chat'); n.close(); }; } } catch (e) {}
+        }
       }
-      chRender();
+      CH.typing = false; chRender(); chPlan();
     }
     if (chVisible()) chMarkSeen(); else chBadge();
   }
+  function chPlan(){                                 // hẹn đúng giờ tin kế tiếp; 25 giây trước đó hiện "đang nhập…"
+    CH.timers.forEach(clearTimeout); CH.timers = [];
+    const now = Date.now(), nx = CH.him.find(m => m.tsn > now && m.k !== 'react'), nr = CH.him.find(m => m.tsn > now);
+    if (nr && nr.tsn - now < 6 * 36e5) CH.timers.push(setTimeout(chTick, nr.tsn - now + 300));
+    if (nx && nx.tsn - now < 6 * 36e5){
+      const on = () => { CH.typing = true; chRender(); };
+      if (nx.tsn - now <= 25000) on(); else CH.timers.push(setTimeout(on, nx.tsn - now - 25000));
+    }
+  }
   setInterval(chTick, 15000);
   setInterval(() => { if (opened && !document.hidden) chLoad(); }, 180000);     // tin trả lời mới: tải lại 3 phút một lần
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && opened){ chLoad(); } });
+  setInterval(() => { if (!wins.chat.hidden) chHead(); }, 60000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && opened) chLoad(); });
+  function chAgo(ms){
+    const d = Math.max(0, Date.now() - ms) / 6e4;
+    return d < 5 ? 'Đang hoạt động' : d < 60 ? `Hoạt động ${Math.round(d)} phút trước` : d < 1440 ? `Hoạt động ${Math.round(d / 60)} giờ trước` : '';
+  }
+  function chHead(){
+    const last = chShown().filter(m => m.k !== 'react').pop();
+    $('#chAct').textContent = CH.typing ? 'Đang nhập…' : last ? chAgo(last.tsn) : '';
+  }
+  const WDN = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  function chStamp(ms){
+    const v = vnNow(new Date(ms)), today = vnNow().date, yday = vnNow(new Date(Date.now() - 864e5)).date;
+    if (v.date === today) return v.hm;
+    if (v.date === yday) return 'Hôm qua ' + v.hm;
+    if (Date.now() - ms < 6 * 864e5) return WDN[new Date(Date.parse(v.date + 'T00:00:00Z')).getUTCDay()] + ' ' + v.hm;
+    return `${+v.date.slice(8)} thg ${+v.date.slice(5, 7)}${v.date.slice(0, 4) !== today.slice(0, 4) ? ' ' + v.date.slice(0, 4) : ''}, ${v.hm}`;
+  }
+  const chCalls = () => { const a = ls.get('tn-calls'); return Array.isArray(a) ? a.filter(c => c && c.s > 0 && c.d >= 0) : []; };
+  const chDur = s => s < 60 ? `${s} giây` : s < 3600 ? `${Math.round(s / 60)} phút` : `${Math.floor(s / 3600)} giờ ${Math.round(s % 3600 / 60)} phút`;
+  const isHeart = t => /^\s*(❤️?|♥️?)\s*$/.test(t), HRT = '<svg class="ig-hrt" viewBox="0 0 24 24" aria-label="trái tim"><path d="M12 21.35 10.55 20.03C5.4 15.36 2 12.27 2 8.5 2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53z"/></svg>';
+  const reactId = hid => ('re' + hid.toLowerCase().replace(/[^a-z0-9]/g, '') + 'xxxxxxxx').slice(0, 24);
   function chRender(){
+    chHead();
     if (wins.chat.hidden) return chBadge();
-    const near = chBody.scrollHeight - chBody.scrollTop - chBody.clientHeight < 80;
-    const re = new Set(chShown().map(m => m.re).filter(Boolean));
-    const all = chShown().map(m => ({ who: 'him', id: m.id, t: m.t, ms: m.tsn }))
-      .concat(chMine().map(m => ({ who: 'me', id: m.id, t: m.t, ms: m.at, st: re.has(m.id) ? 'seen' : (CH.saved[m.id] || 0) >= m.at ? 'ok' : 'pend' })))
-      .sort((a, b) => a.ms - b.ms).slice(-300);
-    if (!all.length){
-      chBody.innerHTML = `<p class="tn-empty">✉<br>${CH.prof.ready ? `chưa có tin nào — ${esc(chName())} sẽ nhắn sớm thôi.` : 'khung tin nhắn đã sẵn sàng.<br>nhân vật đang được dựng — dựng xong là bắt đầu nhắn, từ 6 giờ sáng tới lời chúc ngủ ngon buổi tối.'}</p>`;
+    const near = chBody.scrollHeight - chBody.scrollTop - chBody.clientHeight < 90;
+    const shown = chShown();
+    const hisReact = new Set(shown.filter(m => m.k === 'react').map(m => m.re));
+    const myReact = new Set(), mine = [];
+    chMine().forEach(m => { if (m.k === 'react'){ if (m.t && m.re) myReact.add(m.re); } else if (m.t) mine.push(m); });
+    const all = shown.filter(m => m.k !== 'react').map(m => ({ who: 'him', id: m.id, t: m.t, ms: m.tsn, re: m.re }))
+      .concat(mine.map(m => ({ who: 'me', id: m.id, t: m.t, ms: m.at, ok: (CH.saved[m.id] || 0) >= m.at || !!(CH.web[m.id] && CH.web[m.id].at >= m.at) })))
+      .concat(chCalls().map(c => ({ who: 'me', call: true, id: 'call' + c.s, ms: c.s, dur: c.d })))
+      .sort((a, b) => a.ms - b.ms).slice(-400);
+    if (!all.length && !CH.typing){
+      chBody.innerHTML = `<div class="ig-empty"><span class="ig-av">${esc(chInit())}</span><b>${esc(chName())}</b>${CH.prof.ready ? 'Chưa có tin nhắn nào.' : 'Khung tin nhắn đã sẵn sàng.<br>Tin nhắn sẽ bắt đầu từ 6 giờ sáng tới lời chúc ngủ ngon buổi tối.'}</div>`;
       return chBadge();
     }
-    const today = vnNow().date, yday = vnNow(new Date(Date.now() - 864e5)).date;
-    let h = '<ol class="tn-list">', lastDay = '', prev = null, newMark = false;
-    all.forEach(m => {
-      const d = dayOf(m.ms);
-      if (d !== lastDay){ h += `<li class="tn-day">${d === today ? 'hôm nay' : d === yday ? 'hôm qua' : dmy(d) + '/' + d.slice(0, 4)}</li>`; lastDay = d; prev = null; }
-      if (!newMark && m.who === 'him' && m.ms > CH.seen && CH.seen){ h += '<li class="tn-new">tin mới</li>'; newMark = true; }
-      const same = prev && prev.who === m.who && m.ms - prev.ms < 5 * 6e4;
-      const st = m.who === 'me' ? (m.st === 'seen' ? ' · <span class="seen">đã xem</span>' : m.st === 'ok' ? ' · ✓' : ' · <span class="pend" title="đang gửi lên web">↻</span>') : '';
-      h += `<li class="tn-m ${m.who}${same ? ' same' : ''}${m.who === 'him' && m.ms >= CH.newFrom && Date.now() - m.ms < 6e4 ? ' fresh' : ''}"><p>${esc(m.t)}</p><span class="tn-h">${hmOf(m.ms)}${st}</span></li>`;
-      prev = m;
+    const sep = all.map((m, i) => !i || m.ms - all[i - 1].ms > 36e5 || dayOf(m.ms) !== dayOf(all[i - 1].ms));
+    const start = all.map((m, i) => sep[i] || all[i - 1].who !== m.who || m.ms - all[i - 1].ms > 6e5 || m.call || all[i - 1].call);
+    const replied = new Set(all.filter(m => m.who === 'him' && m.re).map(m => m.re));
+    let h = '<div class="ig-list">';
+    all.forEach((m, i) => {
+      if (sep[i]) h += `<p class="ig-ts">${chStamp(m.ms)}</p>`;
+      const end = i === all.length - 1 || start[i + 1];
+      const pos = start[i] && end ? 'one' : start[i] ? 'first' : end ? 'last' : 'mid';
+      if (m.call){ h += `<div class="ig-row me one"><div class="ig-callb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span>Cuộc gọi thoại<small>${chDur(m.dur)}</small></span></div></div>`; return; }
+      const r = m.who === 'him' ? myReact.has(m.id) : hisReact.has(m.id);
+      const chip = r ? `<i class="ig-r${CH.pops.has('r:' + m.id) ? ' pop' : ''}">${HRT}</i>` : '';
+      const b = `<div class="ig-bw"><div class="ig-b${isHeart(m.t) ? ' big' : ''}${m.who === 'him' && CH.pops.has(m.id) ? ' fresh' : ''}"${m.who === 'him' ? ` data-id="${esc(m.id)}"` : ''}>${isHeart(m.t) ? HRT : esc(m.t)}</div>${chip}</div>`;
+      h += m.who === 'him' ? `<div class="ig-row him ${pos}${r ? ' react' : ''}"><span class="ig-av${end ? '' : ' ghost'}" aria-hidden="true">${esc(chInit())}</span>${b}</div>`
+                           : `<div class="ig-row me ${pos}${r ? ' react' : ''}">${b}</div>`;
     });
-    chBody.innerHTML = h + '</ol>';
+    const last = all[all.length - 1];
+    if (last && last.who === 'me' && !last.call && !CH.typing) h += `<p class="ig-st">${!last.ok ? 'Đang gửi…' : replied.has(last.id) || hisReact.has(last.id) ? 'Đã xem' : 'Đã gửi'}</p>`;
+    if (CH.typing) h += `<div class="ig-row him one"><span class="ig-av" aria-hidden="true">${esc(chInit())}</span><div class="ig-bw"><div class="ig-b ig-typing" aria-label="đang nhập"><i></i><i></i><i></i></div></div></div>`;
+    chBody.innerHTML = h + '</div>';
+    CH.pops.clear();
     if (near || CH.stick){ chBody.scrollTop = chBody.scrollHeight; CH.stick = false; }
     if (chVisible()) chMarkSeen(); else chBadge();
   }
@@ -2328,19 +2435,34 @@
     chBell();
   }
   wins.chat.addEventListener('pointerdown', () => setTimeout(chMarkSeen, 0));
-  function chGrow(){ chIn.style.height = 'auto'; chIn.style.height = Math.min(chIn.scrollHeight + 2, innerHeight * .3) + 'px'; }
+  // chạm hai lần vào tin của anh để thả tim (chạm hai lần nữa để bỏ)
+  let chTap = { id: '', t: 0 };
+  chBody.addEventListener('pointerup', e => {
+    const b = e.target.closest('.ig-b[data-id]'); if (!b) return;
+    const id = b.dataset.id, now = Date.now();
+    if (chTap.id === id && now - chTap.t < 350){
+      chTap = { id: '', t: 0 };
+      const rid = reactId(id), cur = chMine().find(m => m.id === rid), on = !!(cur && cur.t);
+      chPut(rid, { t: on ? '' : '❤', k: 'react', re: id, d: vnNow().date, at: now });
+      if (!on) CH.pops.add('r:' + id);
+      try { getSelection().removeAllRanges(); } catch (err) {}
+      chRender();
+    } else chTap = { id, t: now };
+  });
+  chBody.addEventListener('dblclick', e => { if (e.target.closest('.ig-b[data-id]')) e.preventDefault(); });
+  function chGrow(){
+    chIn.style.height = 'auto'; chIn.style.height = Math.min(chIn.scrollHeight, innerHeight * .3) + 'px';
+    const has = !!chIn.value.trim(); $('#chSend').hidden = !has; $('#chHeart').hidden = has;
+  }
   chIn.addEventListener('input', chGrow);
   chIn.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && !narrow()){ e.preventDefault(); $('#chForm').requestSubmit(); } });
-  $('#chForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const t = chIn.value.trim(); if (!t) return;
+  function chSend(t){
     const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-    const v = { t: t.slice(0, 4000), d: vnNow().date, at: Date.now() };
-    CH.local[id] = v; ls.set('tn-me', CH.local);
-    if (chPublish(id, v)) CH.web[id] = Object.assign({}, v);
-    chIn.value = ''; chGrow(); CH.stick = true; chRender();
-    if (!RN.started){ RN.started = true; rnLib(rnConnect); }
-  });
+    chPut(id, { t: t.slice(0, 4000), d: vnNow().date, at: Date.now() });
+    CH.stick = true; chRender();
+  }
+  $('#chForm').addEventListener('submit', e => { e.preventDefault(); const t = chIn.value.trim(); if (!t) return; chIn.value = ''; chGrow(); chSend(t); });
+  $('#chHeart').addEventListener('click', () => chSend('❤'));
   function chBell(){                                 // nút ! : xin quyền hiện thông báo của máy (máy tính; điện thoại cần cài Studio thành app)
     const b = $('#chBell'); b.hidden = !(window.Notification && Notification.permission === 'default');
   }
@@ -2349,6 +2471,31 @@
     try { const r = await Notification.requestPermission(); toast(r === 'granted' ? '✓ đã bật thông báo tin nhắn trên máy này' : 'thông báo chưa được bật'); } catch (err) {}
     chBell();
   });
+  // cuộc gọi: màn hình như đang gọi, không có âm thanh, không dùng micro
+  const CALL = { ui: $('#chCallUI'), s: 0, on: 0, iv: 0, to: 0 };
+  function callOpen(){
+    if (!CALL.ui.hidden) return;
+    CALL.ui.hidden = false; CALL.ui.classList.add('ring'); $('#chCallSt').textContent = 'Đang gọi…'; CALL.s = Date.now(); CALL.on = 0;
+    $('#chMute').setAttribute('aria-pressed', 'false'); $('#chSpk').setAttribute('aria-pressed', 'false');
+    CALL.to = setTimeout(() => {
+      CALL.ui.classList.remove('ring'); CALL.on = Date.now();
+      const f = () => { const s = Math.floor((Date.now() - CALL.on) / 1000); $('#chCallSt').textContent = (s >= 3600 ? Math.floor(s / 3600) + ':' : '') + String(Math.floor(s / 60) % 60).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); };
+      f(); CALL.iv = setInterval(f, 1000);
+    }, 3500 + Math.random() * 3000);
+    $('#chEnd').focus({ preventScroll: true });
+  }
+  function callEnd(){
+    if (CALL.ui.hidden) return;
+    clearTimeout(CALL.to); clearInterval(CALL.iv);
+    const d = Math.round((Date.now() - CALL.s) / 1000);
+    CALL.ui.hidden = true; CALL.ui.classList.remove('ring');
+    if (d >= 2){ const a = chCalls(); a.push({ s: CALL.s, d }); ls.set('tn-calls', a.slice(-200)); CH.stick = true; chRender(); }
+    $('#chCall').focus({ preventScroll: true });
+  }
+  $('#chCall').addEventListener('click', callOpen);
+  $('#chEnd').addEventListener('click', callEnd);
+  ['chMute', 'chSpk'].forEach(i => $('#' + i).addEventListener('click', e => { const b = e.currentTarget; b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')); }));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !CALL.ui.hidden){ e.stopPropagation(); callEnd(); } }, true);
 
   /* ================= INSTAGRAM ================= */
   let igCur = IG_USERS[0];
